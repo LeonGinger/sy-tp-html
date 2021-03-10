@@ -55,7 +55,7 @@ let resquest =  "/web/";
 //
 // 列表
 export function authRoleList(params){
-  return http.get(`${resquest}/rolelist`,params);
+  return http.get(`${resquest}/role_list`,params);
 }
 // 编辑
 export function authRoleAuthList(params){
