@@ -212,7 +212,7 @@ export default {
                     authPermissionRuleSave(data, this.formName)
                         .then(response => {
                             this.formLoading = false;
-                            if (response.code) {
+                            if (response.code!=200) {
                                 this.$message.error(response.message);
                                 return false;
                             }
@@ -270,7 +270,7 @@ export default {
                         authPermissionRuleDelete(para)
                             .then(response => {
                                 this.deleteLoading = false;
-                                if (response.code) {
+                                if (response.code!=200) {
                                     this.$message.error(response.message);
                                     return false;
                                 }

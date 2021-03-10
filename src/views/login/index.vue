@@ -32,7 +32,7 @@
                 </el-button>
             </div>
             <div>
-                <el-button type="primary" style="width:100%;margin-bottom:30px;"
+                <el-button v-if="otherlogin" type="primary" style="width:100%;margin-bottom:30px;"
                            @click='showDialog = true'>
                     第三方登录
                 </el-button>
@@ -40,14 +40,21 @@
         </el-form>
 
         <el-dialog title="第三方验证" :visible.sync="showDialog">
-            邮箱登录成功,请选择第三方验证<br/>
+            <!-- 邮箱登录成功,请选择第三方验证<br/> -->
+            <wxlogin :appid="appid" :scope="scope" :redirect_uri="redirect_uri"></wxlogin>
         </el-dialog>
 
     </div>
 </template>
 
 <script>
+
+import wxlogin from 'vue-wxlogin';
+
 export default {
+    components: {
+        wxlogin
+    },
     data() {
         let validatePwd = (rule, value, callback) => {
             if (value === "") {
@@ -57,6 +64,10 @@ export default {
             }
         };
         return {
+            appid:'',
+            scope:'',
+            redirect_uri:'',
+            otherlogin:true,
             ruleForm: {
                 userName: "admin",
                 pwd: "admin",
@@ -76,14 +87,16 @@ export default {
     },
     methods: {
         handleLogin() {
+
             this.$refs["ruleForm"].validate(valid => {
+
                 if (valid) {
                     this.loading = true;
                     this.$store
                         .dispatch("loginName", this.ruleForm)
                         .then(response => {
                             this.loading = false;
-                            if (response.code) {
+                            if (response.code!=200) {
                                 this.$message.error(response.message);
                                 return;
                             }
@@ -94,8 +107,6 @@ export default {
                             this.$router.push({
                                 path: path
                             });
-                            // window.location.replace(path);
-                            // this.showDialog = true
                         })
                         .catch(() => {
                             this.loading = false;

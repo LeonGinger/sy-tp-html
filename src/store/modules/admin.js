@@ -41,7 +41,8 @@ const actions = {
         return new Promise((resolve, reject) => {
             loginName(userName, pwd)
                 .then(response => {
-                    if (response.code) {
+
+                    if (response.code!=200) {
                         Message({
                             message: response.message,
                             type: "error",

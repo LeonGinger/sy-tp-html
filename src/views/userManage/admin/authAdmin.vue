@@ -29,6 +29,7 @@
             </el-form-item>
         </el-form>
         <el-table
+            height="500rem"
             v-loading="loading"
             :data="list"
             style="width: 100%;"
@@ -296,7 +297,7 @@ export default {
                     let data = Object.assign({}, this.formData);
                     authAdminSave(data, this.formName).then(response => {
                         this.formLoading = false;
-                        if (response.code) {
+                        if (response.code!=200) {
                             this.$message.error(response.message);
                             return false;
                         }
@@ -329,7 +330,7 @@ export default {
                         authAdminDelete(para)
                             .then(response => {
                                 this.deleteLoading = false;
-                                if (response.code) {
+                                if (response.code!=200) {
                                     this.$message.error(response.message);
                                     return false;
                                 }
