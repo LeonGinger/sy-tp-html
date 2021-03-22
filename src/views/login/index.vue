@@ -104,6 +104,7 @@ export default {
                             if (this.redirect) {
                                 path = this.redirect;
                             }
+                            console.log(response)
                             this.$router.push({
                                 path: path
                             });

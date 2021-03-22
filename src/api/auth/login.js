@@ -3,7 +3,7 @@
  */
 import axios from "../../utils/axios";
 import http from "@/utils/http";
-let resquest =  "/web/";
+let resquest =  "/web";
 // 获取信息
 // export function userInfo(id, token) {
 //     return axios({

@@ -14,11 +14,13 @@ import fileResource from "./fileResource";
 import adSite from "./adSite";
 import ad from "./ad";
 
+import pool from "./pool";
+
 // 登录相关
-Mock.mock(/\/admin\/auth\/login\/out/, "post", login.out);
+Mock.mock(/\/web\/out/, "post", login.out);
 Mock.mock(/\/admin\/auth\/login\/password/, "post", login.password);
-Mock.mock(/\/admin\/auth\/login\/index/, "post", login.index);
-Mock.mock(/\/admin\/auth\/login\/userInfo/, "get", login.userInfo);
+Mock.mock(/\/web\/login/, "post", login.index);
+Mock.mock(/\/web\/userInfo/, "get", login.userInfo);
 // 管理员相关
 Mock.mock(/\/admin\/auth\/admin\/index/, "get", authAdmin.index);
 Mock.mock(/\/admin\/auth\/admin\/roleList/, "get", authAdmin.roleList);
@@ -94,4 +96,8 @@ Mock.mock(/\/admin\/ad\/ad\/save/, "post", ad.save);
 Mock.mock(/\/admin\/ad\/ad\/edit/, "post", ad.edit);
 Mock.mock(/\/admin\/ad\/ad\/delete/, "post", ad.del);
 
+
+//商家管理
+Mock.mock(/\/web\/enterprise_list/, "get", pool.company_list);
+Mock.mock(/\/web\/out/, "post", login.out);
 export default Mock;

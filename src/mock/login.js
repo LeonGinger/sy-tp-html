@@ -3,6 +3,7 @@
  */
 
 const index = {
+    code: 200,
     data: {
         id: 1,
         token:
@@ -11,6 +12,7 @@ const index = {
 };
 
 const userInfo = {
+    code: 200,
     data: {
         status: "1",
         id: 1,
@@ -22,9 +24,9 @@ const userInfo = {
     }
 };
 
-const out = { code: 0, message: "success" };
+const out = { code: 200, message: "success" };
 
-const password = { code: 0, message: "success" };
+const password = { code: 200, message: "success" };
 
 export default {
     index,

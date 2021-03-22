@@ -23,6 +23,10 @@ import upload from "../views/components/upload-demo.vue";
 import adSite from "../views/adManage/adSite.vue";
 import ad from "../views/adManage/ad.vue";
 
+//商家管理
+import apply from "../views/enterprise/apply.vue";
+import employee from "../views/enterprise/employee.vue";
+import MyEnterprise from "../views/enterprise/MyEnterprise.vue";
 // Vue.use(VueRouter);
 
 const err401 = r =>
@@ -201,6 +205,46 @@ export const asyncRouterMap = [
                 path: "ad",
                 component: ad,
                 name: "广告管理",
+                icon: "",
+                meta: {
+                    authRule: ["admin/ad.ad/index"]
+                }
+            }
+        ]
+    },
+    {
+        path: "/enterprise",
+        redirect: "/enterprise/apply",
+        component: Home,
+        icon: "guanggao",
+        name: "企业管理",
+        meta: {
+            authRule: ["enterprise"]
+        },
+        // noDropdown: true,
+        children: [
+            {
+                path: "apply",
+                component: apply,
+                name: "企业申请管理",
+                icon: "",
+                meta: {
+                    authRule: ["admin/ad.site/index"]
+                }
+            },
+            {
+                path: "employee",
+                component: employee,
+                name: "我的企业",
+                icon: "",
+                meta: {
+                    authRule: ["admin/ad.ad/index"]
+                }
+            },
+            {
+                path: "employee",
+                component: employee,
+                name: "员工管理",
                 icon: "",
                 meta: {
                     authRule: ["admin/ad.ad/index"]

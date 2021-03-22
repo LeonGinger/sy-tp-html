@@ -74,7 +74,16 @@ const adList = {
         }
     ]
 };
-
+const companylist = {
+    data: [
+        {
+            company_id: 1,
+            title: "阿范德萨",
+            describe: "撒地方士大夫",
+            status: 1
+        },
+    ]
+};
 const save = {
     data: {
         site_id: 2
