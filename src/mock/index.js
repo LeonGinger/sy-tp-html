@@ -21,6 +21,7 @@ Mock.mock(/\/web\/out/, "post", login.out);
 Mock.mock(/\/admin\/auth\/login\/password/, "post", login.password);
 Mock.mock(/\/web\/login/, "post", login.index);
 Mock.mock(/\/web\/userInfo/, "get", login.userInfo);
+
 // 管理员相关
 Mock.mock(/\/admin\/auth\/admin\/index/, "get", authAdmin.index);
 Mock.mock(/\/admin\/auth\/admin\/roleList/, "get", authAdmin.roleList);
@@ -99,5 +100,8 @@ Mock.mock(/\/admin\/ad\/ad\/delete/, "post", ad.del);
 
 //商家管理
 Mock.mock(/\/web\/enterprise_list/, "get", pool.company_list);
-Mock.mock(/\/web\/out/, "post", login.out);
+Mock.mock(/\/web\/myenterprise_list/, "get", pool.mycompany_list);
+
+//员工管理
+Mock.mock(/\/web\/employee_list/, "get", pool.userlist);
 export default Mock;

@@ -183,9 +183,19 @@ input {
     right: 10px;
     cursor: pointer;
 }
-
+/*全局*/
 .g-success{
     color: #fff!important;
     background-color: #167703!important;
     border-color: #167703!important;
+}
+.g-center{
+    text-align: center!important;
+}
+/*布局*/
+.g-left-i10{
+    left: 10px!important;
+}
+.g-left-d10{
+    left: -10px!important;
 }

@@ -75,7 +75,7 @@
                 <template slot-scope="scope">
 
                    <!-- <el-button  class="g-success" size="small" @click.native="handleDel(scope.$index, scope.row)">删 除</el-button> -->
-                    <el-dropdown @command="handleverif">
+                    <el-dropdown @command="handleverif" class="g-left-d10">
                     <el-button size="small" type="primary" class="g-success" >
                         审 核<i class="el-icon-arrow-down el-icon--right"></i>
                     </el-button>
@@ -104,239 +104,108 @@
             :before-close="hideFormdetails"
             width="85%"
             top="5vh">
-            <el-form :model="formData" :rules="formRules" ref="dataForm">
-                <el-form-item label="标题" prop="title">
-                    <el-input v-model="formData.title" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="封面图片（上传或填写网络地址）" prop="pic">
-                    <div>
-                        <el-input size="small" v-model="formData.pic" auto-complete="off" placeholder="图片路径"></el-input>
 
-                        <upload ext="jpg,png,jpeg" :size="716800"  @on-select="onSelectPic"></upload>
-
-                    </div>
-                    <div class="upload-img" v-if="formData.pic_url">
-                        <img :src="formData.pic_url" style="max-width: 200px;max-height: 200px;">
-                    </div>
-
-                </el-form-item>
-                <el-form-item label="描述" prop="describe">
-                    <el-input v-model="formData.describe" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="跳转方式" prop="jump_type">
-                    <el-radio-group v-model="formData.jump_type">
-                        <el-radio :label="0">web 网页</el-radio>
-                        <el-radio :label="1">APP内跳转</el-radio>
-                        <el-radio :label="2">小程序跳转</el-radio>
-                    </el-radio-group>
-                </el-form-item>
-
-                <el-form-item label="URL链接（web网页和小程序时）" prop="jump_url" v-if="formData.jump_type === 0 || formData.jump_type === 2">
-                    <el-input v-model="formData.jump_url" auto-complete="off"></el-input>
-                </el-form-item>
-
-                <el-form-item label="IOS 类名（APP内跳转时）" prop="ios_url" v-if="formData.jump_type === 1">
-                    <el-input v-model="formData.ios_url" auto-complete="off"></el-input>
-                </el-form-item>
-
-                <el-form-item label="Android 类名（APP内跳转时）" prop="android_url" v-if="formData.jump_type === 1">
-                    <el-input v-model="formData.android_url" auto-complete="off"></el-input>
-                </el-form-item>
-
-                <el-form-item label="小程序的 appid（小程序跳转时）" prop="wxa_appid" v-if="formData.jump_type === 2">
-                    <el-input v-model="formData.wxa_appid" auto-complete="off"></el-input>
-                </el-form-item>
-
-                <el-form-item label="开始时间">
-
-                    <el-form-item prop="start_time" style="display: inline-block;">
-                        <el-date-picker
-                            v-model="formData.start_time"
-                            type="datetime"
-                            size="mini"
-                            placeholder="开始时间（默认不限制）">
-                        </el-date-picker>
+            <el-form :label-position="right" label-width="120px" :model="formData" :rules="formRules" ref="dataForm">
+                <el-row>
+                  <el-col :span="1"><div class="grid-content bg-purple">&nbsp;</div></el-col>
+                  <!-- 左边 -->
+                  <el-col :span="10"><div class="grid-content bg-purple">
+                   <!-- 商户信息 -->
+                    <el-form-item label="商户名称" prop="title">
+                        <el-input v-model="formData.business_name" auto-complete="off"></el-input>
                     </el-form-item>
-                    -
-                    <el-form-item prop="end_time" style="display: inline-block;">
-                        <el-date-picker
-                            v-model="formData.end_time"
-                            type="datetime"
-                            size="mini"
-                            placeholder="结束时间（默认不限制）">
-                        </el-date-picker>
+                    <el-form-item label="商户地址" prop="title">
+                        <el-input v-model="formData.business_address" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="商家姓名" prop="title">
+                        <el-input v-model="formData.responsible_name" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="联系电话" prop="title">
+                        <el-input v-model="formData.mobile" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <!-- 用户信息 -->
+                    <el-form-item label="申请人ID" prop="title">
+                        <el-input v-model="formData.user_id" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="用户名" prop="title">
+                        <el-input v-model="formData.username" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="申请时间" prop="title">
+                        <el-input v-model="formData.create_time" auto-complete="off"></el-input>
                     </el-form-item>
 
-                </el-form-item>
+                  </div></el-col>
+                    <el-col :span="1"><div class="grid-content bg-purple">&nbsp;</div></el-col>
+                  <!-- 右边 -->
+                  <el-col :span="10"><div class="grid-content bg-purple-light">
+                        <el-row>
+                        <el-col :span="12"><div class="grid-content bg-purple">
 
-                <el-form-item label="统计事件的名称" prop="event_name">
-                    <el-input v-model="formData.event_name" auto-complete="off"></el-input>
-                </el-form-item>
+                        <el-form-item label="" prop="pic">
+                            <p class="image_p">营业执照</p>
+                            <el-image
+                              style="width: 226px; height: 226px;"
+                              :src="url"
+                              :fit="fit"></el-image>
 
-                <el-form-item label="状态" prop="status">
-                    <el-radio-group v-model="formData.status">
-                        <el-radio :label="0">禁用</el-radio>
-                        <el-radio :label="1">正常</el-radio>
-                    </el-radio-group>
-                </el-form-item>
+                        </el-form-item></div></el-col>
+                        <el-col :span="12"><div class="grid-content bg-purple-light">
 
-                <el-form-item>
-                    <el-button style="float: right;" type="primary" @click.native="formSubmit()" :loading="formLoading">提前提交</el-button>
-                </el-form-item>
+                        <el-form-item label="" prop="pic" class="enterprise_logo">
+                            <p class="image_p">商户Logo</p>
+                            <el-image
+                            style="width: 226px; height: 226px;"
+                            :src="url"
+                            :fit="fit"></el-image>
 
-                <el-form-item label="新用户展示逻辑">
-                    <div class="remove-list-box">
-                        第几次展示
-                        <el-form-item prop="new_show_start_num" style="display: inline-block;">
-                            <el-input-number
-                                v-model="formData.new_show_start_num"
-                                :min="0"
-                                controls-position="right"
-                                size="mini"
-                                label="第几次展示">
-                            </el-input-number>
-                        </el-form-item>
-                        -
-                        展示最大次数
-                        <el-form-item prop="new_show_max_num" style="display: inline-block;">
-                            <el-input-number
-                                v-model="formData.new_show_max_num"
-                                :min="0"
-                                controls-position="right"
-                                size="mini"
-                                label="展示最大次数">
-                            </el-input-number>
-                        </el-form-item>
-                    </div>
-                </el-form-item>
+                        </el-form-item></div></el-col>
+                        </el-row>
 
-                <el-form-item label="老用户展示逻辑">
-                    <div class="remove-list-box">
-                        第几次展示
-                        <el-form-item prop="old_show_start_num" style="display: inline-block;">
-                            <el-input-number
-                                v-model="formData.old_show_start_num"
-                                :min="0"
-                                controls-position="right"
-                                size="mini"
-                                label="第几次展示">
-                            </el-input-number>
-                        </el-form-item>
-                        -
-                        展示最大次数
-                        <el-form-item prop="old_show_max_num" style="display: inline-block;">
-                            <el-input-number
-                                v-model="formData.old_show_max_num"
-                                :min="0"
-                                controls-position="right"
-                                size="mini"
-                                label="展示最大次数">
-                            </el-input-number>
-                        </el-form-item>
-                    </div>
-                </el-form-item>
 
-                <el-form-item>
-                    <span style='color:red;'>以下内容（注意：不要输入空格和逗号，批量添加以英文逗号隔开）黑白名单用来控制屏蔽或者显示</span>
-                </el-form-item>
 
-                <el-form-item label="渠道名单" required>
-                    <el-form-item prop="channel_type">
-                        <el-radio-group v-model="formData.channel_type">
-                            <el-radio :label="0">不限制</el-radio>
-                            <el-radio :label="1">白名单</el-radio>
-                            <el-radio :label="2">黑名单</el-radio>
-                        </el-radio-group>
-                    </el-form-item>
-                    <el-form-item prop="channel_list" v-if="formData.channel_type !== 0">
-                        <div class="remove-list-box">
-                            <div class="remove-list">
-                                <div class="remove-list-item" v-for="(item, index) in formData.channel_list" :key="index">
-                                    {{item}}
-                                    <i class="el-icon-close remove-list-close" @click="handleChannelListClose(index)"></i>
-                                </div>
+<!--                        <el-form-item label="营业执照" prop="pic">
+                            <div>
+                                <el-input size="small" v-model="formData.pic" auto-complete="off" placeholder="图片路径"></el-input>
+                                <upload ext="jpg,png,jpeg" :size="716800"  @on-select="onSelectPic"></upload>
                             </div>
-                            <div v-show="formData.channel_list.length >= 15" style="color: red;">到达最大次数，最大15个</div>
-                            <el-input
-                                size="mini"
-                                v-model="channelListInput"
-                                placeholder="输入渠道版本插入"
-                                style="width: 190px;"
-                                ref="channelListRef"
-                                @keyup.enter.native="handleChannelListSubmit"
-                                maxlength="12">
-                            </el-input>
-                            <el-button type="primary" size="mini" @click.native="handleChannelListSubmit()" style="margin-left: 5px;">插入</el-button>
-                        </div>
-                    </el-form-item>
-                </el-form-item>
-
-                <el-form-item label="Android版本名单" required>
-                    <el-form-item prop="android_version_type">
-                        <el-radio-group v-model="formData.android_version_type">
-                            <el-radio :label="0">不限制</el-radio>
-                            <el-radio :label="1">白名单</el-radio>
-                            <el-radio :label="2">黑名单</el-radio>
-                        </el-radio-group>
-                    </el-form-item>
-                    <el-form-item prop="android_version_list" v-if="formData.android_version_type !== 0">
-                        <div class="remove-list-box">
-                            <div class="remove-list">
-                                <div class="remove-list-item" v-for="(item, index) in formData.android_version_list" :key="index">
-                                    {{item}}
-                                    <i class="el-icon-close remove-list-close" @click="handleAndroidVersionListClose(index)"></i>
-                                </div>
+                            <div class="upload-img" v-if="formData.pic_url">
+                                <img :src="formData.pic_url" style="max-width: 200px;max-height: 200px;">
                             </div>
-                            <div v-show="formData.android_version_list.length >= 15" style="color: red;">到达最大次数，最大15个</div>
-                            <el-input
-                                size="mini"
-                                v-model="androidVersionListInput"
-                                placeholder="输入Android版本插入"
-                                style="width: 190px;"
-                                ref="androidVersionListRef"
-                                @keyup.enter.native="handleAndroidVersionListSubmit"
-                                maxlength="12">
-                            </el-input>
-                            <el-button type="primary" size="mini" @click.native="handleAndroidVersionListSubmit()" style="margin-left: 5px;">插入</el-button>
-                        </div>
-                    </el-form-item>
-                </el-form-item>
+                        </el-form-item> -->
 
-                <el-form-item label="iOS版本名单" required>
-                    <el-form-item prop="ios_version_type">
-                        <el-radio-group v-model="formData.ios_version_type">
-                            <el-radio :label="0">不限制</el-radio>
-                            <el-radio :label="1">白名单</el-radio>
-                            <el-radio :label="2">黑名单</el-radio>
-                        </el-radio-group>
-                    </el-form-item>
-                    <el-form-item prop="ios_version_list" v-if="formData.ios_version_type !== 0">
-                        <div class="remove-list-box">
-                            <div class="remove-list">
-                                <div class="remove-list-item" v-for="(item, index) in formData.ios_version_list" :key="index">
-                                    {{item}}
-                                    <i class="el-icon-close remove-list-close" @click="handleIosVersionListClose(index)"></i>
-                                </div>
-                            </div>
-                            <div v-show="formData.ios_version_list.length >= 15" style="color: red;">到达最大次数，最大15个</div>
-                            <el-input
-                                size="mini"
-                                v-model="iosVersionListInput"
-                                placeholder="输入iOS版本插入"
-                                style="width: 190px;"
-                                ref="iosVersionListRef"
-                                @keyup.enter.native="handleIosVersionListSubmit"
-                                maxlength="12">
-                            </el-input>
-                            <el-button type="primary" size="mini" @click.native="handleIosVersionListSubmit()" style="margin-left: 5px;">插入</el-button>
-                        </div>
-                    </el-form-item>
-                </el-form-item>
+                        <el-form-item label="信用代码" prop="title">
+                            <el-input v-model="formData.business_code" auto-complete="off"></el-input>
+                        </el-form-item>
+                         <el-form-item label="法定代表人" prop="title">
+                            <el-input v-model="formData.responsible_name" auto-complete="off"></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="状态" prop="status">
+                            <el-radio-group v-model="formData.status">
+                                <el-radio :label="0">禁用</el-radio>
+                                <el-radio :label="1">正常</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                  </div></el-col>
+
+
+
+                </el-row>
 
             </el-form>
+
             <div slot="footer" class="dialog-footer">
-                <el-button @click.native="hideForm">取消</el-button>
-                <el-button type="primary" @click.native="formSubmit()" :loading="formLoading">提交</el-button>
+                <el-dropdown @command="handleverif" class="g-left-d10">
+                <el-button type="primary" class="g-success" >
+                    审 核<i class="el-icon-arrow-down el-icon--right"></i>
+                </el-button>
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item command="1">通 过</el-dropdown-item>
+                    <el-dropdown-item command="2">拒 绝</el-dropdown-item>
+                </el-dropdown-menu>
+                </el-dropdown>
+                <el-button type="primary" @click.native="formSubmit()" :loading="formLoading">保 存</el-button>
+                <el-button @click.native="hideFormdetails">取 消</el-button>
             </div>
         </el-dialog>
         <!-- 审核拒绝表单 -->
@@ -361,21 +230,29 @@
 <script>
 import {enterpriseList} from "@/api/enterprise/enterprise";
 const formJson = {
-
+    appraisal_image: '',
+    business_name: '',
+    company_id:'',
+    id:'',
+    mobile:'',
+    responsible_name:'',
+    status:'',
+    user_id:'',
+    username:'',
 };
 export default {
     data() {
         return {
             formMap: {
-                add: "新增",
-                edit: "编辑"
+                add: "新 增",
+                edit: "审 核"
             },
             formVisibledetails:false,
             formData: formJson,
             query: {
                 title: "",
                 page: 1,
-                limit: 20
+                limit: 10
             },
             loading: true,
             list: [],
@@ -383,11 +260,40 @@ export default {
             dialogFormVisibleverif:false,
             formverif:{},
             formLabelverifWidth:'120px',
+            formName:null,
+            company_imgstyle:"{width: 100px; height: 100px;}",
+            formLoading:false,
 
         }
     },
     methods:{
     //方法
+        // 显示表单
+        handleForm(index, row) {
+            // console.log(row);
+            // console.log(index);
+            this.formVisibledetails = true;
+            // 刷新表单
+            this.resetForm();
+            this.formData = JSON.parse(JSON.stringify(formJson));
+            if (row !== null) {
+                this.formData = Object.assign({}, row);
+            }
+            this.formName = "add";
+            if (index !== null) {
+                this.index = index;
+                this.formName = "edit";
+            }
+        },
+        // 刷新表单
+        resetForm() {
+            if (this.$refs["dataForm"]) {
+                // 清空字段
+                this.$refs["dataForm"].resetFields();
+                // 清空验证信息表单
+                this.$refs["dataForm"].clearValidate();
+            }
+        },
         onReset() {
             this.$router.push({
                 path: ""
@@ -395,18 +301,15 @@ export default {
             this.query = {
                 title: "",
                 page: 1,
-                limit: 20
+                limit: 10
             };
             this.getList();
         },
         getList(){
-
            this.loading = false;
            enterpriseList(this.query)
                 .then(response => {
-                    console.log(1)
-                    console.log(response);
-
+                    //console.log(response);
                     this.loading = false;
                     this.list = response.data.list || [];
                     this.total = response.data.total || 0;
@@ -451,6 +354,35 @@ export default {
             this.formVisibledetails = !this.formVisibledetails;
             return true;
         },
+        formSubmit() {
+            this.$refs["dataForm"].validate(valid => {
+                if (valid) {
+                    this.formLoading = true;
+                    let data = Object.assign({}, this.formData);
+                    adSave(data, this.formName)
+                        .then(response => {
+                            this.formLoading = false;
+                            if (response.code) {
+                                this.$message.error(response.message);
+                                return false;
+                            }
+                            this.$message.success("操作成功");
+                            this.formVisible = false;
+                            if (this.formName === "add") {
+                                // 向头部添加数据
+                                data.ad_id = response.data.ad_id;
+                                this.list.unshift(data);
+                            } else {
+                                this.list.splice(this.index, 1, data);
+                            }
+                        })
+                        .catch(() => {
+                            this.formLoading = false;
+                        });
+                }
+            });
+        },
+
     },
     filters: {
         statusFilterType(status) {
@@ -483,4 +415,13 @@ export default {
 </script>
 
 <style type="text/scss" lang="scss">
+    .image_p{
+        position: absolute;
+        text-align: left;
+        width: 226px;
+        top: -2.2rem;
+    }
+/deep/.enterprise_logo{
+        margin-left: 64px;
+    }
 </style>

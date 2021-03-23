@@ -15,6 +15,8 @@ service.interceptors.request.use(
     config => {
         // Do something before request is sent
         if (store.getters.adminId && store.getters.token) {
+            // config.headers.ADMIN_ID = store.getters.adminId;
+            // config.headers.ADMIN_TOKEN = store.getters.token;
             config.params = {
                 ADMIN_ID: store.getters.adminId,
                 ADMIN_TOKEN: store.getters.token,

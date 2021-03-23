@@ -217,7 +217,7 @@ export const asyncRouterMap = [
         redirect: "/enterprise/apply",
         component: Home,
         icon: "guanggao",
-        name: "企业管理",
+        name: "商户管理",
         meta: {
             authRule: ["enterprise"]
         },
@@ -226,16 +226,16 @@ export const asyncRouterMap = [
             {
                 path: "apply",
                 component: apply,
-                name: "企业申请管理",
+                name: "商户申请管理",
                 icon: "",
                 meta: {
                     authRule: ["admin/ad.site/index"]
                 }
             },
             {
-                path: "employee",
-                component: employee,
-                name: "我的企业",
+                path: "MyEnterprise",
+                component: MyEnterprise,
+                name: "我的商户",
                 icon: "",
                 meta: {
                     authRule: ["admin/ad.ad/index"]
