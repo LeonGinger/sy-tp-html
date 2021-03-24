@@ -27,6 +27,11 @@ import ad from "../views/adManage/ad.vue";
 import apply from "../views/enterprise/apply.vue";
 import employee from "../views/enterprise/employee.vue";
 import MyEnterprise from "../views/enterprise/MyEnterprise.vue";
+
+//商品管理
+import menumodify from "../views/menu/menumodify.vue";
+import menulist from "../views/menu/menulist.vue";
+import classify from "../views/menu/classify.vue";
 // Vue.use(VueRouter);
 
 const err401 = r =>
@@ -250,6 +255,46 @@ export const asyncRouterMap = [
                     authRule: ["admin/ad.ad/index"]
                 }
             }
+        ]
+    },
+    {
+        path: "/menu",
+        redirect: "/menu/menulist",
+        component: Home,
+        icon: "guanggao",
+        name: "商品管理",
+        meta: {
+            authRule: ["menu"]
+        },
+        // noDropdown: true,
+        children: [
+            {
+                path: "menulist",
+                component: menulist,
+                name: "商品列表",
+                icon: "",
+                meta: {
+                    authRule: ["admin/ad.site/index"]
+                }
+            },
+            {
+                path: "menumodify",
+                component: menumodify,
+                name: "新增商品",
+                icon: "",
+                meta: {
+                    authRule: ["admin/ad.ad/index"]
+                }
+            },
+            // {
+            //     path: "classify",
+            //     component: classify,
+            //     name: "商品分类",
+            //     icon: "",
+            //     meta: {
+            //         authRule: ["admin/ad.ad/index"]
+            //     }
+            // }
         ]
     }
 ];

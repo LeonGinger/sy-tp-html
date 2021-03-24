@@ -3,7 +3,13 @@
         <!-- start search -->
         <el-form :inline="true" :model="query" class="query-form" size="mini">
             <el-form-item class="query-form-item">
-                <el-input v-model="query.title" placeholder="企业名称"></el-input>
+                <el-input v-model="query.phone" placeholder="手机号"></el-input>
+            </el-form-item>
+            <el-form-item class="query-form-item">
+                <el-input v-model="query.username" placeholder="用户名称"></el-input>
+            </el-form-item>
+            <el-form-item class="query-form-item">
+                <el-input v-model="query.business_name" placeholder="商户名称"></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button-group>
@@ -20,54 +26,60 @@
             :data="list"
             style="width: 100%;">
             <el-table-column
-                label="ID"
+                label="序号"
+                type="index"
+                fixed>
+            </el-table-column>
+            <el-table-column
+                label="用户ID"
                 prop="id"
-                fixed>
-            </el-table-column>
-            <el-table-column
-                label="企业ID"
-                prop="company_id"
                 with="300"
                 :show-overflow-tooltip="true"
                 fixed>
             </el-table-column>
             <el-table-column
-                label="企业名称"
-                prop="business_name"
-                with="300"
-                :show-overflow-tooltip="true"
-                fixed>
-            </el-table-column>
-            <el-table-column
-                label="法定代表人"
-                prop="responsible_name"
-                with="300"
-                :show-overflow-tooltip="true">
-            </el-table-column>
-            <el-table-column
-                label="申请人ID"
-                prop="user_id"
-                with="300"
-                :show-overflow-tooltip="true">
-            </el-table-column>
-            <el-table-column
-                label="申请人姓名"
+                label="用户名称"
                 prop="username"
                 with="300"
-                :show-overflow-tooltip="true">
+                :show-overflow-tooltip="true"
+                fixed>
             </el-table-column>
             <el-table-column
-                label="联系电话"
-                prop="mobile"
+                label="手机号码"
+                prop="phone"
                 with="300"
                 :show-overflow-tooltip="true">
             </el-table-column>
             <el-table-column
+                label="商户名称"
+                prop="business_name"
+                with="300"
+                :show-overflow-tooltip="true">
+            </el-table-column>
+            <el-table-column
+                 label="权限">
+                 <template slot-scope="scope">
+                     <el-tag :type="scope.row.roleid | roleFilterType">{{scope.row.roleid | roleFilterName}}</el-tag>
+                 </template>
+             </el-table-column>
+<!--            <el-table-column
+                label="权限"
+                prop="roleid_name"
+                with="300"
+                :show-overflow-tooltip="true">
+            </el-table-column> -->
+            <el-table-column
+                label="创建时间"
+                prop="create_time"
+                with="300"
+                :show-overflow-tooltip="true">
+            </el-table-column>
+<!--           <el-table-column
                 label="状态">
                 <template slot-scope="scope">
                     <el-tag :type="scope.row.status | statusFilterType">{{scope.row.status | statusFilterName}}</el-tag>
                 </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column
                 width="300"
                 label="操作"
@@ -75,7 +87,7 @@
                 <template slot-scope="scope">
 
                    <!-- <el-button  class="g-success" size="small" @click.native="handleDel(scope.$index, scope.row)">删 除</el-button> -->
-                    <el-dropdown @command="handleverif" class="g-left-d10">
+<!--                    <el-dropdown @command="handleverif" class="g-left-d10">
                     <el-button size="small" type="primary" class="g-success" >
                         审 核<i class="el-icon-arrow-down el-icon--right"></i>
                     </el-button>
@@ -84,8 +96,9 @@
                         <el-dropdown-item command="2">拒 绝</el-dropdown-item>
                     </el-dropdown-menu>
                     </el-dropdown>
-
-                    <el-button type="warning" size="small" @click.native="handleForm(scope.$index, scope.row)">查 看</el-button>
+ -->
+                    <el-button type="success" size="small" @click.native="handleForm(scope.$index, scope.row)">编 辑</el-button>
+                    <el-button type="danger" size="small" @click.native="handleFormdel(scope.$index, scope.row)">删 除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -102,100 +115,47 @@
             :title="formMap[formName]"
             :visible.sync="formVisibledetails"
             :before-close="hideFormdetails"
-            width="85%"
+            width="35%"
             top="5vh">
 
-            <el-form :label-position="right" label-width="120px" :model="formData" :rules="formRules" ref="dataForm">
-                <el-row>
-                  <el-col :span="1"><div class="grid-content bg-purple">&nbsp;</div></el-col>
-                  <!-- 左边 -->
-                  <el-col :span="10"><div class="grid-content bg-purple">
-                   <!-- 商户信息 -->
-                    <el-form-item label="商户名称" prop="title">
-                        <el-input v-model="formData.business_name" auto-complete="off"></el-input>
+            <el-form :label-position="left" label-width="80px" :model="formData" :rules="formRules" ref="dataForm">
+                   <!-- 员工信息 -->
+                   <el-col><div>
+                    <el-form-item label="" prop="pic">
+                      <!-- <p class="image_p"></p> -->
+                       <el-image
+                         style="width: 226px; height: 226px;"
+                         :src="url"
+                         :fit="fit"></el-image>
+                    </el-form-item></div></el-col>
+                    <el-form-item label="用户ID" prop="id">
+                       <el-input disabled v-model="formData.id" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="商户地址" prop="title">
-                        <el-input v-model="formData.business_address" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="商家姓名" prop="title">
-                        <el-input v-model="formData.responsible_name" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="联系电话" prop="title">
-                        <el-input v-model="formData.mobile" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <!-- 用户信息 -->
-                    <el-form-item label="申请人ID" prop="title">
-                        <el-input v-model="formData.user_id" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="用户名" prop="title">
+                    <el-form-item label="用户名称" prop="title">
                         <el-input v-model="formData.username" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="申请时间" prop="title">
-                        <el-input v-model="formData.create_time" auto-complete="off"></el-input>
+                    <el-form-item label="手机号码" prop="phone">
+                        <el-input v-model="formData.phone" auto-complete="off"></el-input>
                     </el-form-item>
-
-                  </div></el-col>
-                    <el-col :span="1"><div class="grid-content bg-purple">&nbsp;</div></el-col>
-                  <!-- 右边 -->
-                  <el-col :span="10"><div class="grid-content bg-purple-light">
-                        <el-row>
-                        <el-col :span="12"><div class="grid-content bg-purple">
-
-                        <el-form-item label="" prop="pic">
-                            <p class="image_p">营业执照</p>
-                            <el-image
-                              style="width: 226px; height: 226px;"
-                              :src="url"
-                              :fit="fit"></el-image>
-
-                        </el-form-item></div></el-col>
-                        <el-col :span="12"><div class="grid-content bg-purple-light">
-
-                        <el-form-item label="" prop="pic" class="enterprise_logo">
-                            <p class="image_p">商户Logo</p>
-                            <el-image
-                            style="width: 226px; height: 226px;"
-                            :src="url"
-                            :fit="fit"></el-image>
-
-                        </el-form-item></div></el-col>
-                        </el-row>
-
-
-
-<!--                        <el-form-item label="营业执照" prop="pic">
-                            <div>
-                                <el-input size="small" v-model="formData.pic" auto-complete="off" placeholder="图片路径"></el-input>
-                                <upload ext="jpg,png,jpeg" :size="716800"  @on-select="onSelectPic"></upload>
-                            </div>
-                            <div class="upload-img" v-if="formData.pic_url">
-                                <img :src="formData.pic_url" style="max-width: 200px;max-height: 200px;">
-                            </div>
-                        </el-form-item> -->
-
-                        <el-form-item label="信用代码" prop="title">
-                            <el-input v-model="formData.business_code" auto-complete="off"></el-input>
-                        </el-form-item>
-                         <el-form-item label="法定代表人" prop="title">
-                            <el-input v-model="formData.responsible_name" auto-complete="off"></el-input>
-                        </el-form-item>
-
-                        <el-form-item label="状态" prop="status">
-                            <el-radio-group v-model="formData.status">
-                                <el-radio :label="0">禁用</el-radio>
-                                <el-radio :label="1">正常</el-radio>
-                            </el-radio-group>
-                        </el-form-item>
-                  </div></el-col>
-
-
-
-                </el-row>
+                    <el-form-item label="用户类型" prop="roleid">
+                        <!-- <el-input v-model="formData.roleid" auto-complete="off"></el-input> -->
+                         <el-select v-model="formData.roleid" placeholder="请选择">
+                            <el-option
+                              v-for="item in roleoptions"
+                              :key="item.value"
+                              :label="item.label"
+                              :value="item.value">
+                            </el-option>
+                          </el-select>
+                    </el-form-item>
+                    <el-form-item label="所属商户" prop="business_name">
+                        <el-input v-model="formData.business_name" auto-complete="off"></el-input>
+                    </el-form-item>
 
             </el-form>
 
             <div slot="footer" class="dialog-footer">
-                <el-dropdown @command="handleverif" class="g-left-d10">
+<!--                <el-dropdown @command="handleverif" class="g-left-d10">
                 <el-button type="primary" class="g-success" >
                     审 核<i class="el-icon-arrow-down el-icon--right"></i>
                 </el-button>
@@ -203,7 +163,7 @@
                     <el-dropdown-item command="1">通 过</el-dropdown-item>
                     <el-dropdown-item command="2">拒 绝</el-dropdown-item>
                 </el-dropdown-menu>
-                </el-dropdown>
+                </el-dropdown> -->
                 <el-button type="primary" @click.native="formSubmit()" :loading="formLoading">保 存</el-button>
                 <el-button @click.native="hideFormdetails">取 消</el-button>
             </div>
@@ -227,17 +187,28 @@
 </template>
 
 <script>
+    const formJson = {
+        id:'',
+        username:'',
+        phone:'',
+        roleid:'',
+        business_name:'',
+    };
+    import {employeelist} from "@/api/enterprise/enterprise";
     export default {
         data() {
             return {
                 employee_id:'',
                 formMap: {
                     add: "新 增",
-                    edit: "审 核"
+                    edit: "员工信息"
                 },
                 formVisibledetails:false,
                 formData: formJson,
                 query: {
+                    phone:"",
+                    username:"",
+                    business_name:"",
                     title: "",
                     page: 1,
                     limit: 10
@@ -251,6 +222,7 @@
                 formName:null,
                 company_imgstyle:"{width: 100px; height: 100px;}",
                 formLoading:false,
+                roleoptions:[]
             }
         },
         methods:{
@@ -280,6 +252,20 @@
                      this.formName = "edit";
                  }
              },
+             //删除员工
+             handleFormdel(index,row){
+                this.$confirm('此操作将该员工删除, 是否继续?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        //点击确定的操作(调用接口)
+                        this.list.splice(index,1);
+                    }).catch(() => {
+                        //几点取消的提示
+                    });
+
+             },
              // 刷新表单
              resetForm() {
                  if (this.$refs["dataForm"]) {
@@ -301,15 +287,17 @@
                  this.getList();
              },
              getList(){
+                //获取数据
                 this.loading = false;
                 employeelist(this.query)
                      .then(response => {
-                         //console.log(response);
+                         console.log(response);
                          this.loading = false;
                          this.list = response.data.list || [];
                          this.total = response.data.total || 0;
                      })
                      .catch(() => {
+
                          this.loading = false;
                          this.list = [];
                          this.total = 0;
@@ -378,18 +366,43 @@
                  });
              },
         },
+        filters:{
+            //权限相关状态
+            roleFilterType(status) {
+                const statusMap = {
+                    1: "danger",
+                    2: "primary",
+                    3: "success",
+                    4: "info",
+                    5: "",
+                };
+                return statusMap[status];
+            },
+            roleFilterName(status) {
+                const statusMap = {
+                    1: "管理员",
+                    2: "负责人",
+                    3: "操作员",
+                    4: "消费者",
+                    5: "",
+                };
+                return statusMap[status];
+            },
+
+        },
         mounted() {
         //
         },
         created() {
-            console.log(this.$route.params);
             if(this.$route.params.employee_id){
                 this.employee_id = this.$route.params.employee_id;
             }
+            // 加载表格数据
+            this.getList();
         }
 }
 </script>
 
 <style type="text/scss" lang="scss">
-    
+
 </style>

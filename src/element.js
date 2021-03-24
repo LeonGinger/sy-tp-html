@@ -3,74 +3,84 @@ import Vue from "vue";
 
 import ELEMENT from "element-ui";
 import {
-    Pagination,
-    Dialog,
-    Autocomplete,
-    Dropdown,
-    DropdownMenu,
-    DropdownItem,
-    Menu,
-    Submenu,
-    MenuItem,
-    MenuItemGroup,
-    Input,
-    InputNumber,
-    Radio,
-    RadioGroup,
-    RadioButton,
-    Checkbox,
-    CheckboxButton,
-    CheckboxGroup,
-    Switch,
-    Select,
-    Option,
-    OptionGroup,
-    Button,
-    ButtonGroup,
-    Table,
-    TableColumn,
-    DatePicker,
-    TimeSelect,
-    TimePicker,
-    Popover,
-    Tooltip,
-    Breadcrumb,
-    BreadcrumbItem,
-    Form,
-    FormItem,
-    Tabs,
-    TabPane,
-    Tag,
-    Tree,
-    Alert,
-    Slider,
-    Icon,
-    Row,
-    Col,
-    Upload,
-    Progress,
-    Badge,
-    Card,
-    Rate,
-    Steps,
-    Step,
-    Carousel,
-    CarouselItem,
-    Collapse,
-    CollapseItem,
-    Cascader,
-    ColorPicker,
-    Transfer,
-    Container,
-    Header,
-    Aside,
-    Main,
-    Footer,
-    Loading,
-    MessageBox,
-    Message,
-    Notification
-} from "element-ui";
+  Pagination,
+  Dialog,
+  Autocomplete,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
+  Menu,
+  Submenu,
+  MenuItem,
+  MenuItemGroup,
+  Input,
+  InputNumber,
+  Radio,
+  RadioGroup,
+  RadioButton,
+  Checkbox,
+  CheckboxButton,
+  CheckboxGroup,
+  Switch,
+  Select,
+  Option,
+  OptionGroup,
+  Button,
+  ButtonGroup,
+  Table,
+  TableColumn,
+  DatePicker,
+  TimeSelect,
+  TimePicker,
+  Popover,
+  Tooltip,
+  Breadcrumb,
+  BreadcrumbItem,
+  Form,
+  FormItem,
+  Tabs,
+  TabPane,
+  Tag,
+  Tree,
+  Alert,
+  Slider,
+  Icon,
+  Row,
+  Col,
+  Upload,
+  Progress,
+  Spinner,
+  Badge,
+  Card,
+  Rate,
+  Steps,
+  Step,
+  Carousel,
+  CarouselItem,
+  Collapse,
+  CollapseItem,
+  Cascader,
+  ColorPicker,
+  Transfer,
+  Container,
+  Header,
+  Aside,
+  Main,
+  Footer,
+  Timeline,
+  TimelineItem,
+  Link,
+  Divider,
+  Image,
+  Calendar,
+  Backtop,
+  PageHeader,
+  CascaderPanel,
+  Loading,
+  MessageBox,
+  Message,
+  Notification
+} from 'element-ui';
 
 if (process.env.NODE_ENV === "development") {
     require("element-ui/lib/theme-chalk/index.css");
@@ -122,6 +132,7 @@ if (process.env.NODE_ENV === "development") {
     Vue.use(Col);
     Vue.use(Upload);
     Vue.use(Progress);
+    Vue.use(Spinner);
     Vue.use(Badge);
     Vue.use(Card);
     Vue.use(Rate);
@@ -139,9 +150,18 @@ if (process.env.NODE_ENV === "development") {
     Vue.use(Aside);
     Vue.use(Main);
     Vue.use(Footer);
-
+    Vue.use(Timeline);
+    Vue.use(TimelineItem);
+    Vue.use(Link);
+    Vue.use(Divider);
+    Vue.use(Image);
+    Vue.use(Calendar);
+    Vue.use(Backtop);
+    Vue.use(PageHeader);
+    Vue.use(CascaderPanel);
+    
     Vue.use(Loading.directive);
-
+    
     Vue.prototype.$loading = Loading.service;
     Vue.prototype.$msgbox = MessageBox;
     Vue.prototype.$alert = MessageBox.alert;

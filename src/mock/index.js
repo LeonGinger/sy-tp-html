@@ -104,4 +104,8 @@ Mock.mock(/\/web\/myenterprise_list/, "get", pool.mycompany_list);
 
 //员工管理
 Mock.mock(/\/web\/employee_list/, "get", pool.userlist);
+
+//商品管理
+Mock.mock(/\/web\/menu_list/, "get", pool.menulist);
+Mock.mock(/\/web\/menu_details/, "get", pool.menudetails);
 export default Mock;
