@@ -17,23 +17,35 @@ module.exports = {
     },
     /*mock和线上接口同时使用*/
     devServer: {
-        port: 8080,
+        port: 8081,
         open: true,
+        https:false,
         host: '0.0.0.0',
         overlay: {
           warnings: false,
-          errors: true
+          errors: true,
         },
-        before(app){require('mockjs')},
+        // before: app => {
+        //     require('mockjs');
+        // },
         proxy: {
-          [process.env.VUE_APP_BASE_API]: {
-            target: 'http://127.0.0.1:8080/',
-            changeOrigin: true,
-            pathRewrite: {
-              ['^' + process.env.VUE_APP_BASE_API]: ''
+            '/web': {
+                target: 'http://sy.zsicp.com',
+                changeOrigin: true,
+                ws: true,
+                pathRewrite: {
+                  '^/web': ''
+                }
             }
-          }
-        }
+          // [process.env.VUE_APP_BASE_API]: {
+          //   target: 'http://sy.zsicp.com',
+          //   changeOrigin: true,
+          //   pathRewrite: {
+          //     ['^' + process.env.VUE_APP_BASE_API]: ''
+          //   }
+          // }
+        },
+        after:app=>{require('mockjs')},
       },
 
     chainWebpack: config => {

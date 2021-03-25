@@ -90,12 +90,6 @@ export default {
     },
     methods: {
         handleLogin() {
-            testtoken().then(res=>{
-                    console.log(res)
-            }).catch(()=>{
-
-            });
-            return;
             this.$refs["ruleForm"].validate(valid => {
 
                 if (valid) {

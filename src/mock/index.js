@@ -17,9 +17,9 @@ import ad from "./ad";
 import pool from "./pool";
 
 // 登录相关
-Mock.mock(/\/web\/out/, "post", login.out);
+//Mock.mock(/\/web\/out/, "post", login.out);
 // Mock.mock(/\/admin\/auth\/login\/password/, "post", login.password);
-Mock.mock(/\/web\/login/, "post", login.index);
+// Mock.mock(/\/web\/login/, "post", login.index);
 // Mock.mock(/\/web\/userInfo/, "get", login.userInfo);
 
 // 管理员相关

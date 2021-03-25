@@ -23,6 +23,6 @@ export function getecharts_data(params) {
 }
 
 /*测试token*/
-export function testtoken(params) {
-    return http.get(`wap/user/user/set_token`,params);
-}
+// export function testtoken(params) {
+//     return http.get(`wap/user/user/set_token`,params);
+// }
