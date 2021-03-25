@@ -283,10 +283,67 @@ const menudetails ={
 
     }
 };
+const indexdata = {
+    code:200,
+    data:{
+        business_count:90,
+        business_apply:80,
+        menu_count:1547,
+        menu_month:583,
+        user_count:8786,
+        user_month:125,
+        source_count:87214,
+        source_month:4571,
+    }
+};
+const index_echartsdata = {
+    code:200,
+    data:[
+        {
+            day: "2021-03-01",
+            order_num: 23123,
+            user_num: 231,
+        },
+        {
+            day: "2021-03-02",
+            order_num: 1,
+            user_num: 1,
+        },
+        {
+            day: "2021-03-03",
+            order_num: 11,
+            user_num: 132,
+        },
+        {
+            day: "2021-03-04",
+            order_num: 14,
+            user_num: 11,
+        },
+        {
+            day: "2021-03-05",
+            order_num: 31,
+            user_num: 61,
+        },
+        {
+            day: "2021-03-06",
+            order_num: 451,
+            user_num: 21,
+        },
+        {
+            day: "2021-03-07",
+            order_num: 121,
+            user_num: 5671,
+        },
+
+    ]
+
+};
 export default {
     company_list,
     mycompany_list,
     userlist,
     menulist,
     menudetails,
+    indexdata,
+    index_echartsdata,
 };

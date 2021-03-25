@@ -1,7 +1,5 @@
 <template>
-
     <div class="login-container">
-        <div class="login-box">
         <el-form class="card-box login-form" autoComplete="on" :model="ruleForm" :rules="rules" ref="ruleForm"
                  label-position="left">
             <h3 class="title">系统登录</h3>
@@ -40,7 +38,6 @@
                 </el-button>
             </div>
         </el-form>
-        </div>
 
         <el-dialog title="第三方验证" :visible.sync="showDialog">
             <!-- 邮箱登录成功,请选择第三方验证<br/> -->
@@ -53,7 +50,7 @@
 <script>
 
 import wxlogin from 'vue-wxlogin';
-import {testtoken} from '@/api/pool.js';
+
 export default {
     components: {
         wxlogin
@@ -90,12 +87,7 @@ export default {
     },
     methods: {
         handleLogin() {
-            testtoken().then(res=>{
-                    console.log(res)
-            }).catch(()=>{
 
-            });
-            return;
             this.$refs["ruleForm"].validate(valid => {
 
                 if (valid) {
@@ -147,21 +139,10 @@ $light_gray: #eee;
     @include relative;
     height: 100%;
     background-color: $bg;
-    background-image: url('http://sy.zsicp.com/static/images/2kbg.png')!important;
-    background-repeat: no-repeat;
-    background-position: 0 50%;
     input:-webkit-autofill {
         -webkit-box-shadow: 0 0 0 1000px #293444 inset !important;
         -webkit-text-fill-color: #fff !important;
     }
-    .login-box{
-            background-color: #293444;
-            top: 20%;
-            right: 100px;
-            height: 500px;
-            position: fixed;
-            width: 400px;
-        }
     .item {
         .el-form-item__content {
             display: flex;

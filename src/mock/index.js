@@ -18,9 +18,9 @@ import pool from "./pool";
 
 // 登录相关
 Mock.mock(/\/web\/out/, "post", login.out);
-Mock.mock(/\/admin\/auth\/login\/password/, "post", login.password);
+// Mock.mock(/\/admin\/auth\/login\/password/, "post", login.password);
 Mock.mock(/\/web\/login/, "post", login.index);
-Mock.mock(/\/web\/userInfo/, "get", login.userInfo);
+// Mock.mock(/\/web\/userInfo/, "get", login.userInfo);
 
 // 管理员相关
 Mock.mock(/\/admin\/auth\/admin\/index/, "get", authAdmin.index);
@@ -108,4 +108,9 @@ Mock.mock(/\/web\/employee_list/, "get", pool.userlist);
 //商品管理
 Mock.mock(/\/web\/menu_list/, "get", pool.menulist);
 Mock.mock(/\/web\/menu_details/, "get", pool.menudetails);
+
+//面板数据
+Mock.mock(/\/web\/index_data/, "get", pool.indexdata);
+Mock.mock(/\/web\/index_echartsdata/, "get", pool.index_echartsdata);
+
 export default Mock;

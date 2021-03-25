@@ -11,7 +11,11 @@ import "./mock"; // 模拟数据
 
 import "./assets/icons/iconfont";
 import IconSvg from "./components/common/IconSvg.vue"; // svg组件
+import * as echarts from 'echarts';
+Vue.prototype.$echarts = echarts;
 
+//
+Vue.prototype.baseURL = "http://sy.zsicp.com";
 // 注册全局组件（register global）
 Vue.component("icon-svg", IconSvg);
 

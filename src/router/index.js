@@ -8,6 +8,8 @@ if (process.env.NODE_ENV === "development") {
 import { ROUTER_MODE } from "../config/app";
 
 import Home from "../views/home/index.vue";
+import adminMain from "../views/home/adminMain.vue";
+import echartstest from "../views/home/echartstest.vue";
 
 // 管理组相关
 import adminRouter from "../views/userManage/admin/router.vue";
@@ -40,9 +42,10 @@ const err404 = r =>
     require.ensure([], () => r(require("../views/error/err404.vue")), "home");
 const login = r =>
     require.ensure([], () => r(require("../views/login/index.vue")), "home");
+// const main = r =>
+//     require.ensure([], () => r(require("../views/home/main.vue")), "home");
 const main = r =>
-    require.ensure([], () => r(require("../views/home/main.vue")), "home");
-
+    require.ensure([], () => r(require("../views/home/adminMain.vue")), "home");
 // 注意 权限字段 authRule （严格区分大小写）
 export const constantRouterMap = [
     {
@@ -134,6 +137,34 @@ export default new VueRouter({
 });
 
 export const asyncRouterMap = [
+    {
+        path: "/home",
+        component: Home,
+        redirect: "/home/adminMain",
+        icon: "shouye",
+        name: "首页",
+        noDropdown: true,
+        children: [
+            {
+                path: "adminMain",
+                component: adminMain
+            }
+        ]
+    },
+    // {
+    //     path: "/home",
+    //     component: Home,
+    //     redirect: "/home/echartstest",
+    //     icon: "shouye",
+    //     name: "echarts示例",
+    //     noDropdown: true,
+    //     children: [
+    //         {
+    //             path: "echartstest",
+    //             component: echartstest
+    //         }
+    //     ]
+    // },
     {
         path: "/userManage",
         redirect: "/userManage/adminManage/index",
@@ -296,5 +327,6 @@ export const asyncRouterMap = [
             //     }
             // }
         ]
-    }
+    },
+
 ];
