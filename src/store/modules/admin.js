@@ -39,7 +39,7 @@ const actions = {
         const userName = userInfo.userName ? userInfo.userName.trim() : "";
         const pwd = userInfo.pwd ? userInfo.pwd : "";
         return new Promise((resolve, reject) => {
-            loginName(userName, pwd)
+            loginName(userInfo)
                 .then(response => {
 
                     if (response.code!=200) {

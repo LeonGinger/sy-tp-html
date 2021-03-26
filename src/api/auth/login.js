@@ -39,14 +39,17 @@ let resquest =  "/web";
 // 新的封装请求
 // export function userInfo(params){
 export function userInfo(id, token){
-  return http.get(`${resquest}/userInfo`,{id,token})
+  return http.get(`${resquest}/userInfo`,{id,token});
 }
-export function loginName(userName, pwd){
-  return http.post(`${resquest}/login`,{userName, pwd})
+export function loginName(params){
+  return http.post(`${resquest}/login`,params);
 }
 export function logout(uid, token){
-  return http.post(`${resquest}/out`,{uid, token})
+  return http.post(`${resquest}/out`,{uid, token});
 }
 export function password(params){
-  return http.post(`${resquest}/password`,params)
+  return http.post(`${resquest}/password`,params);
+}
+export function sendcode(params){
+  return http.post(`${resquest}/auth/send_code`,params);
 }

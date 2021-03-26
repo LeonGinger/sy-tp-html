@@ -5,7 +5,28 @@
         <el-form class="card-box login-form" autoComplete="on" :model="ruleForm" :rules="rules" ref="ruleForm"
                  label-position="left">
             <h3 class="title">系统登录</h3>
-            <el-form-item prop="username" class="item">
+           <el-form-item prop="mobile" class="item">
+                <el-input
+                    maxlength="11"
+                    placeholder="手机号码"
+                    name="mobile"
+                    autoComplete="on"
+                    v-model="ruleForm.mobile">
+                    <i slot="prefix" class="el-input__icon"><icon-svg icon-class="shouji"/></i>
+                </el-input>
+            </el-form-item>
+            <el-form-item prop="code" class="item">
+                 <el-input
+                     maxlength="8"
+                     placeholder="验证码"
+                     name="code"
+                     autoComplete="on"
+                     v-model="ruleForm.code">
+                     <i slot="prefix" class="el-input__icon"><icon-svg icon-class="mima"/></i>
+                 </el-input>
+                 <el-button :disabled="disabled" @click="handleCode" type="primary">{{codetips}}</el-button>
+             </el-form-item>
+<!--            <el-form-item prop="username" class="item">
                 <el-input
                     placeholder="邮箱"
                     name="userName"
@@ -13,21 +34,12 @@
                     v-model="ruleForm.userName">
                     <i slot="prefix" class="el-input__icon"><icon-svg icon-class="user"/></i>
                 </el-input>
-            </el-form-item>
-            <el-form-item prop="password" class="item">
+            </el-form-item> -->
+           <!-- <el-form-item prop="password" class="item"> -->
                 <!--<span class="svg-container">-->
                 <!--<icon-svg icon-class="pwd"/>-->
                 <!--</span>-->
-                <el-input
-                    placeholder="密码"
-                    name="pwd" :type="isShowPwd ? 'text' : 'password'"
-                    @keyup.enter.native="handleLogin"
-                    v-model="ruleForm.pwd"
-                    autoComplete="on">
-                    <i slot="prefix" class="el-input__icon"><icon-svg icon-class="pwd"/></i>
-                    <i slot="suffix" class="el-input__icon" @click='isShowPwd = !isShowPwd'><icon-svg icon-class="eye"/></i>
-                </el-input>
-            </el-form-item>
+<!--s -->
             <div>
                 <el-button type="primary" style="width:100%;margin-bottom:30px;" :loading="loading"
                            @click.native="handleLogin()">登录
@@ -53,7 +65,7 @@
 <script>
 
 import wxlogin from 'vue-wxlogin';
-import {testtoken} from '@/api/pool.js';
+import {sendcode} from '@/api/auth/login.js';
 export default {
     components: {
         wxlogin
@@ -67,12 +79,17 @@ export default {
             }
         };
         return {
+            disabled:false,
+            codetips:"发送验证码",
+            codetime:15,
             appid:'',
             scope:'',
             redirect_uri:'',
             otherlogin:true,
             ruleForm: {
                 userName: "admin",
+                mobile:"",
+                code:"",
                 pwd: "admin",
                 checked: true
             },
@@ -80,8 +97,12 @@ export default {
                 userName: [
                     { required: true, message: "请输入登录名", trigger: "blur" }
                 ],
-                pwd: [{ validator: validatePwd, trigger: "blur" }]
+                pwd: [{ validator: validatePwd, trigger: "blur" }],
+                mobile: [{ required: true, message: "请输入手机号", trigger: "blur" }],
+                code: [{ required: true, message: "请输入验证码", trigger: "blur"}],
+
             },
+
             isShowPwd: false, // 是否显示密码
             loading: false, // 登录loading
             showDialog: false, // 显示dialog
@@ -89,6 +110,32 @@ export default {
         };
     },
     methods: {
+        handleCode(){
+            if(!this.ruleForm.mobile){this.$message.error('请输入手机号');return;}
+            this.codetime = 15;
+            this.timer();
+            sendcode(this.ruleForm)
+                .then(respnse=>{
+                    console.log(respnse);
+                })
+                .cath(()=>{
+
+                });
+
+            console.log(this.ruleForm)
+        },
+        timer() {
+         if (this.codetime > 0) {
+          this.disabled=true;
+          this.codetime--;
+          this.codetips=this.codetime+"秒";
+          setTimeout(this.timer, 1000);
+         } else{
+          this.codetime=0;
+          this.codetips="发送验证码";
+          this.disabled=false;
+         }
+         },
         handleLogin() {
             this.$refs["ruleForm"].validate(valid => {
 
