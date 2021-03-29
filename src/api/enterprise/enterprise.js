@@ -14,6 +14,9 @@ let resquest =  "/web";
  export function employeelist(params){
   return http.get(`${resquest}/employee_list`,params);
 }
+ export function employeestate(params){
+  return http.post(`${resquest}/enterprise_state`,params);
+}
 //  export function authAdminRoleList(params){
 //   return http.get(`${resquest}/role_list`,params);
 // }

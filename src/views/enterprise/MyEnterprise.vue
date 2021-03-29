@@ -442,7 +442,9 @@ export default {
     //
     },
     created() {
-    //
+        if(this.$route.params.employee_id){
+            this.employee_id = this.$route.params.employee_id;
+        }
         // 加载表格数据
         this.getList();
     }

@@ -9,7 +9,7 @@
                 <p class="bg-blue" style="float: right; padding: 3px 0">总</p>
                 <!-- <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button> -->
               </div>
-                  <div class="number-box"><span class="main-number">{{panelinfo.business_count}}</span>总计</div>
+                  <div class="number-box"><span class="main-number">{{panelinfo.business_count||'0'}}</span>总计</div>
             </el-card>
         </div></el-col>
 
@@ -18,9 +18,9 @@
               <div slot="header" class="clearfix">
                 <span class="number-title">商家申请</span>
                <!-- <p class="bg-blue" style="float: right; padding: 3px 0">总</p> -->
-                <el-button style="float: right; padding: 3px 0" type="text">前往审核</el-button>
+                <el-button @click="goapply" style="float: right; padding: 3px 0" type="text">前往审核</el-button>
               </div>
-                  <div class="number-box"><span class="main-number">{{panelinfo.business_apply}}</span>总计</div>
+                  <div class="number-box"><span class="main-number">{{panelinfo.businessapply_count||'0'}}</span>总计</div>
             </el-card>
         </div></el-col>
 
@@ -30,7 +30,7 @@
                 <span class="number-title">商品</span>
                <p class="bg-blue" style="float: right; padding: 3px 0">总</p>
               </div>
-                  <div class="number-box"><span class="main-number">{{panelinfo.menu_count}}</span>总计</div>
+                  <div class="number-box"><span class="main-number">{{panelinfo.menu_count||'0'}}</span>总计</div>
             </el-card>
         </div></el-col>
 
@@ -40,7 +40,7 @@
                 <span class="number-title">商品</span>
                <p class="bg-blue" style="float: right; padding: 3px 0">月</p>
               </div>
-                  <div class="number-box"><span class="main-number">{{panelinfo.menu_month}}</span>总计</div>
+                  <div class="number-box"><span class="main-number">{{panelinfo.menumonth_count||'0'}}</span>总计</div>
             </el-card>
         </div></el-col>
 
@@ -54,7 +54,7 @@
                 <span class="number-title">用户</span>
                <p class="bg-blue" style="float: right; padding: 3px 0">总</p>
               </div>
-                  <div class="number-box"><span class="main-number">{{panelinfo.user_count}}</span>总计</div>
+                  <div class="number-box"><span class="main-number">{{panelinfo.user_count||'0'}}</span>总计</div>
             </el-card>
         </div></el-col>
 
@@ -64,7 +64,7 @@
                 <span class="number-title">用户</span>
                <p class="bg-blue" style="float: right; padding: 3px 0">月</p>
               </div>
-                  <div class="number-box"><span class="main-number">{{panelinfo.user_month}}</span>本月新增</div>
+                  <div class="number-box"><span class="main-number">{{panelinfo.usermonth_count||'0'}}</span>本月新增</div>
             </el-card>
         </div></el-col>
 
@@ -74,7 +74,7 @@
                 <span class="number-title">溯源查询</span>
                <p class="bg-blue" style="float: right; padding: 3px 0">今</p>
               </div>
-                  <div class="number-box"><span class="main-number">{{panelinfo.source_count}}</span>今日查询</div>
+                  <div class="number-box"><span class="main-number">{{panelinfo.source_count||'0'}}</span>今日查询</div>
             </el-card>
         </div></el-col>
 
@@ -84,7 +84,7 @@
                 <span class="number-title">溯源查询</span>
                <p class="bg-blue" style="float: right; padding: 3px 0">月</p>
               </div>
-                  <div class="number-box"><span class="main-number">{{panelinfo.source_month}}</span>本月查询</div>
+                  <div class="number-box"><span class="main-number">{{panelinfo.sourcemonth_count||'0'}}</span>本月查询</div>
             </el-card>
         </div></el-col>
         </el-row>
@@ -206,6 +206,14 @@
             }
     },
         methods:{
+            goapply(){
+                this.$router.push({
+                    name:'商户申请管理',
+                    params:{
+                        verify_if:3,
+                    }
+                });
+            },
             //echarts
             drawLine(){
                 // 基于准备好的dom，初始化echarts实例
@@ -239,7 +247,7 @@
                 //面板数据
                 getindex_data()
                     .then(response=>{
-                        //console.log(response);
+                        console.log(response);
                         this.panelinfo = response.data;
 
                     })

@@ -4,7 +4,7 @@
         <!-- start search -->
         <el-form :inline="true" :model="query" class="query-form" size="mini">
             <el-form-item class="query-form-item">
-                <el-input v-model="query.title" placeholder="企业名称"></el-input>
+                <el-input v-model="query.name" placeholder="企业名称"></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button-group>
@@ -26,7 +26,7 @@
             </el-table-column>
             <el-table-column
                 label="企业ID"
-                prop="company_id"
+                prop="id"
                 with="300"
                 :show-overflow-tooltip="true"
                 fixed>
@@ -45,20 +45,26 @@
                 :show-overflow-tooltip="true">
             </el-table-column>
             <el-table-column
-                label="申请人ID"
-                prop="user_id"
-                with="300"
-                :show-overflow-tooltip="true">
+                label="申请人ID">
+                <template slot-scope="scope">
+                    {{scope.row.boss_user|bossFiltersId}}
+                </template>
             </el-table-column>
             <el-table-column
+                label="申请人姓名">
+                <template slot-scope="scope">
+                    {{scope.row.boss_user|bossFiltersName}}
+                </template>
+            </el-table-column>
+<!--            <el-table-column
                 label="申请人姓名"
                 prop="username"
                 with="300"
                 :show-overflow-tooltip="true">
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column
                 label="联系电话"
-                prop="mobile"
+                prop="responsible_phone"
                 with="300"
                 :show-overflow-tooltip="true">
             </el-table-column>
@@ -80,7 +86,7 @@
                         审 核<i class="el-icon-arrow-down el-icon--right"></i>
                     </el-button>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item command="1">通 过</el-dropdown-item>
+                        <el-dropdown-item command='1'>通 过</el-dropdown-item>
                         <el-dropdown-item command="2">拒 绝</el-dropdown-item>
                     </el-dropdown-menu>
                     </el-dropdown>
@@ -121,14 +127,14 @@
                         <el-input v-model="formData.responsible_name" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="联系电话" prop="title">
-                        <el-input v-model="formData.mobile" auto-complete="off"></el-input>
+                        <el-input v-model="formData.responsible_phone" auto-complete="off"></el-input>
                     </el-form-item>
                     <!-- 用户信息 -->
                     <el-form-item label="申请人ID" prop="title">
-                        <el-input v-model="formData.user_id" auto-complete="off"></el-input>
+                        <el-input v-model="formData.boss_user.id" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="用户名" prop="title">
-                        <el-input v-model="formData.username" auto-complete="off"></el-input>
+                        <el-input v-model="formData.boss_user.username" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="申请时间" prop="title">
                         <el-input v-model="formData.create_time" auto-complete="off"></el-input>
@@ -181,7 +187,7 @@
                         </el-form-item>
 
                         <el-form-item label="状态" prop="status">
-                            <el-radio-group v-model="formData.status">
+                            <el-radio-group v-model="formData.state">
                                 <el-radio :label="0">禁用</el-radio>
                                 <el-radio :label="1">正常</el-radio>
                             </el-radio-group>
@@ -195,7 +201,7 @@
             </el-form>
 
             <div slot="footer" class="dialog-footer">
-                <el-dropdown @command="handleverif" class="g-left-d10">
+                <el-dropdown @click="formverifBininfo(scope.row)" @command="handleverif" class="g-left-d10">
                 <el-button type="primary" class="g-success" >
                     审 核<i class="el-icon-arrow-down el-icon--right"></i>
                 </el-button>
@@ -218,7 +224,7 @@
             </el-form>
             <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisibleverif = false">取 消</el-button>
-            <el-button type="primary" @click="onSubmitverif">确 定</el-button>
+            <el-button type="primary" @click="handleverif">确 定</el-button>
             </div>
         </el-dialog>
 
@@ -228,7 +234,7 @@
 </template>
 
 <script>
-import {enterpriseList} from "@/api/enterprise/enterprise";
+import {enterpriseList,employeestate} from "@/api/enterprise/enterprise";
 const formJson = {
     appraisal_image: '',
     business_name: '',
@@ -239,6 +245,11 @@ const formJson = {
     status:'',
     user_id:'',
     username:'',
+    boss_user:{
+        id:'',
+        username:'',
+
+    }
 };
 export default {
     data() {
@@ -250,9 +261,10 @@ export default {
             formVisibledetails:false,
             formData: formJson,
             query: {
-                title: "",
+                name: "",
                 page: 1,
-                limit: 10
+                limit: 10,
+                verify_if:'3',
             },
             loading: true,
             list: [],
@@ -268,8 +280,16 @@ export default {
     },
     methods:{
     //方法
+        //
+        formverifBininfo(row){
+            alert(1);
+
+            this.formverif.id = row.id;
+            console.log(row)
+        },
         // 显示表单
         handleForm(index, row) {
+            console.log(row)
             // console.log(row);
             // console.log(index);
             this.formVisibledetails = true;
@@ -309,7 +329,7 @@ export default {
            this.loading = false;
            enterpriseList(this.query)
                 .then(response => {
-                    //console.log(response);
+                    console.log(response);
                     this.loading = false;
                     this.list = response.data.list || [];
                     this.total = response.data.total || 0;
@@ -334,15 +354,26 @@ export default {
            this.getList();
         },
         handleverif(command){
+            console.log(command)
             if(command=='1'){
             //接受
-
+                this.formverif.verify_if = 1;
             }
             if(command=='2'){
             //拒绝
-            this.dialogFormVisibleverif = true;
-
+                this.formverif.verify_if = 2;
+                this.dialogFormVisibleverif = true;
+                return;
             }
+            //
+            employeestate(this.formverif)
+                .then(response=>{
+                    this.formverif = {};
+
+                }).catch(()=>{
+                    this.formverif = {};
+
+                });
        },
         onSubmitverif(){
            //审核不通过
@@ -385,17 +416,31 @@ export default {
 
     },
     filters: {
+        bossFiltersId(boss_user){
+            if(boss_user==null){
+                return "无";
+            }
+            return boss_user.id
+        },
+        bossFiltersName(boss_user){
+            if(boss_user==null){
+                return "无";
+            }
+            return boss_user.username;
+        },
         statusFilterType(status) {
             const statusMap = {
                 0: "gray",
-                1: "success"
+                1: "success",
+                'undefined':"无"
             };
             return statusMap[status];
         },
         statusFilterName(status) {
             const statusMap = {
                 0: "禁用",
-                1: "正常"
+                1: "正常",
+                'undefined':"无"
             };
             return statusMap[status];
         }
@@ -405,6 +450,9 @@ export default {
     },
     created() {
     //
+        if(this.$route.params.verify_if){
+            this.query.verify_if = this.$route.params.verify_if;
+        }
         // 加载表格数据
         this.getList();
     }
