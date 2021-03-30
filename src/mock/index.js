@@ -100,7 +100,7 @@ Mock.mock(/\/admin\/ad\/ad\/delete/, "post", ad.del);
 
 //商家管理
 //Mock.mock(/\/web\/enterprise_list/, "get", pool.company_list);
-Mock.mock(/\/web\/myenterprise_list/, "get", pool.mycompany_list);
+//Mock.mock(/\/web\/myenterprise_list/, "get", pool.mycompany_list);
 
 //员工管理
 Mock.mock(/\/web\/employee_list/, "get", pool.userlist);

@@ -12,8 +12,10 @@
                 <el-input v-model="query.business_name" placeholder="商户名称"></el-input>
             </el-form-item>
             <el-form-item>
+                <el-button v-if="employee_id" plain @click="returnPage">返回上一页</el-button>
+           </el-form-item>
+            <el-form-item>
                 <el-button-group>
-                    <el-button v-if="employee_id" plain @click="returnPage">返回上一页</el-button>
                     <el-button type="primary" icon="el-icon-refresh" @click="getList"></el-button>
                     <el-button type="primary" icon="search" @click="onSubmit">查询</el-button>
                  <!--   <el-button type="primary" @click.native="handleForm(null,null)">新增</el-button> -->
@@ -104,7 +106,7 @@
         </el-table>
 
         <el-pagination
-            :page-size="query.limit"
+            :page-size="query.size"
             @current-change="handleCurrentChange"
             layout="prev, pager, next"
             :total="total">
@@ -211,7 +213,7 @@
                     business_name:"",
                     title: "",
                     page: 1,
-                    limit: 10
+                    size: 10
                 },
                 loading: true,
                 list: [],
@@ -282,7 +284,7 @@
                  this.query = {
                      title: "",
                      page: 1,
-                     limit: 10
+                     size: 10
                  };
                  this.getList();
              },
@@ -395,8 +397,10 @@
         },
         created() {
             if(this.$route.params.employee_id){
+
                 this.employee_id = this.$route.params.employee_id;
             }
+              console.log( this.employee_id);
             // 加载表格数据
             this.getList();
         }

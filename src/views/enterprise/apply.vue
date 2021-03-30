@@ -20,8 +20,8 @@
             :data="list"
             style="width: 100%;">
             <el-table-column
-                label="ID"
-                prop="id"
+                label="序号"
+                type="index"
                 fixed>
             </el-table-column>
             <el-table-column
@@ -71,7 +71,7 @@
             <el-table-column
                 label="状态">
                 <template slot-scope="scope">
-                    <el-tag :type="scope.row.status | statusFilterType">{{scope.row.status | statusFilterName}}</el-tag>
+                    <el-tag :type="scope.row.verify_if | statusFilterType">{{scope.row.verify_if | statusFilterName}}</el-tag>
                 </template>
             </el-table-column>
             <el-table-column
@@ -86,8 +86,8 @@
                         审 核<i class="el-icon-arrow-down el-icon--right"></i>
                     </el-button>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item command='1'>通 过</el-dropdown-item>
-                        <el-dropdown-item command="2">拒 绝</el-dropdown-item>
+                        <el-dropdown-item :command="formverifBininfo(scope.row,'1')">通 过</el-dropdown-item>
+                        <el-dropdown-item :command="formverifBininfo(scope.row,'2')">拒 绝</el-dropdown-item>
                     </el-dropdown-menu>
                     </el-dropdown>
 
@@ -97,7 +97,7 @@
         </el-table>
 
         <el-pagination
-            :page-size="query.limit"
+            :page-size="query.size"
             @current-change="handleCurrentChange"
             layout="prev, pager, next"
             :total="total">
@@ -139,7 +139,6 @@
                     <el-form-item label="申请时间" prop="title">
                         <el-input v-model="formData.create_time" auto-complete="off"></el-input>
                     </el-form-item>
-
                   </div></el-col>
                     <el-col :span="1"><div class="grid-content bg-purple">&nbsp;</div></el-col>
                   <!-- 右边 -->
@@ -201,13 +200,13 @@
             </el-form>
 
             <div slot="footer" class="dialog-footer">
-                <el-dropdown @click="formverifBininfo(scope.row)" @command="handleverif" class="g-left-d10">
+                <el-dropdown @command="handleverif" class="g-left-d10">
                 <el-button type="primary" class="g-success" >
                     审 核<i class="el-icon-arrow-down el-icon--right"></i>
                 </el-button>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item command="1">通 过</el-dropdown-item>
-                    <el-dropdown-item command="2">拒 绝</el-dropdown-item>
+                    <el-dropdown-item :command="formverifBininfo(formData,'1')">通 过</el-dropdown-item>
+                    <el-dropdown-item :command="formverifBininfo(formData,'2')">拒 绝</el-dropdown-item>
                 </el-dropdown-menu>
                 </el-dropdown>
                 <el-button type="primary" @click.native="formSubmit()" :loading="formLoading">保 存</el-button>
@@ -216,15 +215,17 @@
         </el-dialog>
         <!-- 审核拒绝表单 -->
         <el-dialog title="审核不通过" :visible.sync="dialogFormVisibleverif">
-            <el-form :model="formverif">
-            <el-form-item label="原因:" :label-width="formLabelverifWidth">
-                <el-input v-model="formverif.content" autocomplete="off"></el-input>
+            <el-form :model="formverif" ref="formverif">
+            <el-form-item
+            label="原因:"
+            :label-width="formLabelverifWidth">
+                <el-input require v-model="formverif.content" autocomplete="off"></el-input>
             </el-form-item>
 
             </el-form>
             <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisibleverif = false">取 消</el-button>
-            <el-button type="primary" @click="handleverif">确 定</el-button>
+            <el-button type="primary" @click="verifstate()">确 定</el-button>
             </div>
         </el-dialog>
 
@@ -261,16 +262,21 @@ export default {
             formVisibledetails:false,
             formData: formJson,
             query: {
+                type:"apply",
                 name: "",
                 page: 1,
-                limit: 10,
-                verify_if:'3',
+                size: 10,
+                // verify_if:'3',
             },
             loading: true,
             list: [],
             total:0,
             dialogFormVisibleverif:false,
-            formverif:{},
+            formverif:{
+                id:'',
+                verify_if:'',
+                content:'',
+            },
             formLabelverifWidth:'120px',
             formName:null,
             company_imgstyle:"{width: 100px; height: 100px;}",
@@ -281,11 +287,11 @@ export default {
     methods:{
     //方法
         //
-        formverifBininfo(row){
-            alert(1);
-
-            this.formverif.id = row.id;
-            console.log(row)
+        formverifBininfo(row,command){
+            return {
+                'row':row,
+                'command':command,
+            }
         },
         // 显示表单
         handleForm(index, row) {
@@ -296,9 +302,20 @@ export default {
             // 刷新表单
             this.resetForm();
             this.formData = JSON.parse(JSON.stringify(formJson));
+
             if (row !== null) {
                 this.formData = Object.assign({}, row);
             }
+
+            /*注册人为空-之后可删除*/
+            if(this.formData.boss_user==null){
+                this.formData.boss_user = {
+                    'id':'',
+                    'username':'',
+                };
+
+            }
+
             this.formName = "add";
             if (index !== null) {
                 this.index = index;
@@ -321,7 +338,7 @@ export default {
             this.query = {
                 title: "",
                 page: 1,
-                limit: 10
+                size: 10
             };
             this.getList();
         },
@@ -354,27 +371,46 @@ export default {
            this.getList();
         },
         handleverif(command){
-            console.log(command)
-            if(command=='1'){
+            if(command.command=='1'){
             //接受
+                this.formverif.id = command.row.id
                 this.formverif.verify_if = 1;
+                this.verifstate();
             }
-            if(command=='2'){
+            if(command.command=='2'){
             //拒绝
+                this.formverif.id = command.row.id;
                 this.formverif.verify_if = 2;
                 this.dialogFormVisibleverif = true;
                 return;
             }
             //
+       },
+        verifstate(){
+            if(this.formverif.verify_if==2 && this.formverif.content==""){
+                this.$message.error('不通过原因必须');
+                return false;
+            }
+
+            const tips = this.formverif.verify_if==1?"审核通过":"审核不通过";
             employeestate(this.formverif)
                 .then(response=>{
-                    this.formverif = {};
+                    this.$message({
+                        showClose: true,
+                        type: 'success',
+                        message: tips,
+                    });
 
                 }).catch(()=>{
-                    this.formverif = {};
-
+                   this.$message.error('审核失败');
                 });
-       },
+            this.formverif = {};
+            this.dialogFormVisibleverif = false;
+            this.getList();
+
+
+
+        },
         onSubmitverif(){
            //审核不通过
 
@@ -432,14 +468,18 @@ export default {
             const statusMap = {
                 0: "gray",
                 1: "success",
+                2: "danger",
+                3: "primary",
                 'undefined':"无"
             };
             return statusMap[status];
         },
         statusFilterName(status) {
             const statusMap = {
-                0: "禁用",
-                1: "正常",
+                0: "默认",
+                1: "通过",
+                2: "不通过",
+                3: "待审核",
                 'undefined':"无"
             };
             return statusMap[status];
