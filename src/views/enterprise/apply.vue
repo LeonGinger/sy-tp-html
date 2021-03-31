@@ -71,7 +71,13 @@
             <el-table-column
                 label="状态">
                 <template slot-scope="scope">
-                    <el-tag :type="scope.row.verify_if | statusFilterType">{{scope.row.verify_if | statusFilterName}}</el-tag>
+                    <el-tag :type="scope.row.state | statusFilterType">{{scope.row.state | statusFilterName}}</el-tag>
+                </template>
+            </el-table-column>
+            <el-table-column
+                label="资料审核状态">
+                <template slot-scope="scope">
+                    <el-tag :type="scope.row.verify_if | verifyFilterType">{{scope.row.verify_if | verifyFilterName}}</el-tag>
                 </template>
             </el-table-column>
             <el-table-column
@@ -117,6 +123,12 @@
                   <!-- 左边 -->
                   <el-col :span="10"><div class="grid-content bg-purple">
                    <!-- 商户信息 -->
+                   <el-form-item label="营业执照" prop="pic">
+                        <el-image
+                          style="width: 226px; height: 226px;"
+                          :src="url"
+                          :fit="fit"></el-image>
+                   </el-form-item>
                     <el-form-item label="商户名称" prop="title">
                         <el-input v-model="formData.business_name" auto-complete="off"></el-input>
                     </el-form-item>
@@ -131,42 +143,30 @@
                     </el-form-item>
                     <!-- 用户信息 -->
                     <el-form-item label="申请人ID" prop="title">
-                        <el-input v-model="formData.boss_user.id" auto-complete="off"></el-input>
+                        <el-input disabled="disabled" v-model="formData.boss_user.id" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="用户名" prop="title">
                         <el-input v-model="formData.boss_user.username" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="申请时间" prop="title">
-                        <el-input v-model="formData.create_time" auto-complete="off"></el-input>
+                         <el-date-picker
+                              v-model="formData.create_time"
+                              type="datetime"
+                              placeholder="选择日期时间"
+                              default-time="default_time">
+                            </el-date-picker>
                     </el-form-item>
                   </div></el-col>
                     <el-col :span="1"><div class="grid-content bg-purple">&nbsp;</div></el-col>
                   <!-- 右边 -->
                   <el-col :span="10"><div class="grid-content bg-purple-light">
-                        <el-row>
-                        <el-col :span="12"><div class="grid-content bg-purple">
 
-                        <el-form-item label="" prop="pic">
-                            <p class="image_p">营业执照</p>
-                            <el-image
-                              style="width: 226px; height: 226px;"
-                              :src="url"
-                              :fit="fit"></el-image>
-
-                        </el-form-item></div></el-col>
-                        <el-col :span="12"><div class="grid-content bg-purple-light">
-
-                        <el-form-item label="" prop="pic" class="enterprise_logo">
-                            <p class="image_p">商户Logo</p>
+                        <el-form-item label="商户Logo" prop="pic" class="enterprise_logo">
                             <el-image
                             style="width: 226px; height: 226px;"
                             :src="url"
                             :fit="fit"></el-image>
-
-                        </el-form-item></div></el-col>
-                        </el-row>
-
-
+                        </el-form-item>
 
 <!--                        <el-form-item label="营业执照" prop="pic">
                             <div>
@@ -187,8 +187,8 @@
 
                         <el-form-item label="状态" prop="status">
                             <el-radio-group v-model="formData.state">
-                                <el-radio :label="0">禁用</el-radio>
-                                <el-radio :label="1">正常</el-radio>
+                                <el-radio :label="'1'">正常</el-radio>
+                                <el-radio :label="'2'">冻结</el-radio>
                             </el-radio-group>
                         </el-form-item>
                   </div></el-col>
@@ -235,7 +235,8 @@
 </template>
 
 <script>
-import {enterpriseList,employeestate} from "@/api/enterprise/enterprise";
+import {enterpriseList,employeestate,employeeupdate} from "@/api/enterprise/enterprise";
+import time from "@/utils/utils.filter.js"
 const formJson = {
     appraisal_image: '',
     business_name: '',
@@ -281,6 +282,7 @@ export default {
             formName:null,
             company_imgstyle:"{width: 100px; height: 100px;}",
             formLoading:false,
+            default_time:'',
 
         }
     },
@@ -426,29 +428,39 @@ export default {
                 if (valid) {
                     this.formLoading = true;
                     let data = Object.assign({}, this.formData);
-                    adSave(data, this.formName)
+                    if(typeof(data.create_time)=="object"){data.create_time = time.formatDateTime(data.create_time);}
+                    employeeupdate({
+                        business_address:data.business_address,
+                        business_appraisal_id:data.business_appraisal_id,
+                        business_introduction:data.business_introduction,
+                        business_name:data.business_name,
+                        grant_code:data.grant_code,
+                        id:data.id,
+                        // img_info: null
+                        responsible_name:data.responsible_name,
+                        responsible_phone:data.responsible_phone,
+                        state:data.state,
+                        create_time:data.create_time
+                    })
                         .then(response => {
                             this.formLoading = false;
-                            if (response.code) {
                                 this.$message.error(response.message);
+                            if (response.code!=200) {
+                                this.getList();
                                 return false;
                             }
                             this.$message.success("操作成功");
                             this.formVisible = false;
-                            if (this.formName === "add") {
-                                // 向头部添加数据
-                                data.ad_id = response.data.ad_id;
-                                this.list.unshift(data);
-                            } else {
-                                this.list.splice(this.index, 1, data);
-                            }
                         })
                         .catch(() => {
+                            this.$message.error("操作失败");
                             this.formLoading = false;
                         });
+                        this.getList();
                 }
             });
         },
+
 
     },
     filters: {
@@ -464,7 +476,7 @@ export default {
             }
             return boss_user.username;
         },
-        statusFilterType(status) {
+        verifyFilterType(status) {
             const statusMap = {
                 0: "gray",
                 1: "success",
@@ -474,12 +486,30 @@ export default {
             };
             return statusMap[status];
         },
-        statusFilterName(status) {
+        verifyFilterName(status) {
             const statusMap = {
                 0: "默认",
                 1: "通过",
                 2: "不通过",
                 3: "待审核",
+                'undefined':"无"
+            };
+            return statusMap[status];
+        },
+        statusFilterType(status) {
+            const statusMap = {
+                0: "gray",
+                1: "success",
+                2: "danger",
+                'undefined':"无"
+            };
+            return statusMap[status];
+        },
+        statusFilterName(status) {
+            const statusMap = {
+                0: "默认",
+                1: "正常",
+                2: "冻结",
                 'undefined':"无"
             };
             return statusMap[status];
@@ -489,6 +519,7 @@ export default {
     //
     },
     created() {
+        this.default_time = time.timeTodate("H:i:s",Date.parse(new Date()));
     //
         if(this.$route.params.verify_if){
             this.query.verify_if = this.$route.params.verify_if;
@@ -510,6 +541,6 @@ export default {
         top: -2.2rem;
     }
 /deep/.enterprise_logo{
-        margin-left: 64px;
+       margin-left: 64px;
     }
 </style>

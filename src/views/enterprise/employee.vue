@@ -53,15 +53,15 @@
                 :show-overflow-tooltip="true">
             </el-table-column>
             <el-table-column
-                label="商户名称"
-                prop="business_name"
-                with="300"
-                :show-overflow-tooltip="true">
-            </el-table-column>
+                 label="商户名称">
+                 <template slot-scope="scope">
+                    {{scope.row.has_business | businessNameFilter}}
+                 </template>
+             </el-table-column>
             <el-table-column
                  label="权限">
                  <template slot-scope="scope">
-                     <el-tag :type="scope.row.roleid | roleFilterType">{{scope.row.roleid | roleFilterName}}</el-tag>
+                     <el-tag :type="scope.row.role_id | roleFilterType">{{scope.row.get_role | roleFilterName}}</el-tag>
                  </template>
              </el-table-column>
 <!--            <el-table-column
@@ -127,7 +127,7 @@
                       <!-- <p class="image_p"></p> -->
                        <el-image
                          style="width: 226px; height: 226px;"
-                         :src="url"
+                         :src="formData.user_image"
                          :fit="fit"></el-image>
                     </el-form-item></div></el-col>
                     <el-form-item label="用户ID" prop="id">
@@ -189,6 +189,7 @@
 </template>
 
 <script>
+    import {employeelist} from "@/api/user/user.js";
     const formJson = {
         id:'',
         username:'',
@@ -196,7 +197,6 @@
         roleid:'',
         business_name:'',
     };
-    import {employeelist} from "@/api/enterprise/enterprise";
     export default {
         data() {
             return {
@@ -248,6 +248,11 @@
                  if (row !== null) {
                      this.formData = Object.assign({}, row);
                  }
+                 if(row.has_business!==null){
+                     this.formData.business_name = row.has_business.business_name;
+                 }else{
+                     this.formData.business_name = "无";
+                 }
                  this.formName = "add";
                  if (index !== null) {
                      this.index = index;
@@ -256,7 +261,7 @@
              },
              //删除员工
              handleFormdel(index,row){
-                this.$confirm('此操作将该员工删除, 是否继续?', '提示', {
+                this.$confirm('此操作将该员工移出, 是否继续?', '提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                         type: 'warning'
@@ -370,7 +375,7 @@
         },
         filters:{
             //权限相关状态
-            roleFilterType(status) {
+            roleFilterType(roleid) {
                 const statusMap = {
                     1: "danger",
                     2: "primary",
@@ -378,17 +383,22 @@
                     4: "info",
                     5: "",
                 };
-                return statusMap[status];
+                return statusMap[roleid];
             },
-            roleFilterName(status) {
-                const statusMap = {
-                    1: "管理员",
-                    2: "负责人",
-                    3: "操作员",
-                    4: "消费者",
-                    5: "",
-                };
-                return statusMap[status];
+            roleFilterName(role) {
+                // const statusMap = {
+                //     1: "管理员",
+                //     2: "负责人",
+                //     3: "操作员",
+                //     4: "消费者",
+                //     5: "",
+                // };
+                if(role==null){return "无";}
+                return role.role_name;
+            },
+            businessNameFilter(business){
+                if(business==null){return "无";}
+                return business.business_name;
             },
 
         },

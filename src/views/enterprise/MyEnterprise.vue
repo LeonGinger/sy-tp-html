@@ -59,7 +59,7 @@
             <el-table-column
                 label="状态">
                 <template slot-scope="scope">
-                    <el-tag :type="scope.row.status | statusFilterType">{{scope.row.status | statusFilterName}}</el-tag>
+                    <el-tag :type="scope.row.state | statusFilterType">{{scope.row.state | statusFilterName}}</el-tag>
                 </template>
             </el-table-column>
             <el-table-column
@@ -81,7 +81,7 @@
 
                     <el-button type="warning" size="small" @click.native="handleForm(scope.$index, scope.row)">查 看</el-button>
                     <el-button type="primary" size="small" @click.native="handleFormemployee(scope.row.id)">员 工</el-button>
-                    <el-button :type="scope.row.status | statusFilterType_handle" size="small" @click.native="handleFormstatus(scope.$index, scope.row)">{{scope.row.status | statusFilterName_handle}}</el-button>
+                    <el-button :type="scope.row.state | statusFilterType_handle" size="small" @click.native="handleFormstatus(scope.$index, scope.row)">{{scope.row.state | statusFilterName_handle}}</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -107,6 +107,13 @@
                   <!-- 左边 -->
                   <el-col :span="10"><div class="grid-content bg-purple">
                    <!-- 商户信息 -->
+                   <el-form-item label="营业执照" prop="pic">
+                       <el-image
+                         style="width: 226px; height: 226px;"
+                         :src="url"
+                         :fit="fit"></el-image>
+
+                   </el-form-item>
                     <el-form-item label="商户名称:" prop="business_name">
                        <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
                         {{formData.business_name||"暂无"}}
@@ -141,30 +148,12 @@
                     <el-col :span="1"><div class="grid-content bg-purple">&nbsp;</div></el-col>
                   <!-- 右边 -->
                   <el-col :span="10"><div class="grid-content bg-purple-light">
-                        <el-row>
-                        <el-col :span="12"><div class="grid-content bg-purple">
-
-                        <el-form-item label="" prop="pic">
-                            <p class="image_p">营业执照</p>
-                            <el-image
-                              style="width: 226px; height: 226px;"
-                              :src="url"
-                              :fit="fit"></el-image>
-
-                        </el-form-item></div></el-col>
-                        <el-col :span="12"><div class="grid-content bg-purple-light">
-
-                        <el-form-item label="" prop="pic" class="enterprise_logo">
-                            <p class="image_p">商户Logo</p>
+                        <el-form-item label="商户Logo" prop="pic" class="enterprise_logo">
                             <el-image
                             style="width: 226px; height: 226px;"
                             :src="url"
                             :fit="fit"></el-image>
-
-                        </el-form-item></div></el-col>
-                        </el-row>
-
-
+                        </el-form-item>
 
 <!--                        <el-form-item label="营业执照" prop="pic">
                             <div>
@@ -185,8 +174,8 @@
                             {{formData.responsible_name||"暂无"}}
                         </el-form-item>
 
-                        <el-form-item label="状态" prop="status">
-                            <el-radio-group v-model="formData.status">
+                       <el-form-item label="状态" prop="state">
+                            <el-radio-group v-model="formData.state">
                                 <el-radio :label="1">正常</el-radio>
                                 <el-radio :label="2">冻结</el-radio>
                             </el-radio-group>
@@ -233,7 +222,7 @@
 </template>
 
 <script>
-import {enterpriseList} from "@/api/enterprise/enterprise";
+import {enterpriseList,employeestate} from "@/api/enterprise/enterprise";
 const formJson = {
     appraisal_image: '',
     business_name: '',
@@ -241,7 +230,7 @@ const formJson = {
     id:'',
     mobile:'',
     responsible_name:'',
-    status:'',
+    state:'',
     user_id:'',
     username:'',
 };
@@ -294,21 +283,29 @@ export default {
             }
         },
         handleFormstatus(index,row){
-            if(row.status==1){
-                this.list[index].status = 2;
-                this.$message({
-                         showClose: true,
-                         message: '操作成功',
-                         type: 'success'
-                       });
+            if(row.state==1){
+                var state = 2;
             }else{
-                this.list[index].status = 1;
-                this.$message({
-                          showClose: true,
-                          message: '操作成功',
-                          type: 'success'
-                        });
+                var state = 1;
             }
+            //提交
+            employeestate({id:row.id,state:state})
+                .then(response=>{
+                    if(response.code!=200){
+                        this.$message.error("操作失败");
+                        return false;
+                    }
+                    this.list[index].state = state;
+                    this.$message({
+                              showClose: true,
+                              message: '操作成功',
+                              type: 'success'
+                            });
+                })
+                .catch(()=>{
+                    this.$message.error("操作失败");
+
+                });
 
         },
         //员工

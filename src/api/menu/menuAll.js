@@ -12,6 +12,7 @@ let resquest =  "/web";
  export function menudetails(params){
   return http.get(`${resquest}/menu_details`,params);
 }
+
 //  export function authAdminSave(params,formName){
 //     if(formName === "add"){
 //         return http.post(`${resquest}/admin_add`,params);

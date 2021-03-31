@@ -265,7 +265,7 @@ export const asyncRouterMap = [
                 name: "商户申请管理",
                 icon: "",
                 meta: {
-                    authRule: ["admin/ad.site/index"]
+                    authRule: ["enterprise/apply"]
                 }
             },
             {
@@ -274,7 +274,7 @@ export const asyncRouterMap = [
                 name: "我的商户",
                 icon: "",
                 meta: {
-                    authRule: ["admin/ad.ad/index"]
+                    authRule: ["enterprise/MyEnterprise"]
                 }
             },
             {
@@ -283,7 +283,7 @@ export const asyncRouterMap = [
                 name: "员工管理",
                 icon: "",
                 meta: {
-                    authRule: ["admin/ad.ad/index"]
+                    authRule: ["enterprise/employee"]
                 }
             }
         ]
@@ -305,7 +305,7 @@ export const asyncRouterMap = [
                 name: "商品列表",
                 icon: "",
                 meta: {
-                    authRule: ["admin/ad.site/index"]
+                    authRule: ["menu/menulist"]
                 }
             },
             {
@@ -314,7 +314,7 @@ export const asyncRouterMap = [
                 name: "新增商品",
                 icon: "",
                 meta: {
-                    authRule: ["admin/ad.ad/index"]
+                    authRule: ["menu/menu.menulist/add"]
                 }
             },
             // {

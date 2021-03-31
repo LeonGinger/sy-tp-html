@@ -4,30 +4,18 @@
 import axios from "../../utils/axios";
 import http from "@/utils/http";
 let resquest =  "/web";
-//商户申请列表
+//商户列表
  export function enterpriseList(params){
   return http.get(`${resquest}/enterprise_list`,params);
 }
- export function myenterpriseList(params){
-  return http.get(`${resquest}/myenterprise_list`,params);
+//商家修改
+ export function employeeupdate(params){
+  return http.post(`${resquest}/enterprise_edit`,params);
+}
+//商家状态
+ export function employeestate(params){
+  return http.post(`${resquest}/enterprise_state`,params);
 }
  export function employeelist(params){
   return http.get(`${resquest}/employee_list`,params);
 }
- export function employeestate(params){
-  return http.post(`${resquest}/enterprise_state`,params);
-}
-//  export function authAdminRoleList(params){
-//   return http.get(`${resquest}/role_list`,params);
-// }
-//  export function authAdminSave(params,formName){
-//     if(formName === "add"){
-//         return http.post(`${resquest}/admin_add`,params);
-//     }else{
-//         return http.post(`${resquest}/admin_update`,params);
-//     }
-
-// }
-//  export function authAdminDelete(params){
-//   return http.post(`${resquest}/admin_del`,params);
-// }
