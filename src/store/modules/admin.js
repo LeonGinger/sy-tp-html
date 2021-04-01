@@ -1,4 +1,4 @@
-import { userInfo, loginName, logout } from "../../api/auth/login";
+import { userInfo, loginName, loginScan, logout } from "../../api/auth/login";
 import * as types from "../mutation-types";
 import { constantRouterMap } from "../../router";
 import {
@@ -34,6 +34,35 @@ const getters = {
 
 // actions
 const actions = {
+    // 扫码登录
+    loginScan({ commit }, data) {
+        const scan_code = data.code;
+        // const userName = userInfo.userName ? userInfo.userName.trim() : "";
+        // const pwd = userInfo.pwd ? userInfo.pwd : "";
+        return new Promise((resolve, reject) => {
+            loginScan(data)
+                .then(response => {
+                    console.log("store的请求");
+                    console.log(response);
+                    if (response.code!=200) {
+                        Message({
+                            message: response.message,
+                            type: "error",
+                            duration: 5 * 1000
+                        });
+                    } else {
+                        let data = response.data;
+                        commit(types.RECEIVE_ADMIN_ID, data.id);
+                        commit(types.RECEIVE_ADMIN_TOKEN, data.token);
+                        commit(types.RECEIVE_ADMIN_AUTH_RULES, []);
+                    }
+                    resolve(response);
+                })
+                .catch(error => {
+                    reject(error);
+                });
+        });
+    },
     // 用户名登录
     loginName({ commit }, userInfo) {
         const userName = userInfo.userName ? userInfo.userName.trim() : "";

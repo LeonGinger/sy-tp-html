@@ -44,6 +44,10 @@ export function userInfo(id, token){
 export function loginName(params){
   return http.post(`${resquest}/login`,params);
 }
+//扫码登录
+export function loginScan(params){
+  return http.post(`${resquest}/logins`,params);
+}
 export function logout(uid, token){
   return http.post(`${resquest}/out`,{uid, token});
 }

@@ -101,7 +101,7 @@
             width="85%"
             top="5vh">
 
-            <el-form :label-position="right" label-width="120px" :model="formData" :rules="formRules" ref="dataForm">
+            <el-form label-position="right" label-width="120px" :model="formData" :rules="formRules" ref="dataForm">
                 <el-row>
                   <el-col :span="1"><div class="grid-content bg-purple">&nbsp;</div></el-col>
                   <!-- 左边 -->
@@ -260,6 +260,8 @@ export default {
             formName:null,
             company_imgstyle:"{width: 100px; height: 100px;}",
             formLoading:false,
+            formRules:{},
+            fit:"contain"
 
         }
     },

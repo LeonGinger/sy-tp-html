@@ -52,16 +52,22 @@
                 with="300"
                 :show-overflow-tooltip="true">
             </el-table-column>
-            <el-table-column
+<!--            <el-table-column
+                label="商家名称"
+                prop="phone"
+                with="300"
+                :show-overflow-tooltip="true">
+            </el-table-column> -->
+           <el-table-column
                  label="商户名称">
                  <template slot-scope="scope">
-                    {{scope.row.has_business | businessNameFilter}}
+                    {{scope.row.business_name | businessNameFilter}}
                  </template>
              </el-table-column>
             <el-table-column
                  label="权限">
                  <template slot-scope="scope">
-                     <el-tag :type="scope.row.role_id | roleFilterType">{{scope.row.get_role | roleFilterName}}</el-tag>
+                     <el-tag :type="scope.row.role_id | roleFilterType">{{scope.row.role_name | roleFilterName}}</el-tag>
                  </template>
              </el-table-column>
 <!--            <el-table-column
@@ -99,9 +105,9 @@
                     </el-dropdown-menu>
                     </el-dropdown>
  -->
-                    <el-button type="success" size="small" @click.native="handleForm(scope.$index, scope.row)">编 辑</el-button>
-                    <el-button type="danger" size="small" @click.native="handleFormdel(scope.$index, scope.row)">删 除</el-button>
-                </template>
+                    <el-button v-permission="'enterprise/employee/edit'" type="success" size="small" @click.native="handleForm(scope.$index, scope.row)">编 辑</el-button>
+                    <el-button v-permission="'enterprise/employee/del'" type="danger" size="small" @click.native="handleFormdel(scope.$index, scope.row)">删 除</el-button>
+                </template>s
             </el-table-column>
         </el-table>
 
@@ -120,7 +126,7 @@
             width="35%"
             top="5vh">
 
-            <el-form :label-position="left" label-width="80px" :model="formData" :rules="formRules" ref="dataForm">
+            <el-form label-position="left" label-width="80px" :model="formData" :rules="formRules" ref="dataForm">
                    <!-- 员工信息 -->
                    <el-col><div>
                     <el-form-item label="" prop="pic">
@@ -133,25 +139,25 @@
                     <el-form-item label="用户ID" prop="id">
                        <el-input disabled v-model="formData.id" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="用户名称" prop="title">
+                    <el-form-item label="用户名称" prop="username">
                         <el-input v-model="formData.username" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="手机号码" prop="phone">
                         <el-input v-model="formData.phone" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="用户类型" prop="roleid">
+                    <el-form-item label="用户类型" prop="role_id">
                         <!-- <el-input v-model="formData.roleid" auto-complete="off"></el-input> -->
-                         <el-select v-model="formData.roleid" placeholder="请选择">
+                         <el-select v-model="formData.role_id" placeholder="请选择">
                             <el-option
-                              v-for="item in roleoptions"
-                              :key="item.value"
-                              :label="item.label"
-                              :value="item.value">
+                              v-for="item in rolelist"
+                              :key="item.id"
+                              :label="item.name"
+                              :value="item.id">
                             </el-option>
                           </el-select>
                     </el-form-item>
                     <el-form-item label="所属商户" prop="business_name">
-                        <el-input v-model="formData.business_name" auto-complete="off"></el-input>
+                        <el-input disabled="disabled" v-model="formData.business_name" auto-complete="off"></el-input>
                     </el-form-item>
 
             </el-form>
@@ -189,12 +195,13 @@
 </template>
 
 <script>
-    import {employeelist} from "@/api/user/user.js";
+    import {employeelist,employeedel,employeeedit} from "@/api/user/user.js";
+    import {authRoleList} from "@/api/auth/authRole.js"
     const formJson = {
         id:'',
         username:'',
         phone:'',
-        roleid:'',
+        role_id:'',
         business_name:'',
     };
     export default {
@@ -208,12 +215,19 @@
                 formVisibledetails:false,
                 formData: formJson,
                 query: {
+                    business_notice:"",
                     phone:"",
                     username:"",
                     business_name:"",
                     title: "",
                     page: 1,
-                    size: 10
+                    size: 10,
+                    role_id:'2,3',
+                },
+                role_query:{
+                    page:1,
+                    szie:99999,
+                    id:'2,3'
                 },
                 loading: true,
                 list: [],
@@ -224,10 +238,40 @@
                 formName:null,
                 company_imgstyle:"{width: 100px; height: 100px;}",
                 formLoading:false,
-                roleoptions:[]
+                roleoptions:[],
+                formRules: {
+                    username: [
+                        {
+                            required: true,
+                            message: "请输入用户名",
+                            trigger: "blur"
+                        },
+                    ],
+                    phone: [
+                        {
+                            required: true,
+                            message: "请输入手机号",
+                            trigger: "blur"
+                        },
+                    ]
+                },
+                fit:"contain",
+                rolelist:{},
+
             }
         },
         methods:{
+            getrolelist(){
+                authRoleList(this.role_query)
+                    .then(response=>{
+                        if(response.code==200){
+                            this.rolelist = response.data.list;
+                        }
+                    })
+                    .catch(()=>{
+                        this.$message.error("系统发生错误,请稍后再试");
+                    });
+            },
             returnPage(){
                 //返回上一页
                 if (window.history.length <= 1) {
@@ -241,6 +285,7 @@
              handleForm(index, row) {
                  // console.log(row);
                  // console.log(index);
+                 this.getrolelist();
                  this.formVisibledetails = true;
                  // 刷新表单
                  this.resetForm();
@@ -248,16 +293,19 @@
                  if (row !== null) {
                      this.formData = Object.assign({}, row);
                  }
-                 if(row.has_business!==null){
-                     this.formData.business_name = row.has_business.business_name;
-                 }else{
-                     this.formData.business_name = "无";
-                 }
+                 if(row.business_name==null){this.formData.business_name = "无";}
+                 console.log(this.formData);
+                 // if(row.has_business!==null){
+                 //     this.formData.business_name = row.has_business.business_name;
+                 // }else{
+                 //     this.formData.business_name = "无";
+                 // }
                  this.formName = "add";
                  if (index !== null) {
                      this.index = index;
                      this.formName = "edit";
                  }
+
              },
              //删除员工
              handleFormdel(index,row){
@@ -267,8 +315,22 @@
                         type: 'warning'
                     }).then(() => {
                         //点击确定的操作(调用接口)
-                        this.list.splice(index,1);
+                        employeedel({id:row.id})
+                            .then(response=>{
+                                if(response.code!=200){this.$message.error("删除失败,请稍后再试");}
+                                 this.$message({
+                                          showClose: true,
+                                          message: '删除成功',
+                                          type: 'success'
+                                        });
+                                this.list.splice(index,1);
+                            })
+                            .catch(()=>{
+                                this.$message.error("系统出了点问题,请稍后再试");
+                            });
+
                     }).catch(() => {
+
                         //几点取消的提示
                     });
 
@@ -312,10 +374,10 @@
              },
              onSubmit(){
              //查询
-                 this.$router.push({
-                     path: "",
-                     query: this.query
-                 });
+                 // this.$router.push({
+                 //     path: "",
+                 //     query: this.query
+                 // });
                  this.getList();
              },
              handleCurrentChange(val) {
@@ -345,11 +407,17 @@
                  return true;
              },
              formSubmit() {
+
                  this.$refs["dataForm"].validate(valid => {
                      if (valid) {
-                         this.formLoading = true;
+                         //this.formLoading = true;
                          let data = Object.assign({}, this.formData);
-                         adSave(data, this.formName)
+                         employeeedit({
+                             'id':data.id,
+                             'username':data.username,
+                             'phone':data.phone,
+                             'role_id':data.role_id,
+                         })
                              .then(response => {
                                  this.formLoading = false;
                                  if (response.code) {
@@ -358,13 +426,6 @@
                                  }
                                  this.$message.success("操作成功");
                                  this.formVisible = false;
-                                 if (this.formName === "add") {
-                                     // 向头部添加数据
-                                     data.ad_id = response.data.ad_id;
-                                     this.list.unshift(data);
-                                 } else {
-                                     this.list.splice(this.index, 1, data);
-                                 }
                              })
                              .catch(() => {
                                  this.formLoading = false;
@@ -394,11 +455,13 @@
                 //     5: "",
                 // };
                 if(role==null){return "无";}
-                return role.role_name;
+                return role;
+                // return role.role_name;
             },
             businessNameFilter(business){
                 if(business==null){return "无";}
-                return business.business_name;
+                return business;
+                // return business.business_name;
             },
 
         },
@@ -406,11 +469,14 @@
         //
         },
         created() {
+            /*鉴权*/
+            //if(this.$store.getters.adminId=='1'){this.query.role_id="";}
+            /*传参*/
             if(this.$route.params.employee_id){
 
+                this.query.business_notice = this.$route.params.employee_id;
                 this.employee_id = this.$route.params.employee_id;
             }
-              console.log( this.employee_id);
             // 加载表格数据
             this.getList();
         }

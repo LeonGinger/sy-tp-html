@@ -8,5 +8,11 @@ let resquest =  "/web";
  export function employeelist(params){
   return http.get(`${resquest}/employee_list`,params);
 }
-
-
+//删除员工
+ export function employeedel(params){
+  return http.post(`${resquest}/employee_del`,params);
+}
+//修改员工信息
+ export function employeeedit(params){
+  return http.post(`${resquest}/employee_edit`,params);
+}

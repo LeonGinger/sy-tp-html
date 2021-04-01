@@ -66,6 +66,7 @@
 
 import wxlogin from 'vue-wxlogin';
 import {sendcode} from '@/api/auth/login.js';
+const redirectUri = encodeURI("http://ai.zsicp.com/admin/login/sylogin?item=sy");
 export default {
     components: {
         wxlogin
@@ -79,12 +80,12 @@ export default {
             }
         };
         return {
+            appid:'wx4640de1eee48017d',
+            scope:'snsapi_login',
+            redirect_uri:redirectUri,
             disabled:false,
             codetips:"发送验证码",
             codetime:15,
-            appid:'',
-            scope:'',
-            redirect_uri:'',
             otherlogin:true,
             ruleForm: {
                 userName: "admin",
@@ -165,11 +166,47 @@ export default {
                     return false;
                 }
             });
+        },
+        handleLogin_scan(code){
+            console.log("扫码登录");
+            console.log(code)
+
+            if (code) {
+                console.log("开始请求")
+                this.loading = true;
+                this.$store
+                    .dispatch("loginScan", {'code':code})
+                    .then(response => {
+                        this.loading = false;
+                        if (response.code!=200) {
+                            this.$message.error(response.message);
+                            return;
+                        }
+                        let path = "/";
+                        if (this.redirect) {
+                            path = this.redirect;
+                        }
+                        console.log(response)
+                        this.$router.push({
+                            path: path
+                        });
+                    })
+                    .catch(() => {
+                        this.loading = false;
+                    });
+            } else {
+                return false;
+            }
         }
     },
     created() {
         // 将参数拷贝进查询对象
         let query = this.$route.query;
+        console.log(query);
+        if(query.code){
+            this.loading = true;
+            this.handleLogin_scan(query.code);
+        }
         if (query.redirect) {
             // URL Encode
             this.redirect = decodeURIComponent(query.redirect);
