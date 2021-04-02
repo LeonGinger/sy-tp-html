@@ -32,7 +32,7 @@ module.exports = {
             '/web': {
                 target: 'http://sy.zsicp.com',
                 changeOrigin: true,
-                ws: true,
+                ws: false,
                 pathRewrite: {
                   '^/web': ''
                 }

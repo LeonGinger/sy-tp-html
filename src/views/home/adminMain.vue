@@ -226,22 +226,21 @@
             getcharts(){
                 //表格数据
                 getecharts_data(this.query)
-                    .then(response=>{
-                        //console.log(this.chartsoptions)
-                        this.echartsdata = response.data;
-                        //待优化 这里循环速度慢
-                        this.echartsdata.forEach((item,index)=>{
-                            this.chartsoptions.xAxis[0].data.push(item.day);
-                            this.chartsoptions.series[0].data.push(item.user_num);
-                            this.chartsoptions.series[1].data.push(item.order_num);
-                        })
-                        //重新生成实例
-                        this.drawLine();
+                .then(response=>{
+                    //console.log(this.chartsoptions)
+                    this.echartsdata = response.data;
+                    //待优化 这里循环速度慢
+                    this.echartsdata.forEach((item,index)=>{
+                        this.chartsoptions.xAxis[0].data.push(item.day);
+                        this.chartsoptions.series[0].data.push(item.user_num);
+                        this.chartsoptions.series[1].data.push(item.order_num);
                     })
-                    .catch(()=>{
+                    //重新生成实例
+                    this.drawLine();
+                })
+                .catch(()=>{
 
-                    });
-
+                });
             },
             paneldata(){
                 //面板数据
@@ -262,7 +261,7 @@
         //
         },
         created() {
-            //console.log(this.$store);
+            console.log(this.$store);
             this.paneldata();
             this.getcharts();
 

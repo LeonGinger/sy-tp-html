@@ -34,6 +34,10 @@ import MyEnterprise from "../views/enterprise/MyEnterprise.vue";
 import menumodify from "../views/menu/menumodify.vue";
 import menulist from "../views/menu/menulist.vue";
 import classify from "../views/menu/classify.vue";
+
+//溯源批次管理
+import order from "../views/source/order.vue";
+import sourcelist from "../views/source/sourcelist.vue";
 // Vue.use(VueRouter);
 
 const err401 = r =>
@@ -328,5 +332,44 @@ export const asyncRouterMap = [
             // }
         ]
     },
-
+    {
+        path: "/source",
+        redirect: "/source/order",
+        component: Home,
+        icon: "guanggao",
+        name: "批次管理",
+        meta: {
+            authRule: ["source"]
+        },
+        // noDropdown: true,
+        children: [
+            {
+                path: "order",
+                component: order,
+                name: "批次列表",
+                icon: "",
+                meta: {
+                    authRule: ["source/order"]
+                }
+            },
+            {
+                path: "sourcelist",
+                component: sourcelist,
+                name: "溯源码列表",
+                icon: "",
+                meta: {
+                    authRule: ["menu/sourcelist"]
+                }
+            },
+            // {
+            //     path: "classify",
+            //     component: classify,
+            //     name: "商品分类",
+            //     icon: "",
+            //     meta: {
+            //         authRule: ["admin/ad.ad/index"]
+            //     }
+            // }
+        ]
+    },
 ];
