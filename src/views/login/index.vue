@@ -2,9 +2,10 @@
 
     <div class="login-container">
         <div class="login-box">
-        <el-form class="card-box login-form" autoComplete="on" :model="ruleForm" :rules="rules" ref="ruleForm"
+        <el-form :style="{top:formtop}" class="card-box login-form" autoComplete="on" :model="ruleForm" :rules="rules" ref="ruleForm"
                  label-position="left">
             <h3 class="title">系统登录</h3>
+            <div v-if="logintype==1">
            <el-form-item prop="mobile" class="item">
                 <el-input
                     maxlength="11"
@@ -26,6 +27,7 @@
                  </el-input>
                  <el-button :disabled="disabled" @click="handleCode" type="primary">{{codetips}}</el-button>
              </el-form-item>
+
 <!--            <el-form-item prop="username" class="item">
                 <el-input
                     placeholder="邮箱"
@@ -45,18 +47,26 @@
                            @click.native="handleLogin()">登录
                 </el-button>
             </div>
+            </div>
+            <div v-if="logintype==2" id="wxbox">
+
+                <wxlogin :href="wxlogincss" :appid="appid" :scope="scope" :redirect_uri="redirect_uri"></wxlogin>
+            </div>
             <div>
+
                 <el-button v-if="otherlogin" type="primary" style="width:100%;margin-bottom:30px;"
                            @click='showDialog = true'>
                     第三方登录
                 </el-button>
+                <a @click="curlogintype">{{logintips}}</a>
             </div>
         </el-form>
+
         </div>
 
         <el-dialog title="第三方验证" :visible.sync="showDialog">
             <!-- 邮箱登录成功,请选择第三方验证<br/> -->
-            <wxlogin :appid="appid" :scope="scope" :redirect_uri="redirect_uri"></wxlogin>
+            <wxlogin :theme="white" :appid="appid" :scope="scope" :redirect_uri="redirect_uri"></wxlogin>
         </el-dialog>
 
     </div>
@@ -67,6 +77,7 @@
 import wxlogin from 'vue-wxlogin';
 import {sendcode} from '@/api/auth/login.js';
 const redirectUri = encodeURI("http://ai.zsicp.com/admin/login/sylogin?item=sy");
+const wxloginCss = "http://sy.zsicp.com/static/css/wxlogin.css";
 export default {
     components: {
         wxlogin
@@ -80,13 +91,18 @@ export default {
             }
         };
         return {
+            formtop:"50%",
+            logintips:"短信验证登录",
+            white:"white",
+            logintype:2,
             appid:'wx4640de1eee48017d',
             scope:'snsapi_login',
             redirect_uri:redirectUri,
+            wxlogincss:wxloginCss,
             disabled:false,
             codetips:"发送验证码",
             codetime:15,
-            otherlogin:true,
+            otherlogin:false,
             ruleForm: {
                 userName: "admin",
                 mobile:"",
@@ -103,7 +119,6 @@ export default {
                 code: [{ required: true, message: "请输入验证码", trigger: "blur"}],
 
             },
-
             isShowPwd: false, // 是否显示密码
             loading: false, // 登录loading
             showDialog: false, // 显示dialog
@@ -111,19 +126,23 @@ export default {
         };
     },
     methods: {
+        curlogintype(){
+           this.logintype = this.logintype==1?2:1;
+           this.logintips = this.logintype==1?"扫码登录":"短信验证登录";
+           this.formtop = this.logintype==1?"40%":"50%";
+
+        },
         handleCode(){
             if(!this.ruleForm.mobile){this.$message.error('请输入手机号');return;}
             this.codetime = 15;
             this.timer();
             sendcode(this.ruleForm)
                 .then(respnse=>{
-                    console.log(respnse);
+
                 })
                 .cath(()=>{
 
                 });
-
-            console.log(this.ruleForm)
         },
         timer() {
          if (this.codetime > 0) {
@@ -154,7 +173,6 @@ export default {
                             if (this.redirect) {
                                 path = this.redirect;
                             }
-                            console.log(response)
                             this.$router.push({
                                 path: path
                             });
@@ -168,11 +186,7 @@ export default {
             });
         },
         handleLogin_scan(code){
-            console.log("扫码登录");
-            console.log(code)
-
             if (code) {
-                console.log("开始请求")
                 this.loading = true;
                 this.$store
                     .dispatch("loginScan", {'code':code})
@@ -186,7 +200,6 @@ export default {
                         if (this.redirect) {
                             path = this.redirect;
                         }
-                        console.log(response)
                         this.$router.push({
                             path: path
                         });
@@ -202,7 +215,6 @@ export default {
     created() {
         // 将参数拷贝进查询对象
         let query = this.$route.query;
-        console.log(query);
         if(query.code){
             this.loading = true;
             this.handleLogin_scan(query.code);
@@ -217,7 +229,6 @@ export default {
 
 <style type="text/scss" lang="scss">
 @import "../../styles/mixin";
-
 $bg: #2d3a4b;
 $dark_gray: #889aa4;
 $light_gray: #eee;
@@ -281,7 +292,7 @@ $light_gray: #eee;
     }
     .login-form {
         @include fxied-center;
-        top: 40%;
+        //top: 50%;
         width: 22em;
         padding: 0.4666rem 0.4666rem 0.2rem 0.4666rem;
     }
@@ -303,6 +314,11 @@ $light_gray: #eee;
         /*position: absolute;*/
         /*right: .4666rem;*/
         /*bottom: .37333rem;*/
+    }
+    #wxbox{
+        .impowerBox{
+            .title {display: none;}
+        }
     }
 }
 </style>

@@ -73,12 +73,12 @@
                 with="300"
                 :show-overflow-tooltip="true">
             </el-table-column>
-            <el-table-column
+<!--            <el-table-column
                 label="状态">
                 <template slot-scope="scope">
                     <el-tag :type="scope.row.status | statusFilterType">{{scope.row.status | statusFilterName}}</el-tag>
                 </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column
                 width="300"
                 label="操作"
@@ -258,7 +258,7 @@ export default {
             query: {
                 title: "",
                 page: 1,
-                limit: 10
+                size: 10
             },
             loading: true,
             list: [],

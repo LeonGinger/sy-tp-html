@@ -106,8 +106,8 @@ Mock.mock(/\/admin\/ad\/ad\/delete/, "post", ad.del);
 // Mock.mock(/\/web\/employee_list/, "get", pool.userlist);
 
 //商品管理
-Mock.mock(/\/web\/menu_list/, "get", pool.menulist);
-Mock.mock(/\/web\/menu_details/, "get", pool.menudetails);
+// Mock.mock(/\/web\/menu_list/, "get", pool.menulist);
+// Mock.mock(/\/web\/menu_details/, "get", pool.menudetails);
 
 //面板数据
 //Mock.mock(/\/web\/index_data/, "get", pool.indexdata);
