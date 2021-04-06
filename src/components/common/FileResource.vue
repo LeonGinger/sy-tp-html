@@ -195,7 +195,7 @@ export default {
                     };
                     fileResourceTagAdd(data)
                         .then(response => {
-                            if (response.code) {
+                            if (response.code!=200) {
                                 this.$message({
                                     message: response.message,
                                     type: "error"
@@ -271,7 +271,7 @@ export default {
         getList() {
             fileResourceList(this.query)
                 .then(response => {
-                    this.lists = response.data || [];
+                    this.lists = response.data.list || [];
                     this.total = response.total || 0;
                 })
                 .catch(() => {});
@@ -280,7 +280,7 @@ export default {
         getTagList() {
             fileResourceTagList(this.query)
                 .then(response => {
-                    this.tagLists = response || [];
+                    this.tagLists = response.data.list || [];
                 })
                 .catch(() => {});
         },
@@ -300,7 +300,7 @@ export default {
             this.getList();
         },
         handleSuccess(response, file, fileList) {
-            if (response.code) {
+            if (response.code!=200) {
                 this.$message({
                     message: response.message,
                     type: "error"
@@ -328,7 +328,7 @@ export default {
             data.ext = fileName.substr(extIndex, fileName.length);
             fileResourceAdd(data)
                 .then(response => {
-                    if (response.code) {
+                    if (response.code!=200) {
                         this.$message({
                             message: response.message,
                             type: "error"

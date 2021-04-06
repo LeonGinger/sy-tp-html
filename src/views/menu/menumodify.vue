@@ -1,15 +1,20 @@
 <template>
     <div>
-        <el-form ref="form" :model="formData" label-width="80px">
+        <el-form ref="form" :model="formData" label-width="120px">
           <el-form-item label="商品名称">
             <el-input v-model="formData.menu_name"></el-input>
           </el-form-item>
-          <el-form-item label="所属商家">
+          <el-form-item label="所属商家" v-permission="'menu/menumodify/businesslist'">
             <el-select v-model="formData.region" placeholder="请选择商家">
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
+               <el-option
+                   v-for="item in businessArr"
+                   :key="item.id"
+                   :label="item.business_name"
+                   :value="item.id">
+                 </el-option>
             </el-select>
           </el-form-item>
+
 <!--          <el-form-item label="商品分类">
             <el-select v-model="form.region" placeholder="请选择活动区域">
               <el-option label="区域一" value="shanghai"></el-option>
@@ -44,6 +49,31 @@
             <el-form-item label="购买链接">
               <el-input v-model="formData.menu_url"></el-input>
             </el-form-item>
+            <!-- 商品轮播图 -->
+            <el-form-item label="商品轮播图">
+            <el-upload
+            action="https://jsonplaceholder.typicode.com/posts/"
+            list-type="picture-card"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleRemove">
+            <i class="el-icon-plus"></i>
+            </el-upload>
+            <el-dialog :visible.sync="dialogVisible">
+            <img width="100%" :src="dialogImageUrl" alt="">
+            </el-dialog>
+            </el-form-item>
+
+
+            <el-upload
+            action="https://jsonplaceholder.typicode.com/posts/"
+            list-type="picture-card"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleRemove">
+            <i class="el-icon-plus"></i>
+            </el-upload>
+            <el-dialog :visible.sync="dialogVisible">
+            <img width="100%" :src="dialogImageUrl" alt="">
+            </el-dialog>
 <!--          <el-form-item label="活动时间">
             <el-col :span="11">
               <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
@@ -83,6 +113,7 @@
 </template>
 
 <script>
+    import {enterpriseList} from "@/api/enterprise/enterprise";
     import {menudetails} from "@/api/menu/menuAll.js";
     const formJson = {
         id:'',
@@ -97,11 +128,40 @@
                 },
                 menu_info:{},
                 formData:formJson,
+                businessArr:{},
+                loading:false,
+                business_query:{
+                    type:"my",
+                    name: "",
+                    state:'1',
+                    verify_if:'1',
+                    page: 1,
+                    size: 9999
+                },
+                dialogImageUrl:'',
+                dialogVisible:false,
+
+
 
 
             }
     },
         methods:{
+            businesslist(){
+                //商家列表
+                enterpriseList(this.business_query)
+                     .then(response => {
+                         console.log(response);
+                         this.loading = false;
+                         this.businessArr = response.data.list || [];
+                         //this.total = response.data.total || 0;
+                     })
+                     .catch(() => {
+                         this.loading = false;
+                         this.list = [];
+                         //this.total = 0;
+                     });
+            },
             details(){
                 //详情接口
                 menudetails({id:this.formData.id})
@@ -117,7 +177,35 @@
             },
             onSubmit(){
                 //提交表单
+                console.log(this.formData);
+                this.$refs["dataForm"].validate(valid => {
+                    if (valid) {
+                        //this.formLoading = true;
+                        let data = Object.assign({}, this.formData);
+                        employeeedit(data)
+                            .then(response => {
+                                this.formLoading = false;
+                                if (response.code) {
+                                    this.$message.error(response.message);
+                                    return false;
+                                }
+                                this.$message.success("操作成功");
+                                this.formVisible = false;
+                            })
+                            .catch(() => {
+                                this.formLoading = false;
+                            });
+                    }
+                });
+
             },
+            handleRemove(file, fileList) {
+                console.log(file, fileList);
+            },
+            handlePictureCardPreview(file) {
+                this.dialogImageUrl = file.url;
+                this.dialogVisible = true;
+            }
         },
         filters:{
             formFilterType(status) {
@@ -140,10 +228,14 @@
         },
         created() {
             if(this.$route.query.menuid){
+                //修改
                 document.title = "修改商品 - "+document.title;
                 this.formData.id = this.$route.query.menuid;
                 this.formMap.type = "edit";
                 this.details();
+            }else{
+                //添加
+                this.businesslist();
             }
         },
         destroyed(){

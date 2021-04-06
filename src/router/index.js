@@ -313,12 +313,22 @@ export const asyncRouterMap = [
                 }
             },
             {
-                path: "menumodify",
+                path: "add",
                 component: menumodify,
                 name: "新增商品",
                 icon: "",
                 meta: {
                     authRule: ["menu/menu.menulist/add"]
+                }
+            },
+            {
+                path: "edit",
+                component: menumodify,
+                name: "编辑商品",
+                hidden:true,
+                icon: "",
+                meta: {
+                    authRule: ["menu/menu.menulist/edit"]
                 }
             },
             // {

@@ -274,10 +274,17 @@ export default {
     },
     methods:{
     //方法
-        // 显示表单
+        // 显示表单 新增或编辑
         handleForm(index, row) {
+            // //添加
+            if(index==null && row==null){
             this.$router.push({
-                path:'menumodify',
+                path:'add',
+            })
+            }
+            //编辑
+            this.$router.push({
+                path:'edit',
                 query:{
                     menuid:row.id
                 }
@@ -334,7 +341,7 @@ export default {
            this.loading = false;
            menulist(this.query)
                 .then(response => {
-                    console.log(response);
+                    //console.log(response);
                     this.loading = false;
                     this.list = response.data.list || [];
                     this.total = response.data.total || 0;
