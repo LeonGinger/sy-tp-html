@@ -36,8 +36,10 @@ import menulist from "../views/menu/menulist.vue";
 import classify from "../views/menu/classify.vue";
 
 //溯源批次管理
+import orderadd from "../views/source/orderadd.vue"
 import order from "../views/source/order.vue";
 import sourcelist from "../views/source/sourcelist.vue";
+import opdencode from "../views/source/opdencode.vue";
 // Vue.use(VueRouter);
 
 const err401 = r =>
@@ -344,6 +346,15 @@ export const asyncRouterMap = [
         // noDropdown: true,
         children: [
             {
+                path: "orderadd",
+                component: orderadd,
+                name: "新建批次",
+                icon: "",
+                meta: {
+                    authRule: ["source/orderadd"]
+                }
+            },
+            {
                 path: "order",
                 component: order,
                 name: "批次列表",
@@ -358,18 +369,18 @@ export const asyncRouterMap = [
                 name: "溯源码列表",
                 icon: "",
                 meta: {
-                    authRule: ["menu/sourcelist"]
+                    authRule: ["source/sourcelist"]
                 }
             },
-            // {
-            //     path: "classify",
-            //     component: classify,
-            //     name: "商品分类",
-            //     icon: "",
-            //     meta: {
-            //         authRule: ["admin/ad.ad/index"]
-            //     }
-            // }
+            {
+                path: "opdencode",
+                component: opdencode,
+                name: "溯源码打印",
+                icon: "",
+                meta: {
+                    authRule: ["source/opdencode"]
+                }
+            }
         ]
     },
 ];

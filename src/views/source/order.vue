@@ -12,7 +12,8 @@
                     <el-button type="primary" icon="search" @click="onSubmit">查询</el-button>
                 </el-button-group>
                 &nbsp;
-                <el-button v-permission="'menu/menulist/add'" class="g-success" type="success" @click.native="handleForm(null,null)">发布商品</el-button>
+                <!-- <el-button v-permission="'menu/menulist/add'" class="g-success" type="success" @click.native="handleForm(null,null)">新建订单</el-button> -->
+                <el-button v-permission="'source/order/add'" class="g-success" type="success" @click="open">新建批次</el-button>
                 <el-button v-permission="'menu/menulist/del'" type="danger" @click.native="handleFormdell(null,null)">删除</el-button>
             </el-form-item>
         </el-form>
@@ -44,7 +45,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                label="订单编号"
+                label="批次编号"
                 prop="order_number"
                 with="300"
                 :show-overflow-tooltip="true">
@@ -109,6 +110,7 @@
 </template>
 
 <script>
+import {menulist} from '@/api/menu/menuAll.js';
 import {orderList} from '@/api/source/sourceapi.js';
 const formJson = {
 
@@ -154,17 +156,17 @@ export default {
             if(row.status==1){
                 this.list[index].status = 2;
                 this.$message({
-                         showClose: true,
-                         message: '操作成功',
-                         type: 'success'
-                       });
+                    showClose: true,
+                    message: '操作成功',
+                    type: 'success'
+                });
             }else{
                 this.list[index].status = 1;
                 this.$message({
-                          showClose: true,
-                          message: '操作成功',
-                          type: 'success'
-                        });
+                    showClose: true,
+                    message: '操作成功',
+                    type: 'success'
+                });
             }
 
         },
@@ -200,16 +202,16 @@ export default {
         getList(){
            this.loading = false;
            orderList(this.query)
-                .then(response => {
-                    console.log(response);
-                    this.order = response.data.list || 0,
-                    this.total = response.data.total || 0;
-                })
-                .catch(() => {
-                    this.loading = false;
-                    this.list = [];
-                    this.total = 0;
-                });
+            .then(response => {
+                console.log(response);
+                this.order = response.data.list || 0,
+                this.total = response.data.total || 0;
+            })
+            .catch(() => {
+                this.loading = false;
+                this.list = [];
+                this.total = 0;
+            });
         },
         onSubmit(){
         //查询
@@ -273,6 +275,9 @@ export default {
                 }
             });
         },
+        open(){
+            window.location.href = "#/source/orderadd"
+        }
 
     },
     filters: {

@@ -45,12 +45,18 @@
  
      // 新的请求
      //
+  export function orderAdd(params){
+    return http.get(`${resquest}/orderAdd`,params);
+  }
   export function orderList(params){
    return http.get(`${resquest}/order_list`,params);
  }
   export function sourceList(params){
    return http.get(`${resquest}/source_list`,params);
  }
+ export function ScodeList(params){
+  return http.get(`${resquest}/scode_list`,params);
+}
   export function authAdminSave(params,formName){
      if(formName === "add"){
          return http.post(`${resquest}/admin_add`,params);
