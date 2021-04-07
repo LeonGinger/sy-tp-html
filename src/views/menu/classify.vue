@@ -3,7 +3,10 @@
 </template>
 
 <script>
+    export default {
+
+    }
 </script>
 
-<style>
+<style type="text/scss" lang="scss">
 </style>
