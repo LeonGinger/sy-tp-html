@@ -1,11 +1,11 @@
 <template>
     <div>
-        <el-form ref="form" :model="formData" label-width="120px">
-          <el-form-item label="商品名称">
+        <el-form ref="form" :model="formData" label-width="120px" :rules="formRules">
+          <el-form-item label="商品名称" prop="menu_name">
             <el-input v-model="formData.menu_name"></el-input>
           </el-form-item>
           <el-form-item label="所属商家" v-permission="'menu/menumodify/businesslist'">
-            <el-select v-model="formData.region" placeholder="请选择商家">
+            <el-select v-model="formData.business_id" placeholder="请选择商家">
                <el-option
                    v-for="item in businessArr"
                    :key="item.id"
@@ -21,16 +21,16 @@
               <el-option label="区域二" value="beijing"></el-option>
             </el-select>
           </el-form-item> -->
-          <el-form-item label="商品售价">
+          <el-form-item label="商品售价" prop="menu_money">
             <el-input v-model="formData.menu_money"></el-input>
           </el-form-item>
-          <el-form-item label="生产源地">
+          <el-form-item label="生产源地" prop="menu_address">
             <el-input v-model="formData.menu_address"></el-input>
           </el-form-item>
-          <el-form-item label="商品规格">
+          <el-form-item label="商品规格" prop="menu_weight">
             <el-input v-model="formData.menu_weight"></el-input>
           </el-form-item>
-          <el-form-item label="生产日期">
+          <el-form-item label="生产日期" prop="production_time">
              <el-date-picker
                v-model="formData.production_time"
                type="datetime"
@@ -38,7 +38,7 @@
                default-time="12:00:00">
              </el-date-picker>
            </el-form-item>
-           <el-form-item label="保质日期">
+           <el-form-item label="保质日期" prop="quality_time">
               <el-date-picker
                 v-model="formData.quality_time"
                 type="datetime"
@@ -46,66 +46,30 @@
                 default-time="12:00:00">
               </el-date-picker>
             </el-form-item>
-            <el-form-item label="购买链接">
+            <el-form-item label="购买链接" prop="menu_url">
               <el-input v-model="formData.menu_url"></el-input>
             </el-form-item>
             <!-- 商品轮播图 -->
-            <el-form-item label="商品轮播图">
+            <el-form-item label="商品轮播图" prop="">
             <el-upload
-            action="https://jsonplaceholder.typicode.com/posts/"
+            :limit="6"
+            :action="uploadUrl"
             list-type="picture-card"
+            :on-success="handleSuccess"
+            :on-exceed="handleExceed"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove">
             <i class="el-icon-plus"></i>
             </el-upload>
+
             <el-dialog :visible.sync="dialogVisible">
             <img width="100%" :src="dialogImageUrl" alt="">
             </el-dialog>
             </el-form-item>
-
-
-            <el-upload
-            action="https://jsonplaceholder.typicode.com/posts/"
-            list-type="picture-card"
-            :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemove">
-            <i class="el-icon-plus"></i>
-            </el-upload>
-            <el-dialog :visible.sync="dialogVisible">
-            <img width="100%" :src="dialogImageUrl" alt="">
-            </el-dialog>
-<!--          <el-form-item label="活动时间">
-            <el-col :span="11">
-              <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
-            </el-col>
-            <el-col class="line" :span="2">-</el-col>
-            <el-col :span="11">
-              <el-time-picker placeholder="选择时间" v-model="form.date2" style="width: 100%;"></el-time-picker>
-            </el-col>
-          </el-form-item>
-          <el-form-item label="即时配送">
-            <el-switch v-model="form.delivery"></el-switch>
-          </el-form-item>
-          <el-form-item label="活动性质">
-            <el-checkbox-group v-model="form.type">
-              <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
-              <el-checkbox label="地推活动" name="type"></el-checkbox>
-              <el-checkbox label="线下主题活动" name="type"></el-checkbox>
-              <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
-            </el-checkbox-group>
-          </el-form-item>
-          <el-form-item label="特殊资源">
-            <el-radio-group v-model="form.resource">
-              <el-radio label="线上品牌商赞助"></el-radio>
-              <el-radio label="线下场地免费"></el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="活动形式">
-            <el-input type="textarea" v-model="form.desc"></el-input>
-          </el-form-item> -->
+            
           <el-form-item>
             <el-button :type="formMap.type | formFilterType" @click="onSubmit">{{formMap.type | formFilterName}}</el-button>
-            <el-button>取消</el-button>
+            <el-button type="info" plain @click="returnlist">取消</el-button>
           </el-form-item>
         </el-form>
     </div>
@@ -113,20 +77,34 @@
 </template>
 
 <script>
+
     import {enterpriseList} from "@/api/enterprise/enterprise";
-    import {menudetails} from "@/api/menu/menuAll.js";
+    import {menudetails,menuadd,menuedit} from "@/api/menu/menuAll.js";
+    import { BASE_URL,IMG_BASE_URL } from "../../config/app";
+    import time from "@/utils/utils.filter.js"
     const formJson = {
         id:'',
+        menu_images_json:'',
     };
     export default {
         data() {
             return {
+                uploadUrl: BASE_URL + "/web/file/uploadfile",
                 formMap: {
                     add: "新 增",
                     edit: "编 辑",
                     type: "add",
                 },
                 menu_info:{},
+                formRules: {
+                    menu_name: [
+                        {
+                            required: true,
+                            message: "请输入商品名称",
+                            trigger: "blur"
+                        }
+                    ]
+                },
                 formData:formJson,
                 businessArr:{},
                 loading:false,
@@ -140,13 +118,16 @@
                 },
                 dialogImageUrl:'',
                 dialogVisible:false,
-
-
+                menuimagelist:[],
 
 
             }
     },
         methods:{
+            returnlist(){
+                //返回商品列表
+                this.$router.push('menulist');
+            },
             businesslist(){
                 //商家列表
                 enterpriseList(this.business_query)
@@ -177,40 +158,90 @@
             },
             onSubmit(){
                 //提交表单
-                console.log(this.formData);
-                this.$refs["dataForm"].validate(valid => {
+                this.$refs["form"].validate(valid => {
                     if (valid) {
-                        //this.formLoading = true;
                         let data = Object.assign({}, this.formData);
-                        employeeedit(data)
-                            .then(response => {
-                                this.formLoading = false;
-                                if (response.code) {
-                                    this.$message.error(response.message);
-                                    return false;
-                                }
-                                this.$message.success("操作成功");
-                                this.formVisible = false;
-                            })
-                            .catch(() => {
-                                this.formLoading = false;
-                            });
+                        if(this.formMap.type=='add'){
+                            //时间处理
+                            data.production_time = time.formatDateTime(data.production_time);
+                            data.quality_time = time.formatDateTime(data.quality_time);
+                            //图片处理
+                            if(this.menuimagelist){
+                                this.menuimagelist.forEach((item,index)=>{
+                                    this.menuimagelist[index] = IMG_BASE_URL+item;
+                                })
+                                data.menu_images_json = JSON.stringify(this.menuimagelist);
+                            }
+                            menuadd(data)
+                                .then(response => {
+                                    this.formLoading = false;
+                                    if (response.code!=200) {
+                                        this.$message.error(response.message);
+                                        return false;
+                                    }
+                                    this.$message.success("操作成功");
+                                    this.formVisible = false;
+                                    this.returnlist();
+
+                                })
+                                .catch(() => {
+                                    this.formLoading = false;
+                                });
+
+                        }
+                        if(this.formMap.type=='edit'){
+                            menuedit(data)
+                                .then(response => {
+                                    this.formLoading = false;
+                                    if (response.code!=200) {
+                                        this.$message.error(response.message);
+                                        return false;
+                                    }
+                                    this.$message.success("操作成功");
+                                    this.formVisible = false;
+                                    this.returnlist();
+                                })
+                                .catch(() => {
+                                    this.formLoading = false;
+                                });
+                        }
+                        //this.formLoading = true;
+
+
                     }
                 });
 
             },
+            handleSuccess(response, file, fileList) {
+                if (response.code!=200) {
+                    this.$message({
+                        message: response.message,
+                        type: "error"
+                    });
+                    return;
+                }
+                this.menuimagelist.push(response.data.key);
+
+            },
             handleRemove(file, fileList) {
-                console.log(file, fileList);
+                this.menuimagelist.forEach((item,index)=>{
+                    if(item.indexOf(file.response.data.key)){
+                        this.menuimagelist.splice(index,1);
+                    }
+                })
             },
             handlePictureCardPreview(file) {
                 this.dialogImageUrl = file.url;
                 this.dialogVisible = true;
-            }
+            },
+            handleExceed(files, fileList){
+
+            },
         },
         filters:{
             formFilterType(status) {
                 const statusMap = {
-                    'add': "gray",
+                    'add': "primary",
                     'edit': "success"
                 };
                 return statusMap[status];

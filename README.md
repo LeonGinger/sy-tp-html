@@ -82,7 +82,7 @@
 
 ## 添加 阿里巴巴矢量图演示
 
->   路径: vue-admin-html/src/assets/icons 注意 vue-admin-html/src/assets/icons/iconfont.js 头部需要加 ```/* eslint-disable */``` 去掉 eslint 检查 
+>   路径: vue-admin-html/src/assets/icons 注意 vue-admin-html/src/assets/icons/iconfont.js 头部需要加 ```/* eslint-disable */``` 去掉 eslint 检查
 
 1.第一步 选好一个图标加入到购物车 -> 把购物车的添加都项目 -> 下载项目到本地
 
@@ -112,9 +112,9 @@
 	git clone https://github.com/lmxdawn/vue-admin-html.git      // 把模板下载到本地
 	cd vue-admin-html    // 进入模板目录
 	npm install         // 安装项目依赖，等待安装完成之后
-	
+
     构建时三种环境可选，解决不同环境来回切换配置的痛楚（serve：本地测试，stage：预上线，build：生产环境）
-    
+
 ## 本地开发 ##
 
 	// 开启服务器，浏览器访问 http://localhost:8080
@@ -124,18 +124,18 @@
 
 	// 执行构建命令，生成的stage文件夹放在服务器下即可访问
 	npm run stage
-	
+
 ## 构建生产 ##
 
 	// 执行构建命令，生成的dist文件夹放在服务器下即可访问
 	npm run build
-	
+
 # 项目目录介绍
 ```markdown
 ├── LICENSE                                 // 版权许可文件
 ├── README.md                               // 文档
-├── babel.config.js                         // babel 插件配置                
-├── jest.config.js                          // jest 测试配置   
+├── babel.config.js                         // babel 插件配置
+├── jest.config.js                          // jest 测试配置
 ├── package-lock.json                       // 锁定当前安装的扩展包的版本
 ├── package.json                            // 声明引用了哪些扩展包
 ├── public                                  // 公共文件
@@ -162,7 +162,7 @@
 │   │   │   ├── demo_symbol.html            // demo
 │   │   │   ├── demo_unicode.html           // demo
 │   │   │   ├── iconfont.css                // css
-│   │   │   ├── iconfont.eot                // 
+│   │   │   ├── iconfont.eot                //
 │   │   │   ├── iconfont.js                 // js 文件
 │   │   │   ├── iconfont.svg                // svg 文件
 │   │   │   ├── iconfont.ttf                // 字体文件
@@ -229,7 +229,7 @@
 │       ├── login                           // 登录相关
 │       │   └── index.vue                   // 登录首页
 │       ├── profile                         // 测试
-│       │   └── index.vue                   
+│       │   └── index.vue
 │       └── userManage                      // 用户相关
 │           └── admin                       // 管理员相关
 │               ├── authAdmin.vue           // 权限用户
@@ -237,8 +237,8 @@
 │               ├── authRole.vue            // 角色
 │               └── router.vue              // 路由文件
 ├── tests                                   // 测试
-│   └── unit                                
-│       └── HelloWorld.spec.js              
+│   └── unit
+│       └── HelloWorld.spec.js
 └── vue.config.js                           // 构建项目的配置文件
 ```
 
@@ -247,13 +247,19 @@
 [在线 Demo](https://lmxdawn.github.io/vue-admin)
 
 # Donate
-鼓励鼓励鼓励，重要的事情说三遍 
+鼓励鼓励鼓励，重要的事情说三遍
 ![donate](https://lmxdawn.github.io/images/pay.png)
 
+# 环境
+[node] node v14.16.0
+[npm] npm 6.14.4
+[vue] vue @vue/cli 4.5.8
+[element] elementUI 2.10.1
+
+@remark: 低于版本,请升级或指定版本
 
 # License
 
 [MIT](https://github.com/lmxdawn/vue-admin-html/blob/master/LICENSE)
 
 Copyright (c) 2018 lmxdawn
-

@@ -12,6 +12,13 @@ let resquest =  "/web";
  export function menudetails(params){
   return http.get(`${resquest}/menu_details`,params);
 }
+ export function menuadd(params){
+  return http.post(`${resquest}/menu_add`,params);
+}
+ export function menuedit(params){
+  return http.post(`${resquest}/menu_update`,params);
+}
+
 
 //  export function authAdminSave(params,formName){
 //     if(formName === "add"){

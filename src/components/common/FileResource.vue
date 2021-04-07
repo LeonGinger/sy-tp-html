@@ -317,7 +317,7 @@ export default {
                 // 上传完成
                 this.uploadVisible = false;
             }
-            let data = response;
+            let data = response.data;
             data.tag_id = this.uploadData.tagId;
             data.type = this.uploadData.type;
             data.size = this.uploadData.size;
@@ -336,6 +336,7 @@ export default {
                         return;
                     }
                     this.lists.unshift(response.data);
+                    this.refresh();
                 })
                 .catch(() => {});
         },

@@ -39,7 +39,7 @@
                 <template slot-scope="scope">
                     <el-image
                         style="width: 100px; height: 100px"
-                        src="http://qp9mr1fhs.hn-bkt.clouddn.com/img/xiangjiao.jpg"
+                        :src="scope.row | getlistmenuimg"
                         :fit="fit"></el-image>
                 </template>
             </el-table-column>
@@ -417,6 +417,15 @@ export default {
 
     },
     filters: {
+        getlistmenuimg(row){
+            if(!row.menu_images_json){return;}
+            let tmpmenu_img = JSON.parse(row.menu_images_json);
+            try{
+                return tmpmenu_img[0];
+            }catch(e){
+                return;
+            }
+        },
         statusFilterType(status) {
             const statusMap = {
                 1: "success",

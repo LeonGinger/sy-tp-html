@@ -26,7 +26,8 @@ export default {
     data() {
         return {
             // uploadUrl: BASE_URL + "/admin/file/resource/upload",
-            uploadUrl: BASE_URL + "/web/image_upload",
+            //uploadUrl: BASE_URL + "/web/image_upload",
+            uploadUrl: BASE_URL + "/web/file/uploadfile",
             fileExt: "jpg,png,gif",
             dialogVisible: false
         };
@@ -36,6 +37,7 @@ export default {
     },
     methods: {
         resourceSelect(item) {
+			console.log(item);
             alert(JSON.stringify(item));
         },
         handleClose(done) {
