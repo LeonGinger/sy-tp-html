@@ -52,7 +52,7 @@
                         <!--<i class="el-icon-setting" style="margin-right: 15px"></i>-->
                         <span>{{username}}<i class="el-icon-arrow-down el-icon--right"></i></span>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item><span @click="handlePassword">修改密码</span></el-dropdown-item>
+                            <el-dropdown-item><span @click="handlePhone">修改手机号</span></el-dropdown-item>
                             <el-dropdown-item><span @click="loginOut">退出登录</span></el-dropdown-item>
                             <el-dropdown-item disabled divided>主题切换</el-dropdown-item>
                         </el-dropdown-menu>
@@ -78,7 +78,26 @@
                         <el-button type="primary" @click.native="addSubmit('passwordFormData')" :loading="passwordLoading">提交</el-button>
                     </div>
                 </el-dialog>
+                <!-- 修改手机号 -->
+                <el-dialog title="修改手机号" :visible.sync="phoneFormVisible" width="55%" top="5vh">
+                    <el-form :model="phoneFormData" :rules="phoneFormDataRules" ref="phoneFormData">
+                        <el-form-item label="原手机号" prop="old_phone">
+                            <el-input disabled type="text" v-model="phoneFormData.old_phone" auto-complete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="新手机号" prop="new_phone">
+                            <el-input type="text" v-model="phoneFormData.new_phone" auto-complete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="验证码" prop="code">
+                            <el-input type="text" v-model="phoneFormData.code" auto-complete="off"></el-input>
+                            <el-button :disabled="disabledcode" @click="handleCode" type="primary">{{codetips}}</el-button>
 
+                        </el-form-item>
+                    </el-form>
+                    <div slot="footer" class="dialog-footer">
+                        <el-button @click.native="phoneFormVisible = !phoneFormVisible">取消</el-button>
+                        <el-button type="primary" @click.native="addSubmitphone('phoneFormData')" :loading="phoneLoading">提交</el-button>
+                    </div>
+                </el-dialog>
             </el-header>
 
             <!--遮板-->
@@ -103,6 +122,7 @@ import { mapGetters } from "vuex";
 import SidebarItem from "./SidebarItem.vue";
 import { password } from "../../api/auth/login";
 import { getAdminId } from "../../utils/auth";
+import {sendcode} from '@/api/auth/login.js';
 export default {
     data() {
         let validatePass = (rule, value, callback) => {
@@ -127,6 +147,15 @@ export default {
             }
         };
         return {
+            disabledcode:false,
+            codetips:"发送验证码",
+            phoneLoading:false,
+            phoneFormVisible:false,
+            phoneFormData:{
+                old_phone:"",
+                new_phone:"",
+                code:"",
+            },
             menuShow: false,
             levelList: null,
             passwordLoading: false,
@@ -135,6 +164,13 @@ export default {
                 old_password: "",
                 new_password: "",
                 check_new_password: ""
+            },
+            phoneFormDataRules: {
+                userName: [
+                    { required: true, message: "请输入登录名", trigger: "blur" }
+                ],
+                new_phone: [{ required: true, message: "请输入手机号", trigger: "blur" }],
+                code: [{ required: true, message: "请输入验证码", trigger: "blur"}],
             },
             passwordFormDataRules: {
                 old_password: [
@@ -215,6 +251,15 @@ export default {
                     });
                 });
         },
+        // 显示更换手机号页面
+        handlePhone(){
+            this.phoneFormVisible = true,
+            this.phoneFormData = {
+                old_phone:"",
+                new_phone:"",
+                code:"",
+            };
+        },
         // 显示修改密码界面
         handlePassword() {
             this.passwordFormVisible = true;
@@ -259,7 +304,33 @@ export default {
                         });
                 }
             });
-        }
+        },
+        handleCode(){
+            if(!this.phoneFormData.new_phone){this.$message.error('请输入手机号');return;}
+            this.phoneFormData.mobile = this.phoneFormData.new_phone;
+            this.codetime = 15;
+            this.timer();
+            sendcode(this.phoneFormData)
+                .then(respnse=>{
+
+                })
+                .cath(()=>{
+
+                });
+        },
+        timer() {
+         if (this.codetime > 0) {
+          this.disabled=true;
+          this.codetime--;
+          this.codetips=this.codetime+"秒";
+          setTimeout(this.timer, 1000);
+         } else{
+          this.codetime=0;
+          this.codetips="发送验证码";
+          this.disabled=false;
+         }
+         },
+        addSubmitphone(){}
     },
     created() {
         this.getBreadcrumb();
