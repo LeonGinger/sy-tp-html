@@ -21,7 +21,10 @@ export function getindex_data(params) {
 export function getecharts_data(params) {
     return http.get(`${resquest}/index_echartsdata`,params);
 }
-
+/*系统常见问题列表*/
+export function problem_list(params) {
+    return http.get(`${resquest}/problem_list`,params);
+}
 /*测试token*/
 // export function testtoken(params) {
 //     return http.get(`wap/user/user/set_token`,params);

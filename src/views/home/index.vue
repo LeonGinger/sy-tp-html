@@ -50,6 +50,7 @@
                 <div class="header-right">
                     <el-dropdown trigger="click">
                         <!--<i class="el-icon-setting" style="margin-right: 15px"></i>-->
+                        <el-avatar style="margin: 10px;" shape="circle" :size="40" fit="cover" :src="avatar"></el-avatar>
                         <span>{{username}}<i class="el-icon-arrow-down el-icon--right"></i></span>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item><span @click="handlePhone">修改手机号</span></el-dropdown-item>
@@ -213,9 +214,14 @@ export default {
             let username = this.$store.state.admin.userName;
             return !username ? this.name : username;
         },
+        avatar(){
+            let avatar = this.$store.state.admin.avatar;
+            return !avatar ? this.avatar : avatar;
+        },
         isCollapse() {
             return this.$store.state.app.sidebar.opened;
         }
+
     },
     mounted() {},
     methods: {
@@ -333,6 +339,7 @@ export default {
         addSubmitphone(){}
     },
     created() {
+        console.log(this.$store)
         this.getBreadcrumb();
     },
     watch: {

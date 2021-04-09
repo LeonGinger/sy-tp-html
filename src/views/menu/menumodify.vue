@@ -104,7 +104,8 @@
             :on-success="handleSuccess"
             :on-exceed="handleExceed"
             :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemove">
+            :on-remove="handleRemove"
+            :before-upload="handleBefore">
             <i class="el-icon-plus"></i>
             </el-upload>
 
@@ -139,7 +140,8 @@
             :on-success="handleSuccess"
             :on-exceed="handleExceed"
             :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemoveMonitor">
+            :on-remove="handleRemoveMonitor"
+            :before-upload="handleBefore">
             <i class="el-icon-plus"></i>
             </el-upload>
 
@@ -174,7 +176,8 @@
             :on-success="handleSuccess"
             :on-exceed="handleExceed"
             :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemoveCertificate">
+            :on-remove="handleRemoveCertificate"
+            :before-upload="handleBefore">
             <i class="el-icon-plus"></i>
             </el-upload>
 
@@ -479,6 +482,20 @@
                 this.formData.business_name = obj.business_name;
                 this.formData.business_id = obj.id;
 
+            },
+            handleBefore(file){
+                const isIMG = file.type;
+                const isLtBM = file.size / 1024 / 1024 < 2;
+                const file_acctype = ['image/png','image/jpeg'];
+                if (file_acctype.indexOf(isIMG)==-1) {
+                    this.$message.error('上传头像图片只能是 JPG 格式!');
+                    return false;
+                }
+                if (!isLtBM) {
+                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                    return false;
+                }
+                return isIMG && isLtBM;
             },
             handleSuccess(response, file, fileList) {
                 if (response.code!=200) {

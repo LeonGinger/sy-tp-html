@@ -10,6 +10,7 @@ import "./role"; // 权限
 import "./mock"; // 模拟数据
 
 import "./assets/icons/iconfont";
+import './assets/icons/GNLEON/iconfont';
 import IconSvg from "./components/common/IconSvg.vue"; // svg组件
 import * as echarts from 'echarts';
 import '@/directive/permission.js' //自定义权限组件
