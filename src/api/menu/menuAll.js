@@ -12,13 +12,18 @@ let resquest =  "/web";
  export function menudetails(params){
   return http.get(`${resquest}/menu_details`,params);
 }
+//添加
  export function menuadd(params){
   return http.post(`${resquest}/menu_add`,params);
 }
+//修改
  export function menuedit(params){
   return http.post(`${resquest}/menu_update`,params);
 }
-
+//删除
+ export function menudel(params){
+  return http.post(`${resquest}/menu_del`,params);
+}
 
 //  export function authAdminSave(params,formName){
 //     if(formName === "add"){

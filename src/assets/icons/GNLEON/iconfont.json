@@ -2,9 +2,107 @@
   "id": "2446781",
   "name": "溯源",
   "font_family": "iconfont",
-  "css_prefix_text": "icon",
+  "css_prefix_text": "icon-",
   "description": "后台图标库",
   "glyphs": [
+    {
+      "icon_id": "841184",
+      "name": "码",
+      "font_class": "ma",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "5068140",
+      "name": "商家",
+      "font_class": "shangjia",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "6976871",
+      "name": "批次",
+      "font_class": "pici",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "7493076",
+      "name": "码",
+      "font_class": "ma1",
+      "unicode": "e6e0",
+      "unicode_decimal": 59104
+    },
+    {
+      "icon_id": "10100757",
+      "name": "码",
+      "font_class": "ma2",
+      "unicode": "e6ca",
+      "unicode_decimal": 59082
+    },
+    {
+      "icon_id": "13353733",
+      "name": "申请",
+      "font_class": "shenqing",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "13722874",
+      "name": "添加",
+      "font_class": "add-fill",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "14153374",
+      "name": "添加",
+      "font_class": "-tainjia",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "14271872",
+      "name": "商家",
+      "font_class": "shangjia1",
+      "unicode": "e7a2",
+      "unicode_decimal": 59298
+    },
+    {
+      "icon_id": "14515349",
+      "name": "打印",
+      "font_class": "dayin",
+      "unicode": "e79c",
+      "unicode_decimal": 59292
+    },
+    {
+      "icon_id": "15007728",
+      "name": "批次",
+      "font_class": "pici1",
+      "unicode": "e62e",
+      "unicode_decimal": 58926
+    },
+    {
+      "icon_id": "16842845",
+      "name": "商品",
+      "font_class": "shangpin",
+      "unicode": "e615",
+      "unicode_decimal": 58901
+    },
+    {
+      "icon_id": "17851304",
+      "name": "打印",
+      "font_class": "dayin1",
+      "unicode": "e627",
+      "unicode_decimal": 58919
+    },
+    {
+      "icon_id": "18926694",
+      "name": "商品",
+      "font_class": "shangpin1",
+      "unicode": "e674",
+      "unicode_decimal": 58996
+    },
     {
       "icon_id": "17764322",
       "name": "验证码",

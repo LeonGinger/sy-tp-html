@@ -6,24 +6,6 @@
   url('iconfont.ttf?t=1531114397320') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
   url('iconfont.svg?t=1531114397320#iconfont') format('svg'); /* iOS 4.1- */
 }
-@font-face {font-family: "iconfont";
-  src: url('./GNLEON/iconfont.eot?t=1616730819028'); /* IE9 */
-  src: url('./GNLEON/iconfont.eot?t=1616730819028#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAANkAAsAAAAAB0AAAAMYAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCDBgqCKIILATYCJAMMCwgABCAFhG0HNxtSBsiemjxZZr9fBgqBbJaaXACnePhvP9p9M7PihkryaJpUM5W2DTx0aVTNnA6Jqpr/vP5lDqqZSqetxsRNv7nk45yfcpJGcJXeDs2YNLXDBq+FsN1vLejiiNMIRjbvrgswSjjioFYHyUEQiCaW6FbaPNr7PJfTm3YCrQ+U4xwLj3oBxgEFtidGURZwgSToDWMXvMDbBBqNyqXYWdPUCvQKe1Egroo8B/SFmKKwYr1Q27CzELdl9WmlG8Ct6PvxlTWEpCZjr9x3vtoGyj4EfOhQVTXMA4J8OQ/YPjKWAQpxvNF3jCrJLaPSqGvURjdQqwhpqeR/RSQzNLXOHx5JELXYjc1gHuUTHwI8WaYPhoqnvimDWtThGOA6m+v2zlnp6FREu5/i9P5Qo/K+2X0KXTxNqf5bfxjRvjSyPxfehpbndofDbAs+Tr+tlwmaeZXhfy+i1ft8aGMnSs2jNP/3JFbTj9NbfWYfjiz7+u4Hwwsd2H0z0jd+MZy/EfeyeUX77f1iUu2d+fbPWuzzh58vo8vpObEWkxK3cs0V/ctQSuzMKn9awdNB8vHMaTv5Rda3rXv9KNK8mtfz2ipiXgNjV1cN70K6Ab8BHdIGZ2YOXGsaxnVZAzgJoFrMG3kQFt5neej3/8brrKOursCi/6oGvBuLaxitFgsYXqdegsl/tnxgTzGUtj0XTebJLH+2LlclodEIqtihTi/TTT0vVAj1ejIkdUaQ1ZsmC7sMNZqsQ616W9Boqdr9TbpQKlEKLDEBENodI2n1Clm7W7Kwz6jR6xW12sPQ6EiEnthkNtKnkmKOYRvsGYQicruI62Q+cXMz5nsdHM0rI0E7prKYhBajuVysxS5Ml1gj9/FWxggk1O2ENeA+7HC4oYe6JYyYUWDMU2AykaYnGZHbCXzsQGEcBrOBegyCRIibCwkGMz6VzzfDeL0cOLSDV5duh1EycXTIwsg8gKzVuQbxHuURWR+eFcMQEEG5OUE1wIM5nJwb5GmeJsEQxkiYkPEoYEL9yFCdcXuD8/8OQSP7whwqSYxyTXRyWllw90oiAA==') format('woff2'),
-  url('./GNLEON/iconfont.woff?t=1616730819028') format('woff'),
-  url('./GNLEON/iconfont.ttf?t=1616730819028') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
-  url('./GNLEON/iconfont.svg?t=1616730819028#iconfont') format('svg'); /* iOS 4.1- */
-}
-
-@font-face {
-  font-family: 'icon-font';  /* project id 2446781 */
-  src: url('//at.alicdn.com/t/font_2446781_y0oknsq3cnh.eot');
-  src: url('//at.alicdn.com/t/font_2446781_y0oknsq3cnh.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_2446781_y0oknsq3cnh.woff2') format('woff2'),
-  url('//at.alicdn.com/t/font_2446781_y0oknsq3cnh.woff') format('woff'),
-  url('//at.alicdn.com/t/font_2446781_y0oknsq3cnh.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_2446781_y0oknsq3cnh.svg#icon-font') format('svg');
-}
 
 .iconfont {
   font-family:"iconfont" !important;
@@ -68,14 +50,3 @@
 .icon-tiku:before { content: "\e62f"; }
 
 .icon-xiaochengxu:before { content: "\e61e"; }
-
-
-/*GNLEON*/
-.icon-mima:before {
-  content: "\e611";
-}
-
-.icon-shouji:before {
-  content: "\e60e";
-
-}

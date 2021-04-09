@@ -16,6 +16,7 @@ import adminRouter from "../views/userManage/admin/router.vue";
 import authAdmin from "../views/userManage/admin/authAdmin.vue";
 import authRole from "../views/userManage/admin/authRole.vue";
 import authPermissionRule from "../views/userManage/admin/authPermissionRule.vue";
+import fans from "../views/userManage/fans.vue";
 
 // 上传相关
 import tinymce from "../views/components/tinymce-demo.vue";
@@ -40,6 +41,10 @@ import orderadd from "../views/source/orderadd.vue"
 import order from "../views/source/order.vue";
 import sourcelist from "../views/source/sourcelist.vue";
 import opdencode from "../views/source/opdencode.vue";
+
+//系统设置
+import system from "../views/setting/system.vue";
+import database from "../views/setting/database.vue";
 // Vue.use(VueRouter);
 
 const err401 = r =>
@@ -96,6 +101,7 @@ export const constantRouterMap = [
         redirect: "/readme/main",
         icon: "shouye",
         name: "控制台",
+        hidden:true,
         noDropdown: true,
         children: [
             {
@@ -107,6 +113,7 @@ export const constantRouterMap = [
     {
         path: "/components",
         redirect: "/components/uploadList",
+        hidden:true,
         component: Home,
         name: "components",
         icon: "tongyong",
@@ -183,6 +190,15 @@ export const asyncRouterMap = [
         // noDropdown: true,
         children: [
             {
+                path: "fans",
+                component: fans,
+                name: "粉丝管理",
+                icon: "",
+                meta: {
+                    authRule: ["admin/auth.fans/index"]
+                }
+            },
+            {
                 path: "/userManage/adminManage",
                 component: adminRouter,
                 redirect: "/userManage/authAdmin/index",
@@ -229,6 +245,7 @@ export const asyncRouterMap = [
         component: Home,
         icon: "guanggao",
         name: "广告相关",
+        hidden:true,
         meta: {
             authRule: ["ad_manage"]
         },
@@ -258,7 +275,7 @@ export const asyncRouterMap = [
         path: "/enterprise",
         redirect: "/enterprise/apply",
         component: Home,
-        icon: "guanggao",
+        icon: "shangjia",
         name: "商户管理",
         meta: {
             authRule: ["enterprise"]
@@ -298,7 +315,7 @@ export const asyncRouterMap = [
         path: "/menu",
         redirect: "/menu/menulist",
         component: Home,
-        icon: "guanggao",
+        icon: "shangpin1",
         name: "商品管理",
         meta: {
             authRule: ["menu"]
@@ -348,7 +365,7 @@ export const asyncRouterMap = [
         path: "/source",
         redirect: "/source/order",
         component: Home,
-        icon: "guanggao",
+        icon: "pici",
         name: "批次管理",
         meta: {
             authRule: ["source"]
@@ -391,6 +408,37 @@ export const asyncRouterMap = [
                     authRule: ["source/opdencode"]
                 }
             }
+        ]
+    },
+    {
+        path: "/set",
+        redirect: "/setting/system",
+        component: Home,
+        icon: "pici",
+        name: "系统设置",
+        meta: {
+            authRule: ["setting"]
+        },
+        // noDropdown: true,
+        children: [
+            {
+                path: "system",
+                component: system,
+                name: "系统设置",
+                icon: "",
+                meta: {
+                    authRule: ["sys/seeting"]
+                }
+            },
+            {
+                path: "database",
+                component: database,
+                name: "数据备份",
+                icon: "",
+                meta: {
+                    authRule: ["sys/database"]
+                }
+            },
         ]
     },
 ];

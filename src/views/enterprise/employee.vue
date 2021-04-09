@@ -81,6 +81,10 @@
                 prop="create_time"
                 with="300"
                 :show-overflow-tooltip="true">
+                <template slot-scope="scope">
+                    <i class="el-icon-time"></i>
+                   <span>{{ scope.row.create_time }}</span>
+                </template>
             </el-table-column>
 <!--           <el-table-column
                 label="状态">
