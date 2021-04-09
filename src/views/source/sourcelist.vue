@@ -2,6 +2,12 @@
 
     <div>
         <!-- start search -->
+        <div
+      id="qrcode"
+      class="qrcode"
+      ref="qrcodeContainer"
+      style="display: none"
+    ></div>
         <el-form :inline="true" :model="query" class="query-form" size="mini">
             <el-form-item class="query-form-item">
                 <el-input v-model="query.title" placeholder="订单编号"></el-input>
@@ -12,8 +18,8 @@
                     <el-button type="primary" icon="search" @click="onSubmit">查询</el-button>
                 </el-button-group>
                 &nbsp;
-                <el-button v-permission="'menu/menulist/add'" class="g-success" type="success" @click.native="handleForm(null,null)">发布商品</el-button>
-                <el-button v-permission="'menu/menulist/del'" type="danger" @click.native="handleFormdell(null,null)">删除</el-button>
+                <!-- <el-button v-permission="'menu/menulist/add'" class="g-success" type="success" @click.native="handleForm(null,null)">新建批次</el-button> -->
+                <!-- <el-button v-permission="'menu/menulist/del'" type="danger" @click.native="handleFormdell(null,null)">删除</el-button> -->
             </el-form-item>
         </el-form>
         <!-- end search -->
@@ -29,17 +35,20 @@
             <el-table-column
                 label="ID"
                 prop="id"
-                with="300"
+                with="50"
                 :show-overflow-tooltip="true"
                 fixed>
             </el-table-column>
             <el-table-column
                 label="二维码"
+                prop="order_number"
+                with="300"
                 >
                 <template slot-scope="scope">
-                    <el-image
-                        style="width: 100px; height: 100px"
-                        src="http://qp9mr1fhs.hn-bkt.clouddn.com/img/xiangjiao.jpg">
+                    <el-image :src="scope.row.source_code_img">
+                        <div slot="error" class="image-slot">
+                        正在加载中...
+                    </div>
                     </el-image>
                 </template>
             </el-table-column>
@@ -50,7 +59,7 @@
                 :show-overflow-tooltip="true">
             </el-table-column>
             <el-table-column
-                label="订单编号"
+                label="批次编号"
                 prop="order_number"
                 with="300"
                 :show-overflow-tooltip="true">
@@ -82,8 +91,8 @@
                         <el-dropdown-item command="2">拒 绝</el-dropdown-item>
                     </el-dropdown-menu>
                     </el-dropdown> -->
-                    <el-button type="success" size="small" @click.native="handleForm(scope.$index, scope.row)">编 辑</el-button>
-                    <el-button type="danger" size="small" @click.native="handleFormdel(scope.$index, scope.row)">删 除</el-button>
+                    <el-button type="success" size="small" @click="sourceAdd(scope.row.source_code,scope.row.source_code_img)">溯源码打印</el-button>
+                    <!-- <el-button type="danger" size="small" @click.native="handleFormdel(scope.$index, scope.row)">删 除</el-button> -->
                   <!--  <el-button type="primary" size="small" @click.native="handleFormemployee(scope.row.company_id)">员 工</el-button> -->
                    <!-- <el-button :type="scope.row.status | statusFilterType_handle" size="small" @click.native="handleFormstatus(scope.$index, scope.row)">{{scope.row.status | statusFilterName_handle}}</el-button> -->
                 </template>
@@ -99,7 +108,10 @@
 </template>
 
 <script>
+import QRCode from "qrcodejs2";
+import { MY_CODE_URL } from "../../config/app";
 import {sourceList} from '@/api/source/sourceapi.js';
+import { Loading } from 'element-ui';
 const formJson = {
 
 };
@@ -114,7 +126,7 @@ export default {
             formData: formJson,
             query: {
                 title: "",
-                page: 1,
+                page: 0,
                 limit: 10
             },
             loading: true,
@@ -125,8 +137,9 @@ export default {
             formLabelverifWidth:'120px',
             formName:null,
             company_imgstyle:"{width: 100px; height: 100px;}",
-            formLoading:false,
+            formLoading:true,
             order: [],
+            sourceSrc: [],
         }
     },
     methods:{
@@ -144,17 +157,17 @@ export default {
             if(row.status==1){
                 this.list[index].status = 2;
                 this.$message({
-                         showClose: true,
-                         message: '操作成功',
-                         type: 'success'
-                       });
+                    showClose: true,
+                    message: '操作成功',
+                    type: 'success'
+                });
             }else{
                 this.list[index].status = 1;
                 this.$message({
-                          showClose: true,
-                          message: '操作成功',
-                          type: 'success'
-                        });
+                    showClose: true,
+                    message: '操作成功',
+                    type: 'success'
+                });
             }
 
         },
@@ -182,21 +195,24 @@ export default {
             });
             this.query = {
                 title: "",
-                page: 1,
+                page: 0,
                 limit: 10
             };
             this.getList();
         },
         getList(){
-           this.loading = false;
-           sourceList(this.query)
+            // this.loading = false;
+            sourceList(this.query)
                 .then(response => {
                     console.log(response);
                     this.order = response.data.list || 0,
                     this.total = response.data.total || 0;
+                    var _this = this;
+                    this.loading = false
+                    this.codeselect(response.data);
                 })
                 .catch(() => {
-                    this.loading = false;
+                    // this.loading = false;
                     this.list = [];
                     this.total = 0;
                 });
@@ -211,7 +227,7 @@ export default {
         },
         handleCurrentChange(val) {
 
-           this.query.page = val;
+           this.query.page = (val - 1)*10 ;
            this.getList();
         },
         handleverif(command){
@@ -224,25 +240,25 @@ export default {
             this.dialogFormVisibleverif = true;
 
             }
-       },
+        },
         onSubmitverif(){
            //审核不通过
 
         },
         // 隐藏表单
-       hideFormdetails() {
+        hideFormdetails(){
             // 更改值
             this.formVisibledetails = !this.formVisibledetails;
             return true;
         },
-        formSubmit() {
+        formSubmit(){
             this.$refs["dataForm"].validate(valid => {
-                if (valid) {
+                if (valid){
                     this.formLoading = true;
                     let data = Object.assign({}, this.formData);
                     adSave(data, this.formName)
                     .then(response => {
-                        this.formLoading = false;
+                        // this.formLoading = false;
                         if (response.code) {
                             this.$message.error(response.message);
                             return false;
@@ -258,12 +274,68 @@ export default {
                         }
                     })
                     .catch(() => {
-                        this.formLoading = false;
+                        // this.formLoading = false;
                     });
                 }
             });
         },
-
+        codeselect(data){
+            var order = data.list
+            var _this = this
+            console.log(order.length)
+            for(let i=0;i<order.length;i++){
+                var code_number = order[i]['source_code']
+                // console.log(i)
+                _this.makeqrcode(code_number,i);
+            }
+            console.log(this.order)
+        },
+        makeqrcode(code_number,index) {
+            let qrtext = MY_CODE_URL + "?source_code=" + code_number;
+            // console.log(qrtext)
+            this.$nextTick(() => {
+                let qrcode = new QRCode(document.getElementById("qrcode"), {
+                    // let qrcode = new QRCode(this.$refs.qrcodeContainer, {
+                    width: 100, // 二维码的宽
+                    height: 100, // 二维码的高
+                    text: qrtext, // 二维码的内容
+                    // text: "123", // 二维码的内容
+                    colorDark: "#000", // 二维码的颜色
+                    colorLight: "#fff",
+                    correctLevel: QRCode.CorrectLevel.H,
+                });
+                setTimeout(() => {
+                    let qwe = this.$refs.qrcodeContainer.innerHTML;
+                    console.log(qwe);
+                    var patt = /<img[^>]+src=['"]([^'"]+)['"]+/g;
+                    let tmpSrc = patt.exec(qwe);
+                    // console.log(tmpSrc);
+                    this.sourceSrc[index] = tmpSrc[1];
+                    this.$forceUpdate();
+                    //document.getElementById("qrcode").innerHTML = "";
+                    // console.log("妙啊~");
+                    // console.log(this.sourceSrc);
+                    this.order[index]['source_code_img'] = tmpSrc[1];
+                });
+            });
+        },
+        sourceAdd(source,code){
+            console.log(code)
+            this.$prompt('请输入打印数量', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+            }).then(({ value }) => {
+                window.sessionStorage.setItem('source',source)
+                window.sessionStorage.setItem('sourcecode',code)
+                window.sessionStorage.setItem('sourcecode_number',value)
+                window.location.href = "#/source/opdencode"
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '取消'
+                });       
+            });
+        }
     },
     filters: {
         statusFilterType(status) {
@@ -317,5 +389,13 @@ export default {
     }
 /deep/.enterprise_logo{
         margin-left: 64px;
+    }
+    .image-slot{
+        width:100px;
+        height:100px;
+        text-align: center;
+        line-height: 100px;
+        background-color: #e6e6e6;
+        color: #999999;
     }
 </style>

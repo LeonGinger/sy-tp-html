@@ -57,6 +57,9 @@
  export function ScodeList(params){
   return http.get(`${resquest}/scode_list`,params);
 }
+export function order_demo(params){
+  return http.get(`${resquest}/order_demo`,params);
+}
   export function authAdminSave(params,formName){
      if(formName === "add"){
          return http.post(`${resquest}/admin_add`,params);

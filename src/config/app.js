@@ -10,4 +10,5 @@ let BASE_URL = process.env.VUE_APP_API_BASE;
 // let ROUTER_MODE = "history";
 let ROUTER_MODE = "";
 let IMG_BASE_URL = "http://sy.zsicp.com/uploads/";
-export { BASE_URL, ROUTER_MODE, IMG_BASE_URL };
+let MY_CODE_URL = "https://sy.zsicp.com/h5/#/pages/traceability/traceability";
+export { BASE_URL, ROUTER_MODE, IMG_BASE_URL, MY_CODE_URL};

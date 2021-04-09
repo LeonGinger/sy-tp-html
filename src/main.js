@@ -12,7 +12,9 @@ import "./mock"; // 模拟数据
 import "./assets/icons/iconfont";
 import IconSvg from "./components/common/IconSvg.vue"; // svg组件
 import * as echarts from 'echarts';
-import '@/directive/permission.js' //自定义权限组件
+import '@/directive/permission.js'; //自定义权限组件
+import Print from 'vue-print-nb';
+Vue.use(Print);  //注册
 Vue.prototype.$echarts = echarts;
 
 //

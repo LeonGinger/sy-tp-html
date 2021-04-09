@@ -85,14 +85,14 @@
                 orderAdd(this.formData)
                     .then(response => {
                         console.log(response);
-                        this.$router.push({
-                            name:'批次列表',
-                            params:{
-                                data:response.data,
-                            }
-                        });
-                        window.location.href = "#/source/order"
-                        myWindow=window.open('','','width=800,height=500');
+                        // this.$router.push({
+                        //     name:'批次列表',
+                        //     params:{
+                        //         data:response.data,
+                        //     }
+                        // });
+                        window.sessionStorage.setItem("order_number",response.data)
+                        window.location.href = "#/source/opdencode"
                     })
                     .catch(() =>{
                         
