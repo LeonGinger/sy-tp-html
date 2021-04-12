@@ -109,8 +109,8 @@
                     </el-dropdown-menu>
                     </el-dropdown>
  -->
-                    <el-button v-permission="'enterprise/employee/edit'" type="success" size="small" @click.native="handleForm(scope.$index, scope.row)">编 辑</el-button>
-                    <el-button v-permission="'enterprise/employee/del'" type="danger" size="small" @click.native="handleFormdel(scope.$index, scope.row)">删 除</el-button>
+                    <!-- <el-button v-permission="'enterprise/employee/edit'" type="success" size="small" @click.native="handleForm(scope.$index, scope.row)">编 辑</el-button> -->
+                    <el-button v-permission="'enterprise/employee/del'" type="danger" size="small" @click="handleFormdel(scope.row.id,scope.$index)">踢出员工</el-button>
                 </template>s
             </el-table-column>
         </el-table>
@@ -312,14 +312,15 @@
 
              },
              //删除员工
-             handleFormdel(index,row){
+             handleFormdel(out_id,index){
                 this.$confirm('此操作将该员工移出, 是否继续?', '提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).then(() => {
                         //点击确定的操作(调用接口)
-                        employeedel({id:row.id})
+                        // console.log('aaa');
+                        employeedel({out_id:out_id})
                             .then(response=>{
                                 if(response.code!=200){this.$message.error("删除失败,请稍后再试");}
                                  this.$message({
@@ -363,18 +364,18 @@
                 //获取数据
                 this.loading = false;
                 employeelist(this.query)
-                     .then(response => {
-                         console.log(response);
-                         this.loading = false;
-                         this.list = response.data.list || [];
-                         this.total = response.data.total || 0;
-                     })
-                     .catch(() => {
+                    .then(response => {
+                        console.log(response);
+                        this.loading = false;
+                        this.list = response.data.list || [];
+                        this.total = response.data.total || 0;
+                    })
+                    .catch(() => {
 
-                         this.loading = false;
-                         this.list = [];
-                         this.total = 0;
-                     });
+                        this.loading = false;
+                        this.list = [];
+                        this.total = 0;
+                    });
              },
              onSubmit(){
              //查询

@@ -60,6 +60,9 @@
 export function order_demo(params){
   return http.get(`${resquest}/order_demo`,params);
 }
+export function orderdelete(params){
+  return http.get(`${resquest}/order_delete`,params);
+}
   export function authAdminSave(params,formName){
      if(formName === "add"){
          return http.post(`${resquest}/admin_add`,params);

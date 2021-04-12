@@ -29,23 +29,28 @@
             <el-table-column
                 label="ID"
                 prop="id"
-                with="300"
+                with="50"
                 :show-overflow-tooltip="true"
                 fixed>
             </el-table-column>
             <el-table-column
-                label="缩略图"
-                >
+                label="缩略图">
                 <template slot-scope="scope">
                     <el-image
                         style="width: 100px; height: 100px"
-                        :src="scope.row | getlistmenuimg"
+                        :src="scope.row.menu_images_json"
                         fit="cover"></el-image>
                 </template>
             </el-table-column>
             <el-table-column
                 label="商品名称"
                 prop="menu_name"
+                with="300"
+                :show-overflow-tooltip="true">
+            </el-table-column>
+            <el-table-column
+                label="商品规格"
+                prop="menu_weight"
                 with="300"
                 :show-overflow-tooltip="true">
             </el-table-column>
@@ -62,14 +67,8 @@
                 :show-overflow-tooltip="true">
             </el-table-column>
             <el-table-column
-                label="溯源码数量"
-                prop="source_code_count"
-                with="300"
-                :show-overflow-tooltip="true">
-            </el-table-column>
-            <el-table-column
-                label="购买链接"
-                prop="menu_url"
+                label="创建时间"
+                prop="create_time"
                 with="300"
                 :show-overflow-tooltip="true">
             </el-table-column>
@@ -219,6 +218,11 @@ export default {
                     this.loading = false;
                     this.list = response.data.list || [];
                     this.total = response.data.total || 0;
+                    for(var i=0;i<this.list.length;i++){
+                        this.list[i]['menu_images_json'] = this.list[i]['menu_images_json'][0]
+                    }
+                    
+                    console.log(this.list);
                 })
                 .catch(() => {
                     this.loading = false;

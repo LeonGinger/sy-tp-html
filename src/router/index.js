@@ -30,6 +30,7 @@ import ad from "../views/adManage/ad.vue";
 import apply from "../views/enterprise/apply.vue";
 import employee from "../views/enterprise/employee.vue";
 import MyEnterprise from "../views/enterprise/MyEnterprise.vue";
+import information from "../views/enterprise/information.vue";
 
 //商品管理
 import menumodify from "../views/menu/menumodify.vue";
@@ -308,6 +309,15 @@ export const asyncRouterMap = [
                 meta: {
                     authRule: ["enterprise/employee"]
                 }
+            },
+            {
+                path: "information",
+                component: information,
+                name: "信息管理",
+                icon: "",
+                meta: {
+                    authRule: ["enterprise/information"]
+                }  
             }
         ]
     },

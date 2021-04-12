@@ -42,16 +42,16 @@
 
               <el-row>
                 <el-col :span="8"><div class="grid-content bg-purple">
-                    <el-input v-model="formData.menu_weight"></el-input>
+                    <el-input v-model="formData.menu_weightt"></el-input>
                 </div></el-col>
 
                 <el-col :span="11"><div class="grid-content bg-purple-light">
-                    <el-select v-model="formData.menu_weightt" placeholder="请选择">
+                    <el-select v-model="formData.menu_weight" placeholder="请选择">
                         <el-option
                             v-for="item in optionsweight"
                             :key="item.value"
                             :label="item.label"
-                            :value="item.value">
+                            :value="item.label">
                         </el-option>
                     </el-select>
                 </div></el-col>
@@ -66,13 +66,30 @@
                default-time="12:00:00">
              </el-date-picker>
            </el-form-item>
-           <el-form-item label="保质日期" prop="quality_time">
+           <!-- <el-form-item label="保质日期" prop="quality_time">
               <el-date-picker
                 v-model="formData.quality_time"
                 type="datetime"
                 placeholder="选择日期时间"
                 default-time="12:00:00">
               </el-date-picker>
+            </el-form-item> -->
+            <el-form-item label="保质日期" prop="quality_time">
+              <el-row>
+                <el-col :span="8"><div class="grid-content bg-purple">
+                    <el-input v-model="formData.quality_timee"></el-input>
+                </div></el-col>
+                <el-col :span="11"><div class="grid-content bg-purple-light">
+                    <el-select v-model="formData.quality_time" placeholder="请选择">
+                        <el-option
+                            v-for="item in optionstime"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.label">
+                        </el-option>
+                    </el-select>
+                </div></el-col>
+              </el-row>
             </el-form-item>
             <el-form-item label="购买链接" prop="menu_url">
                 <el-col :span="12">
@@ -203,10 +220,13 @@
     import {checkMoney} from "@/utils/tool.js";
     import { BASE_URL,IMG_BASE_URL } from "../../config/app";
     import time from "@/utils/utils.filter.js"
+    import { business_Find } from "@/api/business/business.js"
     const formJson = {
         id:'',
         menu_images_json:'',
         monitor_image:[],
+        menu_weightt: '0',
+        quality_time: '',
         // menu_weightt:'1',
     };
     export default {
@@ -250,14 +270,14 @@
                             // type:"number",
                         }
                     ],
-                    menu_weight: [
-                        {
-                            required: true,
-                            message: "请输入正确商品规格",
-                            trigger: "blur",
-                            // type:"number",
-                        }
-                    ],
+                    // menu_weight: [
+                    //     {
+                    //         required: true,
+                    //         message: "请输入正确商品规格",
+                    //         trigger: "blur",
+                    //         // type:"number",
+                    //     }
+                    // ],
                     production_time: [
                         {
                             required: true,
@@ -265,13 +285,13 @@
                             trigger: "blur"
                         }
                     ],
-                    quality_time: [
-                        {
-                            required: true,
-                            message: "请输入商品保质日期",
-                            trigger: "blur"
-                        }
-                    ],
+                    // quality_time: [
+                    //     {
+                    //         required: true,
+                    //         message: "请输入商品保质日期",
+                    //         trigger: "blur"
+                    //     }
+                    // ],
                     menu_images_json: [
                         {
                             required: true,
@@ -280,13 +300,13 @@
                             trigger: "blur",
                         }
                     ],
-                    business_name: [
-                        {
-                            required: true,
-                            message: "商家信息有误",
-                            trigger: "blur",
-                        }
-                    ],
+                    // business_name: [
+                    //     {
+                    //         required: true,
+                    //         message: "商家信息有误",
+                    //         trigger: "blur",
+                    //     }
+                    // ],
                 },
                 formData:formJson,
                 businessArr:{},
@@ -332,6 +352,24 @@
                     },
 
                 ],
+                optionstime:[
+                    {
+                        value: '1',
+                        label: '年'
+                    },
+                    {
+                        value: '2',
+                        label: '月'
+                    },
+                    {
+                        value: '3',
+                        label: '日'
+                    }, 
+                    {
+                        value: '4',
+                        label: '季度'
+                    }
+                ]
 
 
             }
@@ -386,15 +424,31 @@
             },
             onSubmit(){
                 //提交表单
+                // console.log(window.localStorage)
+                // this.formData.business_name = 
+                // this.formData.userid = formJson
+                business_Find({business_id : this.$store.adminId})
+                .then(response => {
+                    // console.log(response.data)
+                    this.formData.business_id = response.data['id']
+                })
+                .catch(() => {
+                    
+                });
+                console.log(this.formData)
+                this.formData.menu_weight = this.formData.menu_weightt+this.formData.menu_weight
+                this.formData.quality_time = this.formData.quality_timee+this.formData.quality_time
                 this.$refs["form"].validate(valid => {
+                    console.log(valid)
                     if (valid) {
                         let data = Object.assign({}, this.formData);
+                        // console.log(data);
                         if(this.formMap.type=='add'){
                             this.formData.id = "";
                             data.id = "";
                             //时间处理
                             data.production_time = time.formatDateTime(data.production_time);
-                            data.quality_time = time.formatDateTime(data.quality_time);
+                            // data.quality_time = time.formatDateTime(data.quality_time);
                             //图片处理
                             if(this.menuimagelist){
                                 this.menuimagelist.forEach((item,index)=>{
@@ -409,7 +463,9 @@
                                 data.certificate_menu = JSON.stringify(this.certificateimagelist);
                             }
                             //检测报告
+                            console.log(data)
                             if(data.monitor_image){data.monitor_image = JSON.stringify(data.monitor_image);}
+                            // data.business_id = this.formData.business_id
                             menuadd(data)
                                 .then(response => {
                                     this.formLoading = false;
@@ -420,17 +476,18 @@
                                     this.$message.success("操作成功");
                                     this.formVisible = false;
                                     this.returnlist();
-
+                                    this.formData = formJson
+                                    this.formData.quality_timee = ''
+                                    this.formData.monitor_image = ''
                                 })
                                 .catch(() => {
                                     this.formLoading = false;
                                 });
-
                         }
                         if(this.formMap.type=='edit'){
                             //处理数据
                             if(typeof(data.production_time)=='object'){data.production_time = time.formatDateTime(data.production_time);}
-                            if(typeof(data.quality_time)=='object'){data.quality_time = time.formatDateTime(data.quality_time);}
+                            // if(typeof(data.quality_time)=='object'){data.quality_time = time.formatDateTime(data.quality_time);}
                             let menuimagearr = [];
                             if(this.menuimagelist){
                                 this.menuimagelist.forEach((item,index)=>{

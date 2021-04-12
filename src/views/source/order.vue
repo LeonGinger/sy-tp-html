@@ -120,14 +120,12 @@
             type="success"
             size="small"
             @click.native="handleForm(scope.row.order_number)"
-            >批次详情</el-button
-          >
-          <!-- <el-button
+            >批次详情</el-button>
+          <el-button
             type="danger"
             size="small"
-            @click.native="handleFormdel(scope.$index, scope.row)"
-            >删 除</el-button
-          > -->
+            @click.native="orderdelete(scope.row.id)"
+            >删 除</el-button>
           <!--  <el-button type="primary" size="small" @click.native="handleFormemployee(scope.row.company_id)">员 工</el-button> -->
           <!-- <el-button :type="scope.row.status | statusFilterType_handle" size="small" @click.native="handleFormstatus(scope.$index, scope.row)">{{scope.row.status | statusFilterName_handle}}</el-button> -->
         </template>
@@ -176,6 +174,7 @@
 import { menulist } from "@/api/menu/menuAll.js";
 import { orderList } from "@/api/source/sourceapi.js";
 import { order_demo } from "@/api/source/sourceapi.js";
+import { orderdelete } from "@/api/source/sourceapi.js";
 import { Loading } from "element-ui";
 const formJson = {};
 export default {
@@ -354,6 +353,20 @@ export default {
         type: "success",
       });
     },
+    orderdelete(id){
+      console.log(id)
+      orderdelete({order_id:id})
+        .then((response) => {
+          // console.log(response);s
+          (this.order = response.data.list || 0),
+            (this.total = response.data.total || 0);
+        })
+        .catch(() => {
+          this.loading = false;
+          this.list = [];
+          this.total = 0;
+        });
+    }
   },
   filters: {
     statusFilterType(status) {

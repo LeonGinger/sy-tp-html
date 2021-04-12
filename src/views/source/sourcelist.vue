@@ -59,8 +59,8 @@
                 :show-overflow-tooltip="true">
             </el-table-column>
             <el-table-column
-                label="批次编号"
-                prop="order_number"
+                label="溯源编号"
+                prop="source_code"
                 with="300"
                 :show-overflow-tooltip="true">
             </el-table-column>
