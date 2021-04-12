@@ -1,48 +1,28 @@
 <template>
     <div>
         <el-tabs v-model="activeName">
-                <el-tab-pane label="tab1" name="first" :key="'first'">
+                <el-tab-pane label="基础设置" name="first" :key="'first'">
                         <div style="background: yellow; display: inline">
-                            tab1内容
-                            tab1内容
-                            tab1内容
+                            <child1></child1>
                         </div>
                 </el-tab-pane>
 
                 <el-tab-pane label="前台条例设置" name="second" :key="'second'">
                         <div style="background: green; display: inline">
-                            <el-form :model="formData">
-                                <el-form-item label="商家须知" prop="content">
-                                    <tinymce style="display: inline-block;width: 100%;" :height="300" v-model="formData.content"/>
-                                </el-form-item>
-                            </el-form>
+                            <child2></child2>
+                        </div>
+                </el-tab-pane>
 
+                <el-tab-pane label="常用工具" name="third" :key="'third'">
+                        <div style="background: green; display: inline">
                             <el-row>
-                              <el-col :span="12"><div class="grid-content bg-purple">
-                                <el-form :model="formDataproblem">
-                                    <el-form-item label="标题" prop="content">
-                                        <el-input v-model="formDataproblem.title"></el-input>
-                                     </el-form-item>
-                                    <el-form-item label="内容" prop="content">
-                                        <tinymce style="display: inline-block;width: 100%;" :height="300" v-model="formData.content"/>
-                                    </el-form-item>
-                                </el-form>
-                              </div></el-col>
-
-                              <el-col :span="2"><div class="grid-content bg-purple-light">&nbsp;</div></el-col>
-
-                              <el-col :span="10"><div class="grid-content bg-purple-light">
-                                <h3>模拟效果</h3>
-                                <el-collapse  @change="handleChange">
-                                  <el-collapse-item v-for="(item,index) in list" :title="test(item,index+1)" :name="index">
-                                    <div>{{item.content}}</div>
-                                  </el-collapse-item>
-                                </el-collapse>
-
-                              </div></el-col>
+<!--                              <el-button>默认按钮</el-button> -->
+                              <el-button type="primary" @click="cearcache">清理缓存</el-button>
+       <!--                       <el-button type="success">成功按钮</el-button>
+                              <el-button type="info">信息按钮</el-button>
+                              <el-button type="warning">警告按钮</el-button>
+                              <el-button type="danger">危险按钮</el-button> -->
                             </el-row>
-
-
                         </div>
                 </el-tab-pane>
         </el-tabs>
@@ -51,53 +31,54 @@
 </template>
 
 <script>
-    import Tinymce from "../../components/Tinymce/index.vue";
-    import {problem_list} from "@/api/pool";
-
-    const formJson = {};
+    import child1 from "@/views/setting/child/base.vue";
+    import child2 from "@/views/setting/child/norm.vue";
     export default {
         components: {
-            Tinymce
+            child1,
+            child2
         },
         data() {
             return {
-                formDataproblem:{
-                    title:"",
-                },
-                formData:{
-                    content:""
-                },
-                activeNames: ['0'],
-                list:[],
+                activeName: 'first',
+                clearchanger:true,
             }
     },
         methods:{
-            test(row,index){
-                return index+"."+row.title;
-            },
-            handleChange(val) {
-                   console.log(val);
-            },
-            getlist(){
-                problem_list()
-                    .then(response=>{
-                        this.list = response.data;
-                    })
-                    .catch(()=>{
-
+            cearcache(){
+                if(!this.clearchanger){this.$message('完成');return;}
+                this.$message('正在清理缓存......');
+                /**
+                 * API......
+                 * */
+                setTimeout(()=>{
+                    this.$message({
+                      message: '清理完成',
+                      type: 'success'
                     });
-            }
+                    this.clearchanger = false;
+                },2000)
+
+
+            },
         },
         filters:{},
         mounted() {
         //
         },
         created() {
-            this.getlist();
         }
 };
 
 </script>
 
 <style type="text/scss" lang="scss">
+    .problem{
+        color: #000000;
+    }
+    .h3problem{
+        color: #606266;
+        line-height: 40px;
+        padding: 0 12px 0 0;
+    }
 </style>

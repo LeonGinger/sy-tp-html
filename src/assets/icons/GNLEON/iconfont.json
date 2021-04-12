@@ -6,6 +6,90 @@
   "description": "后台图标库",
   "glyphs": [
     {
+      "icon_id": "1661346",
+      "name": "溯源",
+      "font_class": "suyuan",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "8831946",
+      "name": "溯源防伪",
+      "font_class": "suyuanfangwei",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
+      "icon_id": "15535955",
+      "name": "溯源",
+      "font_class": "suyuan1",
+      "unicode": "e644",
+      "unicode_decimal": 58948
+    },
+    {
+      "icon_id": "19435669",
+      "name": "溯源管理",
+      "font_class": "suyuanguanli",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "20858920",
+      "name": "溯源",
+      "font_class": "icon",
+      "unicode": "e707",
+      "unicode_decimal": 59143
+    },
+    {
+      "icon_id": "20938650",
+      "name": "溯源",
+      "font_class": "suyuan1-copy",
+      "unicode": "e7a4",
+      "unicode_decimal": 59300
+    },
+    {
+      "icon_id": "20938654",
+      "name": "溯源防伪",
+      "font_class": "suyuanfangwei-copy",
+      "unicode": "e7a5",
+      "unicode_decimal": 59301
+    },
+    {
+      "icon_id": "3695978",
+      "name": "系统",
+      "font_class": "xitong",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "12467956",
+      "name": "系统监控",
+      "font_class": "tongji",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "20120360",
+      "name": "系统",
+      "font_class": "xitong1",
+      "unicode": "e6e7",
+      "unicode_decimal": 59111
+    },
+    {
+      "icon_id": "20920469",
+      "name": "系统监控",
+      "font_class": "tongji-copy",
+      "unicode": "e7a3",
+      "unicode_decimal": 59299
+    },
+    {
+      "icon_id": "818367",
+      "name": "手机",
+      "font_class": "shouji1",
+      "unicode": "e712",
+      "unicode_decimal": 59154
+    },
+    {
       "icon_id": "841184",
       "name": "码",
       "font_class": "ma",

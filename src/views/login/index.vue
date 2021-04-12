@@ -13,7 +13,7 @@
                     name="mobile"
                     autoComplete="on"
                     v-model="ruleForm.mobile">
-                    <i slot="prefix" class="el-input__icon"><icon-svg icon-class="shouji"/></i>
+                    <i slot="prefix" class="el-input__icon"><icon-svg icon-class="shouji1"/></i>
                 </el-input>
             </el-form-item>
             <el-form-item prop="code" class="item">

@@ -424,7 +424,7 @@ export const asyncRouterMap = [
         path: "/set",
         redirect: "/setting/system",
         component: Home,
-        icon: "pici",
+        icon: "tongji-copy",
         name: "系统设置",
         meta: {
             authRule: ["setting"]
