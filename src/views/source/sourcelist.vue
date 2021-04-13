@@ -10,7 +10,7 @@
     ></div>
         <el-form :inline="true" :model="query" class="query-form" size="mini">
             <el-form-item class="query-form-item">
-                <el-input v-model="query.title" placeholder="订单编号"></el-input>
+                <el-input v-model="query.title" placeholder="溯源编号"></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button-group>
@@ -91,6 +91,11 @@
                         <el-dropdown-item command="2">拒 绝</el-dropdown-item>
                     </el-dropdown-menu>
                     </el-dropdown> -->
+                    <el-button
+                    type="success"
+                    size="small"
+                    @click.native="handleForm(scope.$index)"
+                    >溯源详情</el-button>
                     <el-button type="success" size="small" @click="sourceAdd(scope.row.source_code,scope.row.source_code_img)">溯源码打印</el-button>
                     <!-- <el-button type="danger" size="small" @click.native="handleFormdel(scope.$index, scope.row)">删 除</el-button> -->
                   <!--  <el-button type="primary" size="small" @click.native="handleFormemployee(scope.row.company_id)">员 工</el-button> -->
@@ -104,6 +109,103 @@
             layout="prev, pager, next"
             :total="total">
         </el-pagination>
+        <!-- 查看详情表单 -->
+        <el-dialog
+        :title="formMap[formName]"
+        :visible.sync="formVisibledetails"
+        :before-close="hideFormdetails"
+        width="50%"
+        top="5vh"
+        >
+            <el-form label-position="right" label-width="120px" :model="findsource" :rules="formRules" ref="dataForm">
+                <el-row>
+                  <!-- 左边 -->
+                  <el-form-item prop="">
+                       <el-image
+                         style="width: 20%; height: 20%; margin-left:27%;"
+                         :src="findsource.source_code_img"
+                         :fit="fit"></el-image>
+                    </el-form-item>
+                  <el-col :span="12"><div class="grid-content bg-purple">
+                   <!-- 商户信息 -->
+                    
+                    <el-form-item label="商品名称:" prop="">
+                       <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
+                        {{findsource.menu_name||"暂无"}}
+                    </el-form-item>
+                    <!-- <el-form-item label="所属商家:" prop="business.business_name">
+                        {{findsource.business.business_name||"暂无"}}
+                    </el-form-item> -->
+                    <el-form-item label="批次编号:" prop="">
+                       <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
+                        {{findsource.order_number||"暂无"}}
+                    </el-form-item>
+                    <el-form-item label="扫码次数:" prop="">
+                       <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
+                        {{findsource.source_number||"暂无"}}
+                    </el-form-item>
+                    <el-form-item label="生产源地:" prop="">
+                       <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
+                        {{findsource.menu_address||"暂无"}}
+                    </el-form-item>
+                    
+                    <el-form-item label="商品规格:" prop="">
+                       <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
+                        {{findsource.menu_weight||"暂无"}}
+                    </el-form-item>
+                    
+                    <el-form-item label="生产日期:" prop="">
+                       <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
+                        {{findsource.production_time||"暂无"}}
+                    </el-form-item>
+                    
+                    <el-form-item label="保质日期:" prop="">
+                       <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
+                        {{findsource.quality_time||"暂无"}}
+                    </el-form-item>
+                  </div></el-col>
+                  <el-col :span="12">
+                      <div class="grid-content bg-purple">
+                    <el-form-item label="溯源编号:" prop="">
+                       <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
+                        {{findsource.source_code||"暂无"}}
+                    </el-form-item>
+                    
+                    
+                    <el-form-item label="码数量/批:" prop="quality_time">
+                       <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
+                        {{findsource.source_code_number||"暂无"}}
+                    </el-form-item>
+                    
+                    
+                    <el-form-item label="入库人员:" prop="enter_user">
+                       <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
+                        {{findsource.enter_user||"暂无"}}
+                    </el-form-item>
+                    
+                    
+                    <el-form-item label="入库时间:" prop="storage_time">
+                       <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
+                        {{findsource.storage_time||"暂无"}}
+                    </el-form-item>
+                    
+                    
+                    <el-form-item label="出库人员:" prop="out_user">
+                       <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
+                        {{findsource.out_user||"暂无"}}
+                    </el-form-item>
+                    
+                    
+                    <el-form-item label="出库时间:" prop="deliver_time">
+                       <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
+                        {{findsource.deliver_time||"暂无"}}
+                    </el-form-item>
+                      </div>
+                  </el-col>
+                    <el-col :span="1"><div class="grid-content bg-purple">&nbsp;</div></el-col>
+                </el-row>
+            </el-form>
+        </el-dialog>
     </div>
 </template>
 
@@ -140,18 +242,21 @@ export default {
             formLoading:true,
             order: [],
             sourceSrc: [],
+            findsource: [],
+            formRules:{},
+            fit:"contain"
         }
     },
     methods:{
     //方法
         // 显示表单
-        handleForm(index, row) {
-            this.$router.push({
-                path:'menumodify',
-                query:{
-                    menuid:row.id
-                }
-            })
+        handleForm(index) {
+            this.formLoading = true
+            this.formVisibledetails = true;
+            // 刷新表单
+            this.resetForm();
+            this.findsource = this.order[index]
+            // this.formLoading=false
         },
         handleFormstatus(index,row){
             if(row.status==1){
@@ -201,7 +306,7 @@ export default {
             this.getList();
         },
         getList(){
-            // this.loading = false;
+            this.loading = true;
             sourceList(this.query)
                 .then(response => {
                     console.log(response);
@@ -210,6 +315,7 @@ export default {
                     var _this = this;
                     this.loading = false
                     this.codeselect(response.data);
+                    this.findsource = this.order[0]
                 })
                 .catch(() => {
                     // this.loading = false;
@@ -219,10 +325,7 @@ export default {
         },
         onSubmit(){
         //查询
-            this.$router.push({
-                path: "",
-                query: this.query
-            });
+            this.query.source_number = this.query.title
             this.getList();
         },
         handleCurrentChange(val) {

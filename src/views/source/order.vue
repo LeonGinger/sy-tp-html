@@ -25,12 +25,12 @@
           @click="open"
           >新建批次</el-button
         >
-        <el-button
+        <!-- <el-button
           v-permission="'menu/menulist/del'"
           type="danger"
           @click.native="handleFormdell(null, null)"
           >删除</el-button
-        >
+        > -->
       </el-form-item>
     </el-form>
     <!-- end search -->
@@ -124,7 +124,7 @@
           <el-button
             type="danger"
             size="small"
-            @click.native="orderdelete(scope.row.id)"
+            @click.native="orderdelete(scope.row.id,scope.$index)"
             >删 除</el-button>
           <!--  <el-button type="primary" size="small" @click.native="handleFormemployee(scope.row.company_id)">员 工</el-button> -->
           <!-- <el-button :type="scope.row.status | statusFilterType_handle" size="small" @click.native="handleFormstatus(scope.$index, scope.row)">{{scope.row.status | statusFilterName_handle}}</el-button> -->
@@ -209,7 +209,7 @@ export default {
     // 显示表单
     handleForm(order_number) {
         this.formLoading = true
-        this.formVisibledetails = true;
+        this.formVisibledetails = true
         order_demo({order_number})
         .then((response) => {
           this.orderData = response.data
@@ -281,10 +281,7 @@ export default {
     },
     onSubmit() {
       //查询
-      this.$router.push({
-        path: "",
-        query: this.query,
-      });
+      this.query.order_number = this.query.title
       this.getList();
     },
     handleCurrentChange(val) {
@@ -353,18 +350,41 @@ export default {
         type: "success",
       });
     },
-    orderdelete(id){
-      console.log(id)
-      orderdelete({order_id:id})
-        .then((response) => {
-          // console.log(response);s
-          (this.order = response.data.list || 0),
-            (this.total = response.data.total || 0);
-        })
-        .catch(() => {
-          this.loading = false;
-          this.list = [];
-          this.total = 0;
+    orderdelete(id,index){
+      // orderdelete({order_id:id})
+      //   .then((response) => {
+      //     // console.log(response);s
+      //     (this.order = response.data.list || 0),
+      //       (this.total = response.data.total || 0);
+      //   })
+      //   .catch(() => {
+      //     this.loading = false;
+      //     this.list = [];
+      //     this.total = 0;
+      //   });
+        this.$confirm('此操作将删除此批次的所有信息与溯源码, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          orderdelete({order_id:id})
+          .then((response) => {
+            if(response.code!=200){this.$message.error(response.message);}
+            this.$message({
+              showClose: true,
+              message: '删除成功',
+              type: 'success'
+            });
+            this.order.splice(index,1);
+          })
+          .catch(() => {
+            this.loading = false;
+            this.list = [];
+            this.total = 0;
+            this.$message.error("系统出了点问题,请稍后再试");
+          });
+        }).catch(() => {
+
         });
     }
   },

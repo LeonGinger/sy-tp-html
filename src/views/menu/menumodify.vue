@@ -225,7 +225,7 @@
         id:'',
         menu_images_json:'',
         monitor_image:[],
-        menu_weightt: '0',
+        menu_weightt: '',
         quality_time: '',
         // menu_weightt:'1',
     };
@@ -662,7 +662,7 @@
                  //初始化数据
                  this.formData = formJson;
                  this.formData.id = '';
-                 this.formData. menu_weightt = '1';
+                 this.formData. menu_weightt = '';
                  this.menuimagelist = [];
                  this.formMap.type = "add";
                  this.monitor_imagechanger = true;
@@ -688,7 +688,7 @@
                 this.details();
             }else{
                 this.business_namechanger = false;
-                this.formData. menu_weightt = '1';
+                this.formData. menu_weightt = '';
                 //添加
             }
             console.log(this.formMap)
