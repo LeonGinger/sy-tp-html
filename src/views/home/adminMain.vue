@@ -261,7 +261,6 @@
         //
         },
         created() {
-            console.log(this.$store);
             this.paneldata();
             this.getcharts();
 

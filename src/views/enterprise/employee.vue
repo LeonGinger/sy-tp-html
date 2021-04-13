@@ -298,7 +298,6 @@
                      this.formData = Object.assign({}, row);
                  }
                  if(row.business_name==null){this.formData.business_name = "无";}
-                 console.log(this.formData);
                  // if(row.has_business!==null){
                  //     this.formData.business_name = row.has_business.business_name;
                  // }else{

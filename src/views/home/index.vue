@@ -358,7 +358,6 @@ export default {
         addSubmitphone(){}
     },
     created() {
-        console.log(this.$store)
         this.getBreadcrumb();
         this.getsetting();
     },

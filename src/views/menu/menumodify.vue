@@ -221,6 +221,14 @@
     import { BASE_URL,IMG_BASE_URL } from "../../config/app";
     import time from "@/utils/utils.filter.js"
     import { business_Find } from "@/api/business/business.js"
+    const initial = {
+        id:'',
+        menu_images_json:'',
+        monitor_image:[],
+        menu_weightt: '0',
+        quality_time: '',
+        // menu_weightt:'1',
+    };
     const formJson = {
         id:'',
         menu_images_json:'',
@@ -364,7 +372,7 @@
                     {
                         value: '3',
                         label: '日'
-                    }, 
+                    },
                     {
                         value: '4',
                         label: '季度'
@@ -413,6 +421,7 @@
                                 }
                             }catch(e){}
 
+                            // console.log(this.formData.)
                             if(this.formData.business_name){
                                 this.business_namechanger = true;
                             }
@@ -425,21 +434,23 @@
             onSubmit(){
                 //提交表单
                 // console.log(window.localStorage)
-                // this.formData.business_name = 
+                // this.formData.business_name =
                 // this.formData.userid = formJson
-                business_Find({business_id : this.$store.adminId})
-                .then(response => {
-                    // console.log(response.data)
-                    this.formData.business_id = response.data['id']
-                })
-                .catch(() => {
-                    
-                });
-                console.log(this.formData)
-                this.formData.menu_weight = this.formData.menu_weightt+this.formData.menu_weight
-                this.formData.quality_time = this.formData.quality_timee+this.formData.quality_time
+                // business_Find({business_id : this.$store.adminId})
+                // .then(response => {
+                //     // console.log(response.data)
+                //     this.formData.business_id = response.data['id']
+                // })
+                // .catch(() => {
+
+                // });
+                if(this.$store.state.admin.business_notice){this.formData.business_id = this.$store.state.admin.business_notice;}
+                // this.formData.menu_weight = this.formData.menu_weightt+this.formData.menu_weight;
+                // this.formData.quality_time = this.formData.quality_timee+this.formData.quality_time;
+                this.formData.menu_weight_copy = this.formData.menu_weightt+this.formData.menu_weight;
+                this.formData.quality_time_copy = this.formData.quality_timee+this.formData.quality_time;
                 this.$refs["form"].validate(valid => {
-                    console.log(valid)
+                    // console.log(valid)
                     if (valid) {
                         let data = Object.assign({}, this.formData);
                         // console.log(data);
@@ -463,7 +474,7 @@
                                 data.certificate_menu = JSON.stringify(this.certificateimagelist);
                             }
                             //检测报告
-                            console.log(data)
+                            // console.log(data)
                             if(data.monitor_image){data.monitor_image = JSON.stringify(data.monitor_image);}
                             // data.business_id = this.formData.business_id
                             menuadd(data)
@@ -639,6 +650,16 @@
             handleExceed(files, fileList){
 
             },
+            clearForm(){
+                this.formData = {
+                    id:'',
+                    menu_images_json:'',
+                    monitor_image:[],
+                    menu_weightt: '1',
+                    quality_time: '',
+                    // menu_weightt:'1',
+                };
+            },
         },
         filters:{
             formFilterType(status) {
@@ -660,6 +681,7 @@
          $route(to,from){
              if(to.path=="/menu/add"){
                  //初始化数据
+<<<<<<< Updated upstream
                  this.formData = formJson;
                  this.formData.id = '';
                  this.formData. menu_weightt = '';
@@ -669,7 +691,11 @@
                  this.formData.business_name = "";
                  this.business_namechanger = false;
                  this.$refs.form.resetFields();
+=======
+                 this.clearForm();
+>>>>>>> Stashed changes
              }
+
            //from 对象中包含当前地址
            //to 对象中包含目标地址
            //其实还有一个next参数的，这个参数是控制路由是否跳转的，如果没写，可以不用写next()来代表允许路由跳转，如果写了就必须写next(),否则路由是不会生效的。
@@ -686,14 +712,19 @@
                 this.formData.id = this.$route.query.menuid;
                 this.formMap.type = "edit";
                 this.details();
+
             }else{
                 this.business_namechanger = false;
+<<<<<<< Updated upstream
                 this.formData. menu_weightt = '';
+=======
+                this.clearForm();
+>>>>>>> Stashed changes
                 //添加
             }
-            console.log(this.formMap)
         },
         destroyed(){
+            this.clearForm();
             document.title = "溯源码平台后台管理";
         }
 };

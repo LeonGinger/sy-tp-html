@@ -19,7 +19,8 @@ const state = {
     avatar: "", // 头像
     token: getToken(), // 登录token
     authRules: [], // 权限列表
-    routers: constantRouterMap // 路由列表
+    routers: constantRouterMap ,// 路由列表
+    business_notice:"", //商家ID
 };
 
 // getters
@@ -29,7 +30,8 @@ const getters = {
     avatar: state => state.avatar,
     token: state => state.token,
     authRules: state => state.authRules,
-    routers: state => state.routers
+    routers: state => state.routers,
+    business_notice: state => state.business_notice,
 };
 
 // actions
@@ -101,6 +103,7 @@ const actions = {
                     commit(types.RECEIVE_ADMIN_NAME, data.username);
                     commit(types.RECEIVE_ADMIN_AVATAR, data.avatar);
                     commit(types.RECEIVE_ADMIN_AUTH_RULES, data.authRules);
+                    commit(types.RECEIVE_ADMIN_BUSINESSNOTICE, data.business_notice)
                     resolve(data);
                 })
                 .catch(error => {

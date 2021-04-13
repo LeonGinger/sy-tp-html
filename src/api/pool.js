@@ -52,6 +52,20 @@ export function system_set(params) {
 export function setting(params) {
     return http.get(`${resquest}/setting_index`,params);
 }
+/*粉丝列表*/
+export function fans_index(params) {
+    return http.get(`${resquest}/fans_list`,params);
+}
+/*同步粉丝*/
+export function fans_sync(params) {
+    return http.post(`${resquest}/fans_sync`,params);
+}
+/*同步粉丝任务状态*/
+export function fans_syncstate(params) {
+    return http.get(`${resquest}/fans_syncstate`,params);
+}
+
+
 
 
 /*测试token*/

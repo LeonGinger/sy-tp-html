@@ -43,6 +43,10 @@ import order from "../views/source/order.vue";
 import sourcelist from "../views/source/sourcelist.vue";
 import opdencode from "../views/source/opdencode.vue";
 
+//查询管理
+import certify_list from "../views/certify/list";
+import statistics from "../views/certify/statistics";
+
 //系统设置
 import system from "../views/setting/system.vue";
 import database from "../views/setting/database.vue";
@@ -317,7 +321,7 @@ export const asyncRouterMap = [
                 icon: "",
                 meta: {
                     authRule: ["enterprise/information"]
-                }  
+                }
             }
         ]
     },
@@ -418,6 +422,37 @@ export const asyncRouterMap = [
                     authRule: ["source/opdencode"]
                 }
             }
+        ]
+    },
+    {
+        path: "/certify",
+        redirect: "/certify/list",
+        component: Home,
+        icon: "tongjidefuben3",
+        name: "查询管理",
+        meta: {
+            authRule: ["certify"]
+        },
+        // noDropdown: true,
+        children: [
+            {
+                path: "list",
+                component: certify_list,
+                name: "查询记录",
+                icon: "",
+                meta: {
+                    authRule: ["certify/list"]
+                }
+            },
+            {
+                path: "statistics",
+                component: statistics,
+                name: "查询统计",
+                icon: "",
+                meta: {
+                    authRule: ["certify/statistics"]
+                }
+            },
         ]
     },
     {

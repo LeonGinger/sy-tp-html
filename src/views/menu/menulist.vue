@@ -131,7 +131,8 @@ export default {
             query: {
                 title: "",
                 page: 1,
-                size: 10
+                size: 10,
+                business_id:"",
             },
             loading: true,
             list: [],
@@ -212,6 +213,7 @@ export default {
         },
         getList(){
            this.loading = false;
+           if(this.$store.state.admin.business_notice){this.query.business_id = this.$store.state.admin.business_notice;}
            menulist(this.query)
                 .then(response => {
                     //console.log(response);
@@ -219,10 +221,14 @@ export default {
                     this.list = response.data.list || [];
                     this.total = response.data.total || 0;
                     for(var i=0;i<this.list.length;i++){
-                        this.list[i]['menu_images_json'] = this.list[i]['menu_images_json'][0]
+                        try{
+                            this.list[i]['menu_images_json'] = this.list[i]['menu_images_json'][0];
+                        }catch(e){
+                            this.list[i]['menu_images_json'] = "";
+                            //diu
+                            //TODO handle the exception
+                        }
                     }
-                    
-                    console.log(this.list);
                 })
                 .catch(() => {
                     this.loading = false;
