@@ -38,11 +38,12 @@
                 <el-input v-model="formData.menu_address"></el-input>
               </el-col>
           </el-form-item>
-          <el-form-item label="商品规格" prop="menu_weight">
+
+          <el-form-item label="商品规格" prop="">
 
               <el-row>
                 <el-col :span="8"><div class="grid-content bg-purple">
-                    <el-input v-model="formData.menu_weightt"></el-input>
+                    <el-input v-model="menu_weightt" @input="change($event)"></el-input>
                 </div></el-col>
 
                 <el-col :span="11"><div class="grid-content bg-purple-light">
@@ -58,6 +59,8 @@
               </el-row>
 
           </el-form-item>
+
+
           <el-form-item label="生产日期" prop="production_time">
              <el-date-picker
                v-model="formData.production_time"
@@ -77,7 +80,7 @@
             <el-form-item label="保质日期" prop="quality_time">
               <el-row>
                 <el-col :span="8"><div class="grid-content bg-purple">
-                    <el-input v-model="formData.quality_timee"></el-input>
+                    <el-input v-model="quality_timee"></el-input>
                 </div></el-col>
                 <el-col :span="11"><div class="grid-content bg-purple-light">
                     <el-select v-model="formData.quality_time" placeholder="请选择">
@@ -225,9 +228,9 @@
         id:'',
         menu_images_json:'',
         monitor_image:[],
-        menu_weightt: '0',
+        menu_weightt: '',
         quality_time: '',
-        // menu_weightt:'1',
+        // menu_weight:'1',
     };
     const formJson = {
         id:'',
@@ -235,7 +238,7 @@
         monitor_image:[],
         menu_weightt: '',
         quality_time: '',
-        // menu_weightt:'1',
+        // menu_weight:'1',
     };
     export default {
         data() {
@@ -316,6 +319,8 @@
                     //     }
                     // ],
                 },
+                quality_timee:"",
+                menu_weightt:"",
                 formData:formJson,
                 businessArr:{},
                 loading:false,
@@ -383,6 +388,9 @@
             }
     },
         methods:{
+            change(val){
+                this.formData.menu_weightt = val;
+            },
             returnlist(){
                 //返回商品列表
                 //先清空
@@ -404,21 +412,53 @@
                      });
             },
             details(){
-                console.log(this.formMap);
                 //详情接口
                 menudetails({id:this.formData.id})
                     .then(response => {
-                        // console.log(response);
+                        console.log(response);
                         if(response.data){
                             this.formData = response.data;
                             try{
                                 if(this.formData.monitor_menu.monitor_image){
-                                    this.formData.monitor_image = this.formData.monitor_menu.monitor_image;
-                                    this.monitor_imagechanger = false;
+                                    if(this.formData.monitor_menu.monitor_image.length!=0){
+                                        this.formData.monitor_image = this.formData.monitor_menu.monitor_image;
+                                        this.monitor_imagechanger = false;
+                                    }else{
+                                        this.formData.monitor_image = [];
+                                    }
                                 }
+
                                 if(this.formData.certificate_menu.certificate_image){
-                                    this.formData.certificate_image = this.formData.certificate_menu.certificate_image;
+                                    if(this.formData.certificate_menu.certificate_image.length!=0){
+                                        this.formData.certificate_image = this.formData.certificate_menu.certificate_image;
+                                    }else{
+                                        this.formData.certificate_image = [];
+                                    }
                                 }
+                                  //待优化循环 start
+                                if(this.formData.menu_weight){
+                                    this.optionsweight.forEach((item,index)=>{
+                                        if(this.formData.menu_weight.indexOf(item.label)!=-1){
+                                            const tmp_weight = this.formData.menu_weight;
+                                            this.formData.menu_weight = item.label;
+                                            //this.formData.menu_weightt = tmp_weight.replace(item.label,"");
+                                            this.menu_weightt = tmp_weight.replace(item.label,"");
+                                        }
+                                    })
+                                }
+                                if(this.formData.quality_time){
+                                    //待优化循环
+                                    this.optionstime.forEach((item,index)=>{
+                                        if(this.formData.quality_time.indexOf(item.label)!=-1){
+                                            const tmp_quality_time = this.formData.quality_time;
+                                            this.formData.quality_time = item.label;
+                                            // this.formData.quality_timee = tmp_quality_time.replace(item.label,"");
+                                            this.quality_timee = tmp_quality_time.replace(item.label,"");
+                                        }
+                                    })
+                                }
+                                console.log(this.formData)
+                                //end
                             }catch(e){}
 
                             // console.log(this.formData.)
@@ -447,10 +487,10 @@
                 if(this.$store.state.admin.business_notice){this.formData.business_id = this.$store.state.admin.business_notice;}
                 // this.formData.menu_weight = this.formData.menu_weightt+this.formData.menu_weight;
                 // this.formData.quality_time = this.formData.quality_timee+this.formData.quality_time;
-                this.formData.menu_weight_copy = this.formData.menu_weightt+this.formData.menu_weight;
-                this.formData.quality_time_copy = this.formData.quality_timee+this.formData.quality_time;
+                this.formData.menu_weight_copy = this.menu_weightt+this.formData.menu_weight;
+                this.formData.quality_time_copy = this.quality_timee+this.formData.quality_time;
                 this.$refs["form"].validate(valid => {
-                    // console.log(valid)
+                    console.log(valid)
                     if (valid) {
                         let data = Object.assign({}, this.formData);
                         // console.log(data);
@@ -499,6 +539,7 @@
                             //处理数据
                             if(typeof(data.production_time)=='object'){data.production_time = time.formatDateTime(data.production_time);}
                             // if(typeof(data.quality_time)=='object'){data.quality_time = time.formatDateTime(data.quality_time);}
+                            //检测报告
                             let menuimagearr = [];
                             if(this.menuimagelist){
                                 this.menuimagelist.forEach((item,index)=>{
@@ -514,8 +555,22 @@
                                 }
                             if(menuimagearr){menuimagearr = JSON.stringify(menuimagearr);}
                             data.menu_images_json = menuimagearr;
-                            console.log(data);
-                            return;
+                            //证书
+                            let certificateimagearr = [];
+                            if(this.certificateimagelist){
+                                this.certificateimagelist.forEach((item,index)=>{
+                                    this.certificateimagelist[index] = IMG_BASE_URL+item;
+                                    certificateimagearr.push(this.certificateimagelist[index])
+                                })
+                            }
+                            if(typeof(data.certificate_image)=='object'){
+                                data.certificate_image.forEach((item,index)=>{
+                                    certificateimagearr.push(item);
+                                });
+                            }
+                            if(certificateimagearr){certificateimagearr = JSON.stringify(certificateimagearr);}
+                            data.certificate_image = certificateimagearr;
+
                             menuedit(data)
                                 .then(response => {
                                     this.formLoading = false;
@@ -659,6 +714,8 @@
                     quality_time: '',
                     // menu_weightt:'1',
                 };
+                this.menu_weightt = "";
+                this.quality_timee = "";
             },
         },
         filters:{
@@ -681,19 +738,7 @@
          $route(to,from){
              if(to.path=="/menu/add"){
                  //初始化数据
-<<<<<<< Updated upstream
-                 this.formData = formJson;
-                 this.formData.id = '';
-                 this.formData. menu_weightt = '';
-                 this.menuimagelist = [];
-                 this.formMap.type = "add";
-                 this.monitor_imagechanger = true;
-                 this.formData.business_name = "";
-                 this.business_namechanger = false;
-                 this.$refs.form.resetFields();
-=======
                  this.clearForm();
->>>>>>> Stashed changes
              }
 
            //from 对象中包含当前地址
@@ -715,11 +760,7 @@
 
             }else{
                 this.business_namechanger = false;
-<<<<<<< Updated upstream
-                this.formData. menu_weightt = '';
-=======
                 this.clearForm();
->>>>>>> Stashed changes
                 //添加
             }
         },
