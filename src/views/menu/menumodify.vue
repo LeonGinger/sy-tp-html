@@ -710,7 +710,7 @@
                     id:'',
                     menu_images_json:'',
                     monitor_image:[],
-                    menu_weightt: '1',
+                    menu_weightt: '',
                     quality_time: '',
                     // menu_weightt:'1',
                 };
@@ -738,7 +738,15 @@
          $route(to,from){
              if(to.path=="/menu/add"){
                  //初始化数据
-                 this.clearForm();
+                 this.formData = formJson;
+                 this.formData.id = '';
+                 this.formData. menu_weightt = '';
+                 this.menuimagelist = [];
+                 this.formMap.type = "add";
+                 this.monitor_imagechanger = true;
+                 this.formData.business_name = "";
+                 this.business_namechanger = false;
+                 this.$refs.form.resetFields();
              }
 
            //from 对象中包含当前地址
