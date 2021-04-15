@@ -314,8 +314,10 @@ export default {
                     this.total = response.data.total || 0;
                     var _this = this;
                     this.loading = false
-                    this.codeselect(response.data);
-                    this.findsource = this.order[0]
+                    if(this.order != 0){
+                        this.codeselect(response.data.list);
+                        this.findsource = this.order[0]
+                    }
                 })
                 .catch(() => {
                     // this.loading = false;
@@ -383,9 +385,9 @@ export default {
             });
         },
         codeselect(data){
-            var order = data.list
+            var order = data
             var _this = this
-            console.log(order.length)
+            // console.log(order.length)
             for(let i=0;i<order.length;i++){
                 var code_number = order[i]['source_code']
                 // console.log(i)

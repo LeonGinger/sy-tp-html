@@ -368,6 +368,7 @@
                         this.loading = false;
                         this.list = response.data.list || [];
                         this.total = response.data.total || 0;
+                        this.query.business_name = response.data.business.business_name
                     })
                     .catch(() => {
 
@@ -479,6 +480,7 @@
             if(this.$route.params.employee_id){
 
                 this.query.business_notice = this.$route.params.employee_id;
+                console.log(this.query.business_notice);
                 this.employee_id = this.$route.params.employee_id;
             }
             // 加载表格数据

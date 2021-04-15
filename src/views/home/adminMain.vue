@@ -15,12 +15,12 @@
 
         <el-col :span="6"><div class="grid-content bg-purple">
             <el-card class="box-card">
-              <div slot="header" class="clearfix">
-                <span class="number-title">商家申请</span>
-               <!-- <p class="bg-blue" style="float: right; padding: 3px 0">总</p> -->
-                <el-button @click="goapply" style="float: right; padding: 3px 0" type="text">前往审核</el-button>
-              </div>
-                  <div class="number-box"><span class="main-number">{{panelinfo.businessapply_count||'0'}}</span>总计</div>
+                <div slot="header" class="clearfix">
+                    <span class="number-title">商家申请</span>
+                    <!-- <p class="bg-blue" style="float: right; padding: 3px 0">总</p> -->
+                    <el-button @click="goapply" style="float: right; padding: 3px 0" type="text">前往审核</el-button>
+                </div>
+                <div class="number-box"><span class="main-number">{{panelinfo.businessapply_count||'0'}}</span>总计</div>
             </el-card>
         </div></el-col>
 

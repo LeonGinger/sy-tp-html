@@ -9,8 +9,8 @@ let resquest =  "/web";
   return http.get(`${resquest}/businessAll`,params);
 }
 //商品详情
- export function menudetails(params){
-  return http.get(`${resquest}/menu_details`,params);
+ export function business_update(params){
+  return http.get(`${resquest}/business_update`,params);
 }
 //添加
  export function menuadd(params){

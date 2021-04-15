@@ -33,7 +33,7 @@
           </el-form-item>
             <el-form-item label="商家介绍" prop="">
               <el-col :span="12">
-                <el-input v-model="business.business_introduction"></el-input>
+                <el-input type="textarea" rows="5" v-model="business.business_introduction"></el-input>
               </el-col>
             </el-form-item>
             <!-- 图片模块 -->
@@ -153,7 +153,7 @@
             <!-- # -->
             <el-form-item>
                 <el-button :type="formMap.type | formFilterType" @click="onSubmit">{{formMap.type | formFilterName}}</el-button>
-                <el-button type="info" plain @click="returnlist">取消</el-button>
+                <el-button type="info" plain @click="returnlist">恢 复</el-button>
             </el-form-item>
             </el-form>
     </div>
@@ -167,7 +167,7 @@
     import {checkMoney} from "@/utils/tool.js";
     import { BASE_URL,IMG_BASE_URL } from "../../config/app";
     import time from "@/utils/utils.filter.js"
-    import { business_Find } from "@/api/business/business.js"
+    import { business_Find,business_update } from "@/api/business/business.js"
     const initial = {
         id:'',
         menu_images_json:'',
@@ -288,10 +288,11 @@
     },
         methods:{
             returnlist(){
-                //返回商品列表
-                //先清空
-                this.$refs.form.resetFields();
-                this.$router.push('menulist');
+                this.getlist()
+                 this.$message({
+                    message: '重置成功',
+                    type: 'success'
+                });
             },
             businesslist(){
                 //商家列表
@@ -337,7 +338,39 @@
             },
             onSubmit(){
                 this.business['business_img']['business_img_contentjson'] = this.input
-                console.log(this.business)
+                // console.log(this.business)
+                business_update({business:this.business})
+                .then(response => {
+                    var data = response.data
+                    if(data.inster1 != "无需要更新的值" && data.inster2 != "无需要更新的值" && data.inster3 != "无需要更新的值"){
+                        if(data.key != 0 || data.key == "无需要更新的值"){
+                            this.$message({
+                                message: '更改成功，内容将递交管理员进行审核',
+                                type: 'success'
+                            });
+                        }else{
+                            this.$message({
+                                message: '更改成功',
+                                type: 'success'
+                            });
+                        }
+                        window.location.reload()
+                    }else if(data.inster1 == "无需要更新的值" && data.inster2 == "无需要更新的值" && data.inster3 == "无需要更新的值"){
+                        this.$message({
+                            message: '无需更新，请修改内容后重试',
+                            type: 'warning'
+                        });
+                    }else{
+                        this.$message({
+                            message: '内容更改成功',
+                            type: 'success'
+                        });
+                    }
+                    
+                })
+                .catch(() => {
+                    
+                });
             },
             getlist(){
                 this.loading = true;

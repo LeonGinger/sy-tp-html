@@ -4,7 +4,7 @@
         <!-- start search -->
         <el-form :inline="true" :model="query" class="query-form" size="mini">
             <el-form-item class="query-form-item">
-                <el-input v-model="query.name" placeholder="企业名称"></el-input>
+                <el-input v-model="business_name" placeholder="企业名称"></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button-group>
@@ -518,11 +518,10 @@ export default {
         }
     },
     mounted() {
-    //
+        
     },
     created() {
         this.default_time = time.timeTodate("H:i:s",Date.parse(new Date()));
-    //
         if(this.$route.params.verify_if){
             this.query.verify_if = this.$route.params.verify_if;
         }

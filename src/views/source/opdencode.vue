@@ -20,8 +20,7 @@
         class="box"
         id="box"
         v-for="(item, index) in sourceCode"
-        :key="index"
-      >
+        :key="index">
         <!--     <div :id="'qrCode'+index" :ref="'qrcodeContainer'+index"></div> -->
         <img :src="sourceSrc[index]" />
         <div style="margin-top: 10px"></div>
@@ -83,6 +82,7 @@ export default {
               message: '订单号错误，请重试',
               type: 'warning'
             });
+
             return false;
           }  
           this.sourceCode = response.data;
@@ -131,7 +131,6 @@ export default {
           colorLight: "#fff",
           correctLevel: QRCode.CorrectLevel.H,
         });
-
         setTimeout(() => {
           let qwe = this.$refs.qrcodeContainer.innerHTML;
           console.log(qwe);
@@ -147,7 +146,6 @@ export default {
       });
     },
     smallcode(source,code,number) {
-      // console.log(value)
       for(var ii = 0;ii<number;ii++){
         this.sourceCode[ii] = source;
         this.sourceSrc[ii] = code;
@@ -165,7 +163,6 @@ export default {
     },
   },
   mounted() {
-    //
     // var qrcode = new QRCode(this.$refs.qrCodeUrl, {
     //         text: 'xxxx', // 需要转换为二维码的内容
     //         width: 100,
@@ -178,10 +175,8 @@ export default {
   created() {
     if (typeof window.sessionStorage.order_number != "undefined") {
       var order_number = window.sessionStorage.getItem("order_number");
+      window.sessionStorage.removeItem("order_number");
       this.html(order_number);
-      setTimeout(function (){
-        window.sessionStorage.removeItem("order_number");
-      }, 3000);
       // window.sessionStorage.removeItem("order_number");
     } else if (typeof window.sessionStorage.sourcecode_number != "undefined") {
       var source = window.sessionStorage.getItem("source");

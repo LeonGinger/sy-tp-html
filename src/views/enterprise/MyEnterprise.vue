@@ -1,5 +1,4 @@
 <template>
-
     <div>
         <!-- start search -->
         <el-form :inline="true" :model="query" class="query-form" size="mini">
