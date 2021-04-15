@@ -403,7 +403,7 @@
                 this.formData.business_id = obj.id;
 
             },
-            handleBefore(file){ 
+            handleBefore(file){
                 const isIMG = file.type;
                 const isLtBM = file.size / 1024 / 1024 < 2;
                 const file_acctype = ['image/png','image/jpeg'];
@@ -414,7 +414,7 @@
                 if (!isLtBM) {
                     this.$message.error('上传头像图片大小不能超过 2MB!');
                     return false;
-                } 
+                }
                 return isIMG && isLtBM;
             },
             handleSuccess(response, file, fileList) {
@@ -596,6 +596,6 @@
 <style type="text/scss" lang="scss">
     .MenuCarousel,.MenuMonitor{display: inline-block;}
     .menu-span{color: #000000;}
-    .el-upload-list--picture-card .el-upload-list__item{overflow: visible !important;}
-    .el-upload-list--picture-card .el-upload-list__item-status-label i{margin-top: 0px !important;}
+    /deep/.el-upload-list--picture-card .el-upload-list__item{overflow: visible !important;}
+    /deep/.el-upload-list--picture-card .el-upload-list__item-status-label i{margin-top: 0px !important;}
 </style>

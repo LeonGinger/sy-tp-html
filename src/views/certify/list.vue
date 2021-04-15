@@ -158,10 +158,12 @@
                 formData: formJson,
                 formRules:{},
                 query: {
+                    business_id:"",
                     user_id:"",
                     source_code: "",
                     page: 1,
-                    size: 10
+                    size: 10,
+
                 },
                 loading: true,
                 list: [],
@@ -272,6 +274,10 @@
 
                 this.query.user_id = this.$route.params.user_id;
                 // this.user_id = this.$route.params.user_id;
+            }
+            console.log(this.$store);
+            if(this.$store.state.admin.business_notice){
+                this.query.business_id = this.$store.state.admin.business_notice;
             }
             this.getList();
 

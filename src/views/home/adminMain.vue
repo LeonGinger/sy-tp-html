@@ -9,7 +9,9 @@
                 <p class="bg-blue" style="float: right; padding: 3px 0">总</p>
                 <!-- <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button> -->
               </div>
-                  <div class="number-box"><span class="main-number">{{panelinfo.business_count||'0'}}</span>总计</div>
+               <countTo class="number-box" :startVal='0' :endVal='panelinfo.business_count || 0' :duration='3500'></countTo>
+               <span class="number-span">总计</span>
+                  <!-- <div class="number-box"><span class="main-number">{{panelinfo.business_count||'0'}}</span>总计</div> -->
             </el-card>
         </div></el-col>
 
@@ -30,7 +32,8 @@
                 <span class="number-title">商品</span>
                <p class="bg-blue" style="float: right; padding: 3px 0">总</p>
               </div>
-                  <div class="number-box"><span class="main-number">{{panelinfo.menu_count||'0'}}</span>总计</div>
+                <countTo class="number-box" :startVal='0' :endVal='panelinfo.menu_count || 0' :duration='3500'></countTo>
+                <span class="number-span">总计</span>
             </el-card>
         </div></el-col>
 
@@ -40,13 +43,13 @@
                 <span class="number-title">商品</span>
                <p class="bg-blue" style="float: right; padding: 3px 0">月</p>
               </div>
-                  <div class="number-box"><span class="main-number">{{panelinfo.menumonth_count||'0'}}</span>总计</div>
+                  <countTo class="number-box" :startVal='0' :endVal='panelinfo.menumonth_count || 0' :duration='3500'></countTo>
+                  <span class="number-span">总计</span>
             </el-card>
         </div></el-col>
 
 
         <div style="margin-top: 1.25rem;">&nbsp;</div>
-
 
         <el-col :span="6"><div class="grid-content bg-purple">
             <el-card class="box-card">
@@ -54,7 +57,8 @@
                 <span class="number-title">用户</span>
                <p class="bg-blue" style="float: right; padding: 3px 0">总</p>
               </div>
-                  <div class="number-box"><span class="main-number">{{panelinfo.user_count||'0'}}</span>总计</div>
+                  <countTo class="number-box" :startVal='0' :endVal='panelinfo.user_count || 0' :duration='3500'></countTo>
+                  <span class="number-span">总计</span>
             </el-card>
         </div></el-col>
 
@@ -64,7 +68,8 @@
                 <span class="number-title">用户</span>
                <p class="bg-blue" style="float: right; padding: 3px 0">月</p>
               </div>
-                  <div class="number-box"><span class="main-number">{{panelinfo.usermonth_count||'0'}}</span>本月新增</div>
+                <countTo class="number-box" :startVal='0' :endVal='panelinfo.usermonth_count || 0' :duration='3500'></countTo>
+                <span class="number-span">本月新增</span>
             </el-card>
         </div></el-col>
 
@@ -74,7 +79,8 @@
                 <span class="number-title">溯源查询</span>
                <p class="bg-blue" style="float: right; padding: 3px 0">今</p>
               </div>
-                  <div class="number-box"><span class="main-number">{{panelinfo.source_count||'0'}}</span>今日查询</div>
+                  <countTo class="number-box" :startVal='0' :endVal='panelinfo.source_count || 0' :duration='3500'></countTo>
+                  <span class="number-span">今日查询</span>
             </el-card>
         </div></el-col>
 
@@ -84,7 +90,8 @@
                 <span class="number-title">溯源查询</span>
                <p class="bg-blue" style="float: right; padding: 3px 0">月</p>
               </div>
-                  <div class="number-box"><span class="main-number">{{panelinfo.sourcemonth_count||'0'}}</span>本月查询</div>
+                <countTo class="number-box" :startVal='0' :endVal='panelinfo.sourcemonth_count || 0' :duration='3500'></countTo>
+                <span class="number-span">本月查询</span>
             </el-card>
         </div></el-col>
         </el-row>
@@ -102,6 +109,7 @@
 
 <script>
     import {getindex_data,getecharts_data} from "@/api/pool.js";
+    import countTo from "vue-count-to";
     const formJson = {};
     const echartsoptions = {
         color: ['#5470C6', '#EE6666'],
@@ -194,6 +202,7 @@
         ]
     };
     export default {
+        components: { countTo },
         data() {
             return {
                 panelinfo:{},
@@ -289,9 +298,12 @@
     }
     .number-box{
         color: #6b6b6b;
-        .main-number{
-            padding-right: 0.225rem;
-            font-size: 2rem;
-        }
+        padding-right: 0.225rem;
+        font-size: 2rem;
+
     }
+    .number-span{
+        padding-right: 0.225rem;
+    }
+
 </style>

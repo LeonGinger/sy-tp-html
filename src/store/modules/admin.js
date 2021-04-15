@@ -44,8 +44,6 @@ const actions = {
         return new Promise((resolve, reject) => {
             loginScan(data)
                 .then(response => {
-                    console.log("store的请求");
-                    console.log(response);
                     if (response.code!=200) {
                         Message({
                             message: response.message,
@@ -180,7 +178,10 @@ const mutations = {
     [types.RECEIVE_ROUTERS](state, routers) {
         const tempRm = constantRouterMap.concat(routers);
         state.routers = JSON.parse(JSON.stringify(tempRm));
-    }
+    },
+    [types.RECEIVE_ADMIN_BUSINESSNOTICE](state, business_notice) {
+        state.business_notice = business_notice;
+    },
 };
 
 export default {

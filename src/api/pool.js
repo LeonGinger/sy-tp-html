@@ -64,6 +64,24 @@ export function fans_sync(params) {
 export function fans_syncstate(params) {
     return http.get(`${resquest}/fans_syncstate`,params);
 }
+/*数据库备份*/
+export function baseindex(params) {
+    return http.get(`${resquest}/database_index`,params);
+}
+export function basedump(params) {
+    return http.post(`${resquest}/database_dump`,params);
+}
+export function basedown(params) {
+    // return window.location.href =  `${resquest}/database_down?time=`+params;
+    return http.post(`${resquest}/database_down`,params);
+}
+export function basedel(params) {
+
+    return http.post(`${resquest}/database_del`,params);
+}
+
+
+
 
 
 
