@@ -6,7 +6,7 @@
                 <el-input v-model="formData.menu_name"></el-input>
             </el-col>
           </el-form-item>
-          <el-form-item  prop="business_name" label="所属商家" v-permission="'menu/menumodify/businesslist'">
+          <el-form-item  prop="business_name" label="所属商家" v-permission="menu/menumodify/businesslist">
             <el-select @change="onselectbusiness" v-model="formData.business_name" :disabled="business_namechanger" placeholder="请选择商家">
                <el-option
                    v-for="item in businessArr"
@@ -244,9 +244,11 @@
         data() {
             var validatemenuimglist = (rule, value, callback) =>{
                 if(this.formMap.type == "add"){
-                    if(this.menuimagelist.length==0){
+                    if(this.formData.menu_images_json.length==0){
                          callback(new Error('请上传至少一张商品图片.'));
-
+                    }
+                    if(this.formData.monitor_image.length==0){
+                         callback(new Error('请上传至少一张商品图片.'));
                     }
                 }
                 if(this.formMap.type == "edit"){
@@ -362,6 +364,14 @@
                     {
                         value: '6',
                         label: 'KG/千克'
+                    },
+                    {
+                        value: '7',
+                        label: '斤'
+                    },
+                    {
+                        value: '8',
+                        label: '公斤'
                     },
 
                 ],
@@ -482,8 +492,8 @@
                 //     this.formData.business_id = response.data['id']
                 // })
                 // .catch(() => {
-
                 // });
+
                 if(this.$store.state.admin.business_notice){this.formData.business_id = this.$store.state.admin.business_notice;}
                 // this.formData.menu_weight = this.formData.menu_weightt+this.formData.menu_weight;
                 // this.formData.quality_time = this.formData.quality_timee+this.formData.quality_time;

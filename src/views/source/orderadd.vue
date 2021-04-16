@@ -3,6 +3,18 @@
         <el-form ref="form" :model="formData" label-width="80px">
             <div v-for="(item,index) in number">
                 <el-row>
+                    <el-col :span="4">
+                        <el-form-item  prop="business_name" label="所属商家" v-permission="menu/menumodify/businesslist">
+                            <el-select @change="onselectbusiness" v-model="formData.business_name" :disabled="business_namechanger" placeholder="请选择商家">
+                            <el-option
+                                v-for="item in businessArr"
+                                :key="item.id"
+                                :label="item.business_name"
+                                :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
                     <el-col :span="5">
                         <el-form-item label="商品名称">
                             <el-select v-model="data[index].menu_id" placeholder="请选择商品">
@@ -35,6 +47,7 @@
 </template>
 
 <script>
+    import {enterpriseList} from "@/api/enterprise/enterprise";
     import {menulist} from '@/api/menu/menuAll.js';
     import {orderAdd} from "@/api/source/sourceapi.js";
     const formJson = {
@@ -62,6 +75,15 @@
                 },
                 menulist:[],
                 number:1,
+                businessArr:[],
+                business_query:{
+                    type:"my",
+                    name: "",
+                    state:'1',
+                    verify_if:'1',
+                    page: 1,
+                    size: 9999
+                },
             }
     },
         methods:{
@@ -83,20 +105,20 @@
                 console.log(this.data)
                 this.formData.data = this.data
                 orderAdd(this.formData)
-                    .then(response => {
-                        console.log(response);
-                        // this.$router.push({
-                        //     name:'批次列表',
-                        //     params:{
-                        //         data:response.data,
-                        //     }
-                        // });
-                        window.sessionStorage.setItem("order_number",response.data)
-                        window.location.href = "#/source/opdencode"
-                    })
-                    .catch(() =>{
-                        
-                    });
+                .then(response => {
+                    console.log(response);
+                    // this.$router.push({
+                    //     name:'批次列表',
+                    //     params:{
+                    //         data:response.data,
+                    //     }
+                    // });
+                    window.sessionStorage.setItem("order_number",response.data)
+                    window.location.href = "#/source/opdencode"
+                })
+                .catch(() =>{
+                    
+                });
 
             },
             getList(){
@@ -122,7 +144,33 @@
                 }
                 this.data.push({menu_id:'',number:'',menu_number:''})
                 this.number++
-            }
+            },
+            onselectbusiness(e){
+                //选择商家
+                if(!e){return;}
+                let obj = {};
+                obj = this.businessArr.find(item => {
+                    //这里的operateOption就是上面遍历的数据源
+                    return item.id === e; //筛选出匹配数据
+                });
+                console.log(obj)
+                this.formData.business_name = obj.business_name;
+                this.formData.business_id = obj.id;
+            },
+            businesslist(){
+                //商家列表
+                enterpriseList(this.business_query)
+                .then(response => {
+                    this.loading = false;
+                    this.businessArr = response.data.list || [];
+                    //this.total = response.data.total || 0;
+                })
+                .catch(() => {
+                    this.loading = false;
+                    this.list = [];
+                    //this.total = 0;
+                });
+            },
         },
         filters:{
             formFilterType(status) {
@@ -144,6 +192,7 @@
         //
         },
         created() {
+            this.businesslist();
             if(this.$route.query.menuid){
                 document.title = "修改商品 - "+document.title;
                 this.formData.id = this.$route.query.menuid;
