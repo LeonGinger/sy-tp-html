@@ -1,6 +1,14 @@
 <template>
     <div>
         <el-row>
+            <el-col :span="24"><div class="grid-content bg-purple-dark">
+            <el-button-group>
+                <el-button type="primary" @click="legendgo">{{legendTips}}</el-button>
+            </el-button-group>
+            </div></el-col>
+        </el-row>
+
+        <el-row v-show="legendChanger">
           <el-col :span="12"><div class="grid-content bg-purple-dark">
             <el-table
                 :data="list"
@@ -42,9 +50,19 @@
           <el-col :span="12"><div class="grid-content bg-purple-dark">
             <div id="myChartPercen" :style="{width: '100%', height: '400px'}"></div>
           </div></el-col>
+          <el-col :span="24"><div class="grid-content bg-purple-dark">&nbsp;</div></el-col>
           <el-col :span="24"><div class="grid-content bg-purple-dark mt-10">
             <div id="myChartBar" :style="{width: '100%', height: '400px'}"></div>
           </div></el-col>
+        </el-row>
+
+            <el-row v-show="!legendChanger">
+       <!-- <el-row v-show="!legendChanger"> -->
+             <el-col :span="24"><div class="grid-content bg-purple">
+              <div id="ChartChina" :style="{width: '800px', height: '710px'}"></div>
+             </div></el-col>
+             <el-col :span="12"><div class="grid-content bg-purple-light"></div></el-col>
+
         </el-row>
 
     </div>
@@ -52,7 +70,9 @@
 </template>
 
 <script>
-    import {sroucelogEcharts} from "@/api/source/sourceapi.js"
+    import {sroucelogEcharts} from "@/api/source/sourceapi.js";
+    import 'echarts/map/js/china.js';
+    // import '@/utils/china.js';
     const formJson = {};
     const echartBar = {
         legend: {},
@@ -94,8 +114,7 @@
                 type: 'pie',
                 radius: '50%',
                 data: [
-                    {value: 1048, name: '商品1'},
-                    {value: 735, name: '商品2'},
+                    {value: 999, name: '暂无'},
                 ],
                 label: {
                       formatter: '{b}: {@2012} ({d}%)'
@@ -110,21 +129,123 @@
             }
         ]
     };
+    const echartMap = {
+        visualMap: {           //地图图例
+          show:true,
+          left: 26,
+          bottom: 40,
+          showLabel:true,
+          pieces: [        //根据数据大小，各省显示不同颜色
+            {
+              gte: 100,
+              label: ">= 1000",
+              color: "#1f307b"
+            },
+            {
+              gte: 500,
+              lt: 999,
+              label: "500 - 999",
+              color: "#3c57ce"
+            },
+            {
+              gte: 100,
+              lt:499,
+              label: "100 - 499",
+              color: "#6f83db"
+            },
+            {
+              gte: 10,
+              lt: 99,
+              label: "10 - 99",
+              color: "#9face7"
+            },
+            {
+              lt:10,
+              label:'<10',
+              color: "#bcc5ee"
+            }
+          ]
+        },
+        geo: {                 //中国地图设置
+          map: "china",
+          scaleLimit: {
+            min: 1,
+            max: 2
+          },
+          zoom: 1,
+          top: 120,
+          label: {
+            normal: {
+              show:true,
+              fontSize: "14",
+              color: "rgba(0,0,0,0.7)"
+            }
+          },
+          itemStyle: {
+            normal: {
+              borderColor: "rgba(0, 0, 0, 0.2)"
+            },
+            emphasis: {
+              areaColor: "#f2d5ad",
+              shadowOffsetX: 0,
+              shadowOffsetY: 0,
+              borderWidth: 0
+            }
+          }
+        },
+        series: [
+          {
+            name: "地区查询次数统计",
+            type: "map",
+            geoIndex: 0,
+            data:[
+                {
+                name: "北京",
+                value: 599, //  项目数量
+                perf: "60%", // 项目占比
+              },
+            ]
+          }
+        ]
+      };
+
     export default {
         data() {
             return {
+                legendChanger:true,
+                legendTips:"切换到区域",
                 list:[],
                 loading:false,
                 chartsoptionsBar:echartBar,
                 chartsoptionsPerson:echartPercen,
+                chartsoptionsMap:echartMap,
 
             }
     },
         methods:{
+            legendgo(){
+                if(this.legendChanger){
+                    this.legendChanger = false;
+                    this.legendTips = "切换图表";
+                    this.getList();
+                    // this.drawMap();
+                }else{
+                    this.legendChanger = true;
+                    this.legendTips = "切换到区域";
+                    this.getList();
+                    // this.drawBar();
+                    // this.drawPercen();
+                }
+            },
             //echarts
+            drawMap(){
+                //加载echarts的代码
+                let myChartMap = this.$echarts.init(document.getElementById('ChartChina'));
+                myChartMap.setOption(this.chartsoptionsMap);
+                window.onresize = myChartMap.resize;
+            },
             drawBar(){
                 // 基于准备好的dom，初始化echarts实例
-                // let echarts = require('echarts');
                 let myChartBar = this.$echarts.init(document.getElementById('myChartBar'))
                 // 绘制图表
                 myChartBar.setOption(this.chartsoptionsBar);
@@ -148,23 +269,22 @@
                         this.list.forEach((item,index)=>{
                             this.chartsoptionsBar.dataset.source.push([item.menu_name,item.track,item.first_count]);
                         });
-                        console.log(this.chartsoptionsBar)
                         //重新生成实例
                         this.drawBar();
-
-                        console.log(this.list);
+                        this.drawPercen();
+                        this.drawMap();
                     })
                     .catch(() => {
                         this.loading = false;
                         this.list = [];
                     });
             },
-
         },
         filters:{},
         mounted() {
-            this.drawBar();
-            this.drawPercen();
+            // this.drawBar();
+            // this.drawPercen();
+            // this.drawMap();
         //
         },
         created() {
