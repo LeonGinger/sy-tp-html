@@ -33,6 +33,13 @@ export default {
                 return [];
             }
         },
+        plugins: {
+            type: Array,
+            required: false,
+            default() {
+                return [];
+            }
+        },
         menubar: {
             type: String,
             default: "file edit insert view format table"
@@ -76,6 +83,8 @@ export default {
     methods: {
         initTinymce() {
             const _this = this;
+            console.log(this.toolbar.length)
+            console.log(this.height)
             window.tinymce.init({
                 language: "zh_CN",
                 selector: `#${this.tinymceId}`,
@@ -85,7 +94,8 @@ export default {
                 object_resizing: false,
                 toolbar: this.toolbar.length > 0 ? this.toolbar : toolbar,
                 menubar: this.menubar,
-                plugins: plugins,
+                plugins:plugins,
+                //plugins: this.plugins.length > 0 ? this.plugins : plugins,
                 end_container_on_empty_block: true,
                 powerpaste_word_import: "clean",
                 code_dialog_height: 450,

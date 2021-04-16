@@ -1,10 +1,17 @@
 <template>
     <div>
-        <el-button type="primary" @click="savedataBase">备份数据库</el-button>
+        <el-button :disabled="savedataBasechanger" type="primary" @click="savedataBase">备份数据库</el-button>
+        <el-button type="primary" icon="el-icon-refresh-left" @click="getList">刷新</el-button>
+        <el-button v-if="multipleSelection.length>0" type="danger" @click="handleFormdel(-1,-1)">批量删除</el-button>
         <el-table
                     v-loading="loading"
                     :data="list"
-                    style="width: 100%;">
+                    style="width: 100%;"
+                    @selection-change="handleSelectionChange">
+                    <el-table-column
+                         type="selection"
+                         width="55">
+                    </el-table-column>
                     <el-table-column
                         label="序号"
                         type="index"
@@ -77,8 +84,12 @@
                 loading: true,
                 list: [],
                 total:0,
-
-
+                savedataBasechanger:false,
+                multipleSelection:[],
+                delquery:{
+                    time:"",
+                    type:"",
+                }
             }
     },
         methods:{
@@ -86,11 +97,9 @@
                 this.loading = false;
                 baseindex(this.query)
                      .then(response => {
-                         //console.log(response);
                          this.loading = false;
                          this.list = response.data.list || [];
                          this.total = response.data.total || 0;
-                         console.log(this.list);
                      })
                      .catch(() => {
                          this.loading = false;
@@ -99,59 +108,111 @@
                      });
 
             },
+            handleSelectionChange(val){
+                this.multipleSelection = val;
+            },
             handleCurrentChange(val) {
                this.query.page = val;
+               this.multipleSelection = [];
                this.getList();
             },
             savedataBase(){
+                basedump()
+                    .then(response=>{
+                        this.$message({
+                                  message: "[备份数据库]任务成功提交到后台,请稍后刷新本页面.",
+                                  type: 'success'
+                                });
+                        this.savedataBasechanger = true;
 
+                    })
+                    .catch(()=>{
+
+                    });
             },
             handleFormdown(index,time){
                 basedown({time:time})
                     .then(response=>{
-               const content = response
-                    const blob = new Blob([content])
-                    const fileName = '导出信息.xlsx'
-                    
-                         navigator.msSaveBlob(blob, fileName)
-                         return;
-                    
-                    if ('download' in document.createElement('a')) { // 非IE下载
-                      const elink = document.createElement('a')
-                      elink.download = fileName
-                      elink.style.display = 'none'
-                      elink.href = URL.createObjectURL(blob)
-                      document.body.appendChild(elink)
-                      elink.click()
-                      URL.revokeObjectURL(elink.href) // 释放URL 对象
-                      document.body.removeChild(elink)
-                    } else { // IE10+下载
-                      navigator.msSaveBlob(blob, fileName)
-                    }
+                        const content = response
+                        const blob = new Blob([content])
+                        const fileName = this.list[index].name+".sql";
 
-
-
-                        //if(response.code!=200){this.$message.error("删除失败,请稍后再试");}
-                    })
+                        if ('download' in document.createElement('a')) { // 非IE下载
+                            const elink = document.createElement('a')
+                            elink.download = fileName
+                            elink.style.display = 'none'
+                            elink.href = URL.createObjectURL(blob)
+                            document.body.appendChild(elink)
+                            elink.click()
+                            URL.revokeObjectURL(elink.href) // 释放URL 对象
+                            document.body.removeChild(elink)
+                        } else { // IE10+下载
+                            navigator.msSaveBlob(blob, fileName)
+                        }
+                        })
                     .catch(()=>{
-
+                        this.$message.error("系统发声未知错误,请稍后再试.");
                     });
             },
             handleFormdel(index,time){
-                basedel({time:time})
-                    .then(response=>{
-                        if(response.code!=200){this.$message.error("删除失败,请稍后再试");}
-                        this.getList();
-                    })
-                    .catch(()=>{
+                this.$confirm('此操作将永久删除备份文件, 是否继续?', '提示', {
+                         confirmButtonText: '确定',
+                         cancelButtonText: '取消',
+                         type: 'warning'
+                       }).then(() => {
+                           if(index==-1){
+                               time = "";
+                               this.multipleSelection.forEach((item,index)=>{
+                                   time = time+item.time+",";
+                               });
+                               time = time.substr(0, time.length - 1);
+                               this.delquery.type = "list";
+                           }else{
+                               this.delquery.type = "";
+                           }
+                           this.delquery.time = time;
+                           basedel(this.delquery)
+                               .then(response=>{
+                                   if(response.code!=200){
+                                       this.$message.error("删除失败,请稍后再试");
+                                       this.delquery = {
+                                           time:"",
+                                           type:"",
+                                       };
+                                       return;
+                                    }
+                                   this.$message({
+                                     type: 'success',
+                                     message: '删除成功!'
+                                   });
+                                   this.delquery = {
+                                       time:"",
+                                       type:"",
+                                   };
+                                   this.getList();
+                               })
+                               .catch(()=>{
+                                   this.delquery = {
+                                       time:"",
+                                       type:"",
+                                   };
+                               });
+                        }).catch(() => {
+                            this.delquery = {
+                               time:"",
+                               type:"",
+                            };
+                            this.$message({
+                                type: 'info',
+                                message: '已取消删除'
+                            });
+                       });
 
-                    });
             },
 
         },
         filters:{
             FilterSize(val){
-                console.log(val)
                 return fileLengthFormat(val,1);
             },
         },

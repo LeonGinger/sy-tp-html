@@ -22,7 +22,8 @@
                     <!-- <p class="bg-blue" style="float: right; padding: 3px 0">总</p> -->
                     <el-button @click="goapply" style="float: right; padding: 3px 0" type="text">前往审核</el-button>
                 </div>
-                <div class="number-box"><span class="main-number">{{panelinfo.businessapply_count||'0'}}</span>总计</div>
+                <countTo class="number-box" :startVal='0' :endVal='panelinfo.businessapply_count || 0' :duration='3500'></countTo>
+                <span class="number-span">总计</span>
             </el-card>
         </div></el-col>
 

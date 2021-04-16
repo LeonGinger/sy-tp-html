@@ -1,10 +1,28 @@
 <template>
-
     <div class="login-container">
+
+          <swiper class="swiper" ref="mySwiper" :options="swiperOption">
+
+            <swiper-slide v-for="(img,index) in swiperImglist" :key="index">
+                <img class="swiperimg" :src="img" />
+            </swiper-slide>
+
+            <div class="swiper-pagination" slot="pagination"></div>
+          </swiper>
+
+        <div class="head-logo">
+            <a :href="weburl">
+                <i slot="prefix" class="el-input__icon"><icon-svg style="font-size: 32px;" icon-class="suyuan"/></i>
+            </a>
+        </div>
+        <div class="head-menu">
+            <i slot="prefix" class="el-input__icon"><icon-svg style="font-size: 32px;" icon-class="caidan-copy"/></i>
+        </div>
+
         <div class="login-box">
         <el-form :style="{top:formtop}" class="card-box login-form" autoComplete="on" :model="ruleForm" :rules="rules" ref="ruleForm"
                  label-position="left">
-            <h3 class="title">系统登录</h3>
+            <h3 class="title">溯源后台系统登录</h3>
             <div v-if="logintype==1">
            <el-form-item prop="mobile" class="item">
                 <el-input
@@ -64,6 +82,14 @@
 
         </div>
 
+
+        <div class="login-footer">
+            <el-row>
+              <el-col :span="24"><div class="grid-content bg-purple-dark" v-html="websidedata.copyright">{{websidedata.copyright}}</div></el-col>
+            </el-row>
+        </div>
+
+
         <el-dialog title="第三方验证" :visible.sync="showDialog">
             <!-- 邮箱登录成功,请选择第三方验证<br/> -->
             <wxlogin :theme="white" :appid="appid" :scope="scope" :redirect_uri="redirect_uri"></wxlogin>
@@ -74,13 +100,22 @@
 
 <script>
 
+import { Swiper, SwiperSlide, directive } from 'vue-awesome-swiper';
+import { DOMAIN_ADMIN_URL } from "../../config/app";
 import wxlogin from 'vue-wxlogin';
 import {sendcode} from '@/api/auth/login.js';
+import {settingno} from "@/api/pool";
 const redirectUri = encodeURI("http://ai.zsicp.com/admin/login/sylogin?item=sy");
 const wxloginCss = "http://sy.zsicp.com/static/css/wxlogin.css";
+import 'swiper/css/swiper.css';
 export default {
     components: {
-        wxlogin
+        Swiper,
+        SwiperSlide,
+        wxlogin,
+    },
+    directives: {
+      swiper: directive
     },
     data() {
         let validatePwd = (rule, value, callback) => {
@@ -91,6 +126,32 @@ export default {
             }
         };
         return {
+            weburl:DOMAIN_ADMIN_URL,
+            swiperImglist:[
+                'http://sy.zsicp.com/static/images/bg1.jpg',
+                'http://sy.zsicp.com/static/images/bg2.jpg',
+            ],
+            swiperOption:{
+
+                direction: 'vertical',
+                autoplay:true,
+                loop:true,
+                slidesPerView: 1,
+                spaceBetween: 30,
+                // setWrapperSize: true,
+                mousewheel: true,
+                autoHeight: true,
+                height: window.innerHeight,
+                pagination: {
+                  el: '.swiper-pagination',
+                  clickable: true
+                }
+                // some swiper options/callbacks
+                // 所有的参数同 swiper 官方 api 参数
+                       // ...
+
+            },
+            websidedata:[],
             formtop:"50%",
             logintips:"短信验证登录",
             white:"white",
@@ -126,6 +187,9 @@ export default {
         };
     },
     methods: {
+        callback(){
+
+        },
         curlogintype(){
            this.logintype = this.logintype==1?2:1;
            this.logintips = this.logintype==1?"扫码登录":"短信验证登录";
@@ -210,10 +274,29 @@ export default {
             } else {
                 return false;
             }
+        },
+        getsetting(){
+            settingno()
+                .then(response=>{
+                    this.websidedata = response.data;
+                })
+                .catch(()=>{
+
+                })
+        },
+
+    },
+    computed:{
+        swiper(){
+              return this.$refs.mySwiper.$swiper;
         }
+    },
+    mounted(){
+      this.swiper.slideTo(3, 1000, false);
     },
     created() {
         // 将参数拷贝进查询对象
+        this.getsetting();
         let query = this.$route.query;
         if(query.code){
             this.loading = true;
@@ -229,28 +312,67 @@ export default {
 
 <style type="text/scss" lang="scss">
 @import "../../styles/mixin";
-$bg: #2d3a4b;
+
+
+// $bg: #2d3a4b;
+$bg: "";
 $dark_gray: #889aa4;
 $light_gray: #eee;
 .login-container {
     @include relative;
     height: 100%;
     background-color: $bg;
-    background-image: url('http://sy.zsicp.com/static/images/2kbg.png')!important;
+    // background-image: url('http://sy.zsicp.com/static/images/2kbg.png')!important;
+    background-size: cover;
     background-repeat: no-repeat;
-    background-position: 0 50%;
+    background-position: 0 0;
     input:-webkit-autofill {
         -webkit-box-shadow: 0 0 0 1000px #293444 inset !important;
         -webkit-text-fill-color: #fff !important;
     }
+    .head-logo,.head-menu,.login-box,.login-footer{z-index: 1!important;}
+    .head-logo{
+        position: fixed;
+        top: 20px;
+        left: 40px;
+        a{
+            color:#fff;
+        }
+    }
+    .head-menu{
+        background-color: #293444d1;
+        padding: 2px;
+        position: fixed;
+        right:40px;
+        top: 20px;
+    }
+    .swiperimg{
+        width: 100%;
+    }
     .login-box{
-            background-color: #293444;
-            top: 20%;
+            background-color: #293444d1;
+            top: 100px;
             right: 100px;
             height: 500px;
             position: fixed;
             width: 400px;
         }
+    .login-footer{
+        background-color: #29344491;
+        // background-color:#293444;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        color: #000000;
+        a{
+            color: #ff2a75;
+        }
+        p{
+            margin: 40px;
+            text-align: center;
+            color: #fff;
+        }
+    }
     .item {
         .el-form-item__content {
             display: flex;

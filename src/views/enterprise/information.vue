@@ -596,6 +596,6 @@
 <style type="text/scss" lang="scss">
     .MenuCarousel,.MenuMonitor{display: inline-block;}
     .menu-span{color: #000000;}
-    /deep/.el-upload-list--picture-card .el-upload-list__item{overflow: visible !important;}
-    /deep/.el-upload-list--picture-card .el-upload-list__item-status-label i{margin-top: 0px !important;}
+    ::v-deep.el-upload-list--picture-card .el-upload-list__item-status-label i{margin-top: 0px !important;}
+    ::v-deep.el-upload-list--picture-card .el-upload-list__item{overflow: visible !important;}
 </style>

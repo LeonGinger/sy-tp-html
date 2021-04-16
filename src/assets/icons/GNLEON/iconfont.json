@@ -6,6 +6,48 @@
   "description": "后台图标库",
   "glyphs": [
     {
+      "icon_id": "12442006",
+      "name": "菜单",
+      "font_class": "caidan",
+      "unicode": "e773",
+      "unicode_decimal": 59251
+    },
+    {
+      "icon_id": "21053253",
+      "name": "菜单",
+      "font_class": "caidan-copy",
+      "unicode": "e7a9",
+      "unicode_decimal": 59305
+    },
+    {
+      "icon_id": "6043493",
+      "name": "菜单",
+      "font_class": "menu-two",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "6353166",
+      "name": "菜单",
+      "font_class": "menu-two1",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "16293803",
+      "name": "菜单",
+      "font_class": "toggle",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "21052874",
+      "name": "菜单",
+      "font_class": "menu-two1-copy",
+      "unicode": "e7a8",
+      "unicode_decimal": 59304
+    },
+    {
       "icon_id": "20952127",
       "name": "记录",
       "font_class": "icon22-copy",

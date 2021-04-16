@@ -44,6 +44,10 @@
                 </el-dialog>
                 </el-form-item>
 
+                <el-form-item label="版权信息" prop="webname">
+                    <tinymce ref="bntinymceedit"  :height="200" :plugins="['']" :toolbar="['']" v-model="formData.copyright"/>
+                </el-form-item>
+
             </div></el-col>
             </el-row>
             <el-form-item>
@@ -58,12 +62,17 @@
 
 <script>
     import { BASE_URL,IMG_BASE_URL } from "@/config/app";
+    import Tinymce from "@/components/Tinymce/index.vue";
     import {system_set,setting} from "@/api/pool";
     const formJson = {
         sitelogo: "",
         website:"",
+        copyright:"",
     };
     export default {
+        components: {
+            Tinymce
+        },
         name:'child1',
         data() {
             return {

@@ -49,8 +49,12 @@ export function buNotice_edit(params) {
 export function system_set(params) {
     return http.post(`${resquest}/sys_save`,params);
 }
+/*获取网站配置*/
 export function setting(params) {
     return http.get(`${resquest}/setting_index`,params);
+}
+export function settingno(params) {
+    return http.get(`${resquest}/setting_indexno`,params);
 }
 /*粉丝列表*/
 export function fans_index(params) {
