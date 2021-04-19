@@ -103,6 +103,13 @@
             onSubmit(){
                 //提交表单
                 console.log(this.data)
+                if(this.data[this.data.length-1]['menu_id'] == '' || this.data[this.data.length-1]['number'] == '' || this.data[this.data.length-1]['menu_number'] == ''){
+                    this.$message({
+                        message: '请输入完整再进行提交',
+                        type: 'warning'
+                    });
+                    return false; 
+                }
                 this.formData.data = this.data
                 orderAdd(this.formData)
                 .then(response => {
@@ -113,8 +120,15 @@
                     //         data:response.data,
                     //     }
                     // });
-                    window.sessionStorage.setItem("order_number",response.data)
-                    window.location.href = "#/source/opdencode"
+                    // window.sessionStorage.setItem("order_number",response.data)
+                    // window.location.href = "#/source/opdencode"
+                    this.$router.push({
+                        path:'opdencode',
+                        query:{
+                            order_number:response.data.order_number,
+                            order_total:response.data.total 
+                        }
+                    })
                 })
                 .catch(() =>{
                     

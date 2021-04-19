@@ -367,11 +367,11 @@
                     },
                     {
                         value: '7',
-                        label: '斤'
+                        label: '公斤'
                     },
                     {
                         value: '8',
-                        label: '公斤'
+                        label: '斤'
                     },
 
                 ],
@@ -750,7 +750,7 @@
                  //初始化数据
                  this.formData = formJson;
                  this.formData.id = '';
-                 this.formData. menu_weightt = '';
+                 this.formData.menu_weightt = '';
                  this.menuimagelist = [];
                  this.formMap.type = "add";
                  this.monitor_imagechanger = true;

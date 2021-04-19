@@ -17,14 +17,18 @@
     <!--startprint-->
     <div id="sourcebox">
       <div
-        class="box"
-        id="box"
         v-for="(item, index) in sourceCode"
         :key="index">
+        <div
+         class="box"
+         id="box"
+         v-for="(itemm, indexx) in item.source_number"
+        :key="indexx">
         <!--     <div :id="'qrCode'+index" :ref="'qrcodeContainer'+index"></div> -->
         <img :src="sourceSrc[index]" />
         <div style="margin-top: 10px"></div>
-        <a :title="item">{{ item }}</a>
+        <a :title="item.source_code">{{ item.source_code }}</a>
+        </div>
       </div>
     </div>
     <!--endprint-->
@@ -48,6 +52,7 @@ export default {
       orderNumber: "",
       test2: {},
       qrcodetext: "",
+      sourceNumber:[],
     };
   },
   methods: {
@@ -60,6 +65,15 @@ export default {
         cancelButtonText: "取消",
       })
         .then(({ value }) => {
+          console.log(value)
+          if(value == null){
+            window.location.reload();
+            this.$message({
+              message: '请输入订单编号',
+              type: 'warning'
+            });
+            return false;
+          }
           this.orderNumber = value;
           this.html(value);
         })
@@ -71,20 +85,23 @@ export default {
           window.location.href = "#/source/order";
         });
     },
-    html(value) {
-      // console.log(value)
-      ScodeList({ order_number: value })
+    html(value,total) {
+      console.log(total)
+      ScodeList({ order_number: value,total:total })
         .then((response) => {
           console.log(response)
+          // return false;
           if(response.code == 555){
-            window.location.reload();
             this.$message({
-              message: '订单号错误，请重试',
+              message: '订单号'+value+'错误，请重试',
               type: 'warning'
             });
-
+            window.location.reload();
             return false;
-          }  
+          }else if(response.code == 963){
+            window.location.reload();
+            return false;
+          }
           this.sourceCode = response.data;
           var count_qrcode = this.sourceCode.length;
           var tmpg = 0;
@@ -119,7 +136,7 @@ export default {
 
     },
     makeqrcode(index) {
-      let qrtext = MY_CODE_URL + "?source_code=" + this.sourceCode[index];
+      let qrtext = MY_CODE_URL + "?source_code=" + this.sourceCode[index]['source_code'];
       this.$nextTick(() => {
         let qrcode = new QRCode(document.getElementById("qrcode"), {
           // let qrcode = new QRCode(this.$refs.qrcodeContainer, {
@@ -173,10 +190,11 @@ export default {
     //     })
   },
   created() {
-    if (typeof window.sessionStorage.order_number != "undefined") {
-      var order_number = window.sessionStorage.getItem("order_number");
-      window.sessionStorage.removeItem("order_number");
-      this.html(order_number);
+    if (this.$route.query.order_number) {
+      var order_number = this.$route.query.order_number
+      var order_total = this.$route.query.order_total 
+      setTimeout(this.html(order_number,order_total),"1000")
+      
       // window.sessionStorage.removeItem("order_number");
     } else if (typeof window.sessionStorage.sourcecode_number != "undefined") {
       var source = window.sessionStorage.getItem("source");
