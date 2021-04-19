@@ -2,9 +2,9 @@
     <div class="error401">
         <div class="error401-body-con">
             <div class="error401-body-con-title">4<span class="error401-0-span">0</span><span class="error401-key-span">3</span></div>
-            <p class="error401-body-con-message">You don't have permission</p>
+            <p class="error401-body-con-message">没 有 权 限 访 问</p>
             <div class="error401-btn-con">
-                <a class="error401-home-button" href="/">返回首页</a>
+                <a class="error401-home-button" @click="backIndex">返回首页</a>
                 <div class="error401-block-button" @click="backPage">返回上一页</div>
             </div>
         </div>
@@ -16,7 +16,17 @@ export default {
     name: "Error401",
     methods: {
         backPage() {
-            this.$router.go(-1);
+            this.$router.push({
+                name: "登录",
+                params: {refresh:'1'}
+            });
+            //this.$router.go(-1);
+        },
+        backIndex(){
+            this.$router.push({
+                name: "登录",
+                params: {refresh:'1'}
+            });
         }
     }
 };

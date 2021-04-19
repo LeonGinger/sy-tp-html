@@ -2,7 +2,7 @@
     <div>
         <el-row :gutter="20">
 
-        <el-col :span="6"><div class="grid-content bg-purple">
+        <el-col :span="6"><div class="grid-content bg-purple" v-permission="'home/adminMain/business_count'">
             <el-card class="box-card">
               <div slot="header" class="clearfix">
                 <span class="number-title">商家</span>
@@ -15,7 +15,7 @@
             </el-card>
         </div></el-col>
 
-        <el-col :span="6"><div class="grid-content bg-purple">
+        <el-col :span="6"><div class="grid-content bg-purple" v-permission="'home/adminMain/businessapply_count'">
             <el-card class="box-card">
                 <div slot="header" class="clearfix">
                     <span class="number-title">商家申请</span>
@@ -50,9 +50,9 @@
         </div></el-col>
 
 
-        <div style="margin-top: 1.25rem;">&nbsp;</div>
+        <div style="margin-top: 1.25rem;" v-permission="'home/adminMain/el-colshow'">&nbsp;</div>
 
-        <el-col :span="6"><div class="grid-content bg-purple">
+        <el-col :span="6"><div class="grid-content bg-purple" v-permission="'home/adminMain/user_count'">
             <el-card class="box-card">
               <div slot="header" class="clearfix">
                 <span class="number-title">用户</span>
@@ -63,7 +63,7 @@
             </el-card>
         </div></el-col>
 
-        <el-col :span="6"><div class="grid-content bg-purple">
+        <el-col :span="6"><div class="grid-content bg-purple" v-permission="'home/adminMain/usermonth_count'">
             <el-card class="box-card">
               <div slot="header" class="clearfix">
                 <span class="number-title">用户</span>

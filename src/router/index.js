@@ -162,6 +162,9 @@ export const asyncRouterMap = [
         icon: "shouye",
         name: "首页",
         noDropdown: true,
+        meta: {
+            authRule: ["adminMain"]
+        },
         children: [
             {
                 path: "adminMain",

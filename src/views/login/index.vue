@@ -106,7 +106,7 @@ import wxlogin from 'vue-wxlogin';
 import {sendcode} from '@/api/auth/login.js';
 import {settingno} from "@/api/pool";
 const redirectUri = encodeURI("http://ai.zsicp.com/admin/login/sylogin?item=sy");
-const wxloginCss = "http://sy.zsicp.com/static/css/wxlogin.css";
+const wxloginCss = "https://sy.zsicp.com/static/css/wxlogin.css";
 import 'swiper/css/swiper.css';
 export default {
     components: {
@@ -295,6 +295,9 @@ export default {
       this.swiper.slideTo(3, 1000, false);
     },
     created() {
+        if(this.$route.params.refresh){
+            location. reload();
+        }
         // 将参数拷贝进查询对象
         this.getsetting();
         let query = this.$route.query;
