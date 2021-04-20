@@ -6,7 +6,7 @@
                 <el-input v-model="formData.menu_name"></el-input>
             </el-col>
           </el-form-item>
-          <el-form-item  prop="business_name" label="所属商家" v-permission="menu/menumodify/businesslist">
+          <el-form-item  prop="business_name" label="所属商家" v-permission="'menu/menumodify/businesslist'">
             <el-select @change="onselectbusiness" v-model="formData.business_name" :disabled="business_namechanger" placeholder="请选择商家">
                <el-option
                    v-for="item in businessArr"
@@ -447,14 +447,21 @@
                                 }
                                   //待优化循环 start
                                 if(this.formData.menu_weight){
-                                    this.optionsweight.forEach((item,index)=>{
-                                        if(this.formData.menu_weight.indexOf(item.label)!=-1){
-                                            const tmp_weight = this.formData.menu_weight;
-                                            this.formData.menu_weight = item.label;
-                                            //this.formData.menu_weightt = tmp_weight.replace(item.label,"");
-                                            this.menu_weightt = tmp_weight.replace(item.label,"");
-                                        }
-                                    })
+                                    try{
+                                        this.optionsweight.forEach((item,index)=>{
+                                            if(this.formData.menu_weight.indexOf(item.label)!=-1){
+                                                const tmp_weight = this.formData.menu_weight;
+                                                this.formData.menu_weight = item.label;
+                                                //this.formData.menu_weightt = tmp_weight.replace(item.label,"");
+                                                this.menu_weightt = tmp_weight.replace(item.label,"");
+                                                throw new Error("OK DONE");
+                                            }
+                                        })
+                                    }catch(e){
+
+
+                                    }
+
                                 }
                                 if(this.formData.quality_time){
                                     //待优化循环
