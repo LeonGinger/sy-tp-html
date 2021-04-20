@@ -56,11 +56,12 @@
                 <div class="header-right">
                     <el-dropdown trigger="click">
                         <!-- <i class="el-icon-setting" style="margin-right: 15px"></i> -->
-                       <el-avatar style="margin: 10px;" shape="circle" :size="40" fit="cover" :src="avatar"></el-avatar>
-                        <span>{{username}}<i class="el-icon-arrow-down el-icon--right"></i></span>
+                         <span>{{username}}<i class="el-icon-arrow-down el-icon--right"></i></span>
+                        <el-avatar style="margin: 10px;" shape="circle" :size="40" fit="cover" :src="avatar"></el-avatar>
+                       
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item><span @click="handlePhone">修改手机号</span></el-dropdown-item>
-                            <el-dropdown-item><span @click="loginOut">退出登录</span></el-dropdown-item>
+                            <el-dropdown-item @click.native="handlePhone"><span @click="handlePhone">修改手机号</span></el-dropdown-item>
+                            <el-dropdown-item @click.native="loginOut"><span @click="loginOut">退出登录</span></el-dropdown-item>
                             <el-dropdown-item disabled divided>主题切换</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
@@ -270,10 +271,6 @@ export default {
                     });
                 })
                 .catch(() => {
-                    this.$message({
-                        type: "error",
-                        message: "操作失败"
-                    });
                 });
         },
         // 显示更换手机号页面

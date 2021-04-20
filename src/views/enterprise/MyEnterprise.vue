@@ -106,13 +106,7 @@
                   <!-- 左边 -->
                   <el-col :span="10"><div class="grid-content bg-purple">
                    <!-- 商户信息 -->
-                   <el-form-item label="营业执照" prop="pic">
-                       <el-image
-                         style="width: 226px; height: 226px;"
-                         :src="url"
-                         :fit="fit"></el-image>
 
-                   </el-form-item>
                     <el-form-item label="商户名称:" prop="business_name">
                        <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
                         {{formData.business_name||"暂无"}}
@@ -125,6 +119,10 @@
                    <!--     <el-input v-model="formData.responsible_name" auto-complete="off"></el-input> -->
                     {{formData.responsible_name||"暂无"}}
                     </el-form-item>
+                    <el-form-item label="法定代表人:" prop="responsible_name">
+                         <!-- <el-input v-model="formData.responsible_name" auto-complete="off"></el-input> -->
+                         {{formData.responsible_name||"暂无"}}
+                     </el-form-item>
                     <el-form-item label="联系电话:" prop="mobile">
                    <!--     <el-input v-model="formData.mobile" auto-complete="off"></el-input> -->
                     {{formData.mobile||"暂无"}}
@@ -143,15 +141,41 @@
                     {{formData.create_time||"暂无"}}
                     </el-form-item>
 
+                    <el-form-item label="状态" prop="state">
+                         <el-radio-group v-model="formData.state">
+                             <el-radio :label="1">正常</el-radio>
+                             <el-radio :label="2">冻结</el-radio>
+                         </el-radio-group>
+                     </el-form-item>
+
                   </div></el-col>
                     <el-col :span="1"><div class="grid-content bg-purple">&nbsp;</div></el-col>
                   <!-- 右边 -->
                   <el-col :span="10"><div class="grid-content bg-purple-light">
-                        <el-form-item label="商户Logo" prop="pic" class="enterprise_logo">
-                            <el-image
-                            style="width: 226px; height: 226px;"
-                            :src="url"
-                            :fit="fit"></el-image>
+                        <el-form-item label="商户证书" prop="pic" class="enterprise_logo">
+                            <swiper  class="swiper swiper-cer" ref="mySwiper" :options="swiperOption">
+                             <swiper-slide  v-for="(img,index) in swiperImglist" :key="index">
+                                    <!-- 测试 -->
+<!--                                <swiper-slide  v-for="(img,index) in swiperImglist" :key="index"> -->
+                                  <img  @click="handlePictureCardPreview(img)" class="swiperimg" :src="img" />
+                              </swiper-slide>
+                              <div class="swiper-pagination swiper-pagination-bullets" slot="pagination"></div>
+                            </swiper>
+                        </el-form-item>
+
+                        <el-row>
+                          <el-col :span="24"><div class="grid-content bg-purple-dark"></div></el-col>
+                        </el-row>
+
+                        <el-form-item label="商户图集" prop="pic">
+                            <swiper  class="swiper swiper-cer" ref="mySwiper" :options="swiperOption">
+                             <swiper-slide  v-for="(img,index) in swiperImglist" :key="index">
+                                    <!-- 测试 -->
+<!--                                <swiper-slide  v-for="(img,index) in swiperImglist" :key="index"> -->
+                                  <img  @click="handlePictureCardPreview(img)" class="swiperimg" :src="img" />
+                              </swiper-slide>
+                              <div class="swiper-pagination swiper-pagination-bullets" slot="pagination"></div>
+                            </swiper>
                         </el-form-item>
 
 <!--                        <el-form-item label="营业执照" prop="pic">
@@ -164,21 +188,11 @@
                             </div>
                         </el-form-item> -->
 
-                        <el-form-item label="信用代码:" prop="business_code">
+                     <!--   <el-form-item label="信用代码:" prop="business_code"> -->
                             <!-- <el-input v-model="formData.business_code" auto-complete="off"></el-input> -->
-                            {{formData.business_code||"暂无"}}
-                        </el-form-item>
-                         <el-form-item label="法定代表人:" prop="responsible_name">
-                            <!-- <el-input v-model="formData.responsible_name" auto-complete="off"></el-input> -->
-                            {{formData.responsible_name||"暂无"}}
-                        </el-form-item>
+                    <!--        {{formData.business_code||"暂无"}}
+                        </el-form-item> -->
 
-                       <el-form-item label="状态" prop="state">
-                            <el-radio-group v-model="formData.state">
-                                <el-radio :label="1">正常</el-radio>
-                                <el-radio :label="2">冻结</el-radio>
-                            </el-radio-group>
-                        </el-form-item>
                   </div></el-col>
 
 
@@ -222,6 +236,9 @@
 
 <script>
 import {enterpriseList,employeestate} from "@/api/enterprise/enterprise";
+import { Swiper, SwiperSlide, directive } from 'vue-awesome-swiper';
+import 'swiper/css/swiper.css';
+
 const formJson = {
     appraisal_image: '',
     business_name: '',
@@ -234,8 +251,16 @@ const formJson = {
     username:'',
 };
 export default {
+    components: {
+        Swiper,
+        SwiperSlide,
+    },
+    directives: {
+      swiper: directive
+    },
     data() {
         return {
+            swiperImglist:["http://sy.zsicp.com/static/images/bg1.jpg","http://sy.zsicp.com/static/images/bg2.jpg","http://sy.zsicp.com/static/images/bg3.jpg"],
             formMap: {
                 add: "新 增",
                 edit: "编 辑"
@@ -260,15 +285,30 @@ export default {
             company_imgstyle:"{width: 100px; height: 100px;}",
             formLoading:false,
             formRules:{},
-            fit:"contain"
+            fit:"contain",
+            swiperOption:{
+                autoHeight: true,
+                height:300,
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                    renderBullet(index, className) {
+                        return `<span class="${className} swiper-pagination-bullet-custom">${index + 1}</span>`
+                    }
+                }
+
+            },
+            dialogImageUrl:"",
+            dialogVisible:false
 
         }
     },
     methods:{
     //方法
+
         // 显示表单
         handleForm(index, row) {
-            // console.log(row);
+            console.log(row);
             // console.log(index);
             this.formVisibledetails = true;
             // 刷新表单
@@ -415,6 +455,10 @@ export default {
                 }
             });
         },
+        handlePictureCardPreview(url) {
+            this.dialogImageUrl = url;
+            this.dialogVisible = true;
+        },
 
     },
     filters: {
@@ -476,14 +520,20 @@ export default {
 };
 </script>
 
-<style type="text/scss" lang="scss">
+<style lang="less" scoped>
     .image_p{
         position: absolute;
         text-align: left;
         width: 226px;
         top: -2.2rem;
     }
-/deep/.enterprise_logo{
+    ::v-deep.enterprise_logo{
         margin-left: 64px;
+    }
+    .swiper-cer{
+        height: 226px;
+    }
+    .swiperimg{
+        width: 100%;
     }
 </style>

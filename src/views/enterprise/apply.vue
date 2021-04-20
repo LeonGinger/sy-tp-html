@@ -123,12 +123,12 @@
                   <!-- 左边 -->
                   <el-col :span="10"><div class="grid-content bg-purple">
                    <!-- 商户信息 -->
-                   <el-form-item label="营业执照" prop="pic">
+<!--                   <el-form-item label="营业执照" prop="pic">
                         <el-image
                           style="width: 226px; height: 226px;"
                           :src="url"
                           :fit="fit"></el-image>
-                   </el-form-item>
+                   </el-form-item> -->
                     <el-form-item label="商户名称" prop="title">
                         <el-input v-model="formData.business_name" auto-complete="off"></el-input>
                     </el-form-item>
@@ -161,11 +161,19 @@
                   <!-- 右边 -->
                   <el-col :span="10"><div class="grid-content bg-purple-light">
 
-                        <el-form-item label="商户Logo" prop="pic" class="enterprise_logo">
-                            <el-image
+                       <el-form-item label="商户证书" prop="pic" class="enterprise_logo">
+          <!--                  <el-image
                             style="width: 226px; height: 226px;"
                             :src="url"
-                            :fit="fit"></el-image>
+                            :fit="fit"></el-image> -->
+                            <swiper  class="swiper swiper-cer" ref="mySwiper" :options="swiperOption">
+                             <swiper-slide  v-for="(img,index) in swiperImgappraisal" :key="index">
+                                    <!-- 测试 -->
+<!--                                <swiper-slide  v-for="(img,index) in swiperImglist" :key="index"> -->
+                                  <img  @click="handlePictureCardPreview(img)" class="swiperimg" :src="img" />
+                              </swiper-slide>
+                              <div class="swiper-pagination swiper-pagination-bullets" slot="pagination"></div>
+                            </swiper>
                         </el-form-item>
 
 <!--                        <el-form-item label="营业执照" prop="pic">
@@ -178,9 +186,9 @@
                             </div>
                         </el-form-item> -->
 
-                        <el-form-item label="信用代码" prop="title">
+           <!--             <el-form-item label="信用代码" prop="title">
                             <el-input v-model="formData.business_code" auto-complete="off"></el-input>
-                        </el-form-item>
+                        </el-form-item> -->
                          <el-form-item label="法定代表人" prop="title">
                             <el-input v-model="formData.responsible_name" auto-complete="off"></el-input>
                         </el-form-item>
@@ -200,6 +208,7 @@
             </el-form>
 
             <div slot="footer" class="dialog-footer">
+                <el-button v-if="false" type="primary" @click.native="handleInfo(formData.id)">更多资料</el-button>
                 <el-dropdown @command="handleverif" class="g-left-d10">
                 <el-button type="primary" class="g-success" >
                     审 核<i class="el-icon-arrow-down el-icon--right"></i>
@@ -228,6 +237,11 @@
             <el-button type="primary" @click="verifstate()">确 定</el-button>
             </div>
         </el-dialog>
+        <!-- 查看图片弹窗 -->
+        <el-dialog :visible.sync="dialogVisible">
+        <img width="100%" :src="dialogImageUrl" alt="">
+        </el-dialog>
+        </el-form-item>
 
     </div>
 
@@ -235,7 +249,10 @@
 </template>
 
 <script>
+import {DOMAIN_URL} from "@/config/app.js";
 import {enterpriseList,employeestate,employeeupdate} from "@/api/enterprise/enterprise";
+import { Swiper, SwiperSlide, directive } from 'vue-awesome-swiper';
+import 'swiper/css/swiper.css';
 import time from "@/utils/utils.filter.js"
 const formJson = {
     appraisal_image: '',
@@ -254,8 +271,40 @@ const formJson = {
     }
 };
 export default {
+    components: {
+        Swiper,
+        SwiperSlide,
+    },
+    directives: {
+      swiper: directive
+    },
     data() {
         return {
+            defaultImgappraisal:DOMAIN_URL+"/static/images/loseimg1.png",//默认的商家证书模板
+            swiperImglist:["http://sy.zsicp.com/static/images/bg1.jpg","http://sy.zsicp.com/static/images/bg2.jpg","http://sy.zsicp.com/static/images/bg3.jpg"],
+            swiperOption:{
+
+                // direction: 'vertical',
+                // autoplay:true,
+                // loop:true,
+                // slidesPerView: 1,
+                // spaceBetween: 30,
+                // setWrapperSize: true,
+                // mousewheel: true,
+                autoHeight: true,
+                height:300,
+                pagination: {
+                  el: '.swiper-pagination',
+                  clickable: true,
+                  renderBullet(index, className) {
+                                return `<span class="${className} swiper-pagination-bullet-custom">${index + 1}</span>`
+                              }
+                }
+                // some swiper options/callbacks
+                // 所有的参数同 swiper 官方 api 参数
+                       // ...
+
+            },
             formMap: {
                 add: "新 增",
                 edit: "审 核"
@@ -285,6 +334,9 @@ export default {
             default_time:'',
             fit:"contain",
             formRules:{},
+            dialogVisible:false,
+            dialogImageUrl:"",
+            swiperImgappraisal:[],
 
         }
     },
@@ -309,6 +361,14 @@ export default {
 
             if (row !== null) {
                 this.formData = Object.assign({}, row);
+                //商家证书
+                try{
+                   this.swiperImgappraisal =JSON.parse(this.formData.business_appraisal[0].appraisal_image);
+
+                }catch(e){
+
+                }
+
             }
 
             /*注册人为空-之后可删除*/
@@ -463,11 +523,32 @@ export default {
             });
         },
 
+        handleInfo(id){
+            this.$router.push({
+                name:'信息管理',        handlePictureCardPreview(url) {
+            // if(is_url){
+            this.dialogImageUrl = url;
+            // }else{
+            //     this.dialogImageUrl = file.url;
+            // }
+            this.dialogVisible = true;
+        },
+                params:{
+                    business_id:id,
+                }
+            });
+        },
+        errorImg(){
+             let img = event.srcElement;
+            	 img.src = this.defaultImgappraisal;
+            	 img.onerror = null; //防止闪图
+        }
+
 
     },
     filters: {
         bossFiltersId(boss_user){
-            if(boss_user==null){
+            if(!boss_user){
                 return "无";
             }
             return boss_user.id
@@ -518,7 +599,7 @@ export default {
         }
     },
     mounted() {
-        
+
     },
     created() {
         this.default_time = time.timeTodate("H:i:s",Date.parse(new Date()));
@@ -534,14 +615,22 @@ export default {
 
 </script>
 
-<style type="text/scss" lang="scss">
+<style lang="less" scoped>
     .image_p{
         position: absolute;
         text-align: left;
         width: 226px;
         top: -2.2rem;
     }
-/deep/.enterprise_logo{
+    ::v-deep.enterprise_logo{
        margin-left: 64px;
+
     }
+    .swiper-cer{
+        height: 226px;
+    }
+    .swiperimg{
+        width: 100%;
+    }
+
 </style>

@@ -284,6 +284,7 @@
                 input:[],
                 imgjson:[],
                 businessimg:[],
+                business_id:"",
             }
     },
         methods:{
@@ -366,15 +367,15 @@
                             type: 'success'
                         });
                     }
-                    
+
                 })
                 .catch(() => {
-                    
+
                 });
             },
             getlist(){
                 this.loading = true;
-                business_Find({business_id:this.$store.state.admin.business_notice})
+                business_Find({business_id:this.business_id})
                     .then(response => {
                         this.business = response.data || 0
                         this.input = this.business['business_img']['business_img_contentjson']
@@ -570,6 +571,11 @@
         //
         },
         created() {
+            if(this.$route.params.business_id){
+                this.business_id = this.$route.params.business_id;
+            }else{
+                this.business_id = this.$store.state.admin.business_notice;
+            }
             this.businesslist();
             this.getlist();
             if(this.$route.query.menuid){

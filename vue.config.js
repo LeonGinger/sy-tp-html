@@ -1,3 +1,9 @@
+const path = require('path')
+function resolve (dir) {
+  return path.join(__dirname, dir)
+}
+
+
 module.exports = {
     baseUrl: process.env.NODE_ENV === "production" ? "./" : "/",
     outputDir: process.env.outputDir,
@@ -47,6 +53,12 @@ module.exports = {
         },
         after:app=>{require('mockjs')},
       },
+      pluginOptions: { // 第三方插件配置
+           'style-resources-loader': {
+             preProcessor: 'less',
+             patterns: [path.resolve(__dirname, 'src/assets/styles/base.less')] // less所在文件路径
+           }
+        },
 
     chainWebpack: config => {
         config.plugin("html").tap(args => {

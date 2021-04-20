@@ -57,6 +57,13 @@
         </el-row>
 
             <el-row v-show="!legendChanger">
+            <el-col :span="24"><div class="grid-content bg-purple-dark">
+                <div class="area-tipbox">
+                    <h1 class="area-h1">全国扫码累计次数:</h1>
+                    <countTo class="number-box" :startVal='0' :endVal='areatotal || 0' :duration='3500'></countTo>
+                </div>
+            </div></el-col>
+
        <!-- <el-row v-show="!legendChanger"> -->
              <el-col :span="24"><div class="grid-content bg-purple">
               <div id="ChartChina" :style="{width: '800px', height: '710px'}"></div>
@@ -70,7 +77,8 @@
 </template>
 
 <script>
-    import {sroucelogEcharts} from "@/api/source/sourceapi.js";
+    import {sroucelogEcharts,srouceareaEcharts} from "@/api/source/sourceapi.js";
+    import countTo from "vue-count-to";
     import 'echarts/map/js/china.js';
     // import '@/utils/china.js';
     const formJson = {};
@@ -193,6 +201,10 @@
             }
           }
         },
+        tooltip: {
+            trigger: 'item',
+            formatter: '{b}<br/>扫码次数:{c}'
+        },
         series: [
           {
             name: "地区查询次数统计",
@@ -200,7 +212,7 @@
             geoIndex: 0,
             data:[
                 {
-                name: "北京",
+                name: "浙江",
                 value: 599, //  项目数量
                 perf: "60%", // 项目占比
               },
@@ -210,15 +222,18 @@
       };
 
     export default {
+        components: { countTo },
         data() {
             return {
                 legendChanger:true,
                 legendTips:"切换到区域",
                 list:[],
+                listarea:[],
                 loading:false,
                 chartsoptionsBar:echartBar,
                 chartsoptionsPerson:echartPercen,
                 chartsoptionsMap:echartMap,
+                areatotal:0,
 
             }
     },
@@ -227,7 +242,7 @@
                 if(this.legendChanger){
                     this.legendChanger = false;
                     this.legendTips = "切换图表";
-                    this.getList();
+                    this.getareadata();
                     // this.drawMap();
                 }else{
                     this.legendChanger = true;
@@ -272,12 +287,33 @@
                         //重新生成实例
                         this.drawBar();
                         this.drawPercen();
-                        this.drawMap();
+
                     })
                     .catch(() => {
                         this.loading = false;
                         this.list = [];
                     });
+            },
+            getareadata(){
+                this.loading = false;
+                srouceareaEcharts(this.query)
+                     .then(response => {
+                         //console.log(response);
+                         this.loading = false;
+                         this.listarea = response.data.list || [];
+                         this.areatotal = response.data.total_search;
+                         if(this.listarea.length>0){
+                            this.chartsoptionsMap.series[0]['data'] = [];
+                            this.listarea.forEach((item,index)=>{
+                                this.chartsoptionsMap.series[0]['data'].push({'name':item.province,'value':item.track,'perf':item.track})
+                            });
+                         }
+
+                         this.drawMap();
+                     })
+                     .catch(() => {
+                         this.loading = false;
+                     });
             },
         },
         filters:{},
@@ -289,11 +325,22 @@
         },
         created() {
             this.getList();
+            this.getareadata();
 
         }
 };
 
 </script>
+<style lang="less" scoped>
+        .area-h1{
+            color: #303133;
+            display: contents;
+            margin-top: 20px;
+        }
+        .number-box{
+            display: inline-block;
 
-<style type="text/scss" lang="scss">
+        }
+
+
 </style>

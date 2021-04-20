@@ -47,3 +47,8 @@ export function orderdelete(params){
  export function sroucelogEcharts(params){
    return http.get(`${resquest}/sroucelog_echarts`,params);
  }
+ /*查询记录地图统计*/
+ export function srouceareaEcharts(params){
+   return http.get(`${resquest}/sroucearea_echarts`,params);
+ }
+ 
