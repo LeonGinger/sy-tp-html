@@ -12,6 +12,18 @@
             <el-form-item class="query-form-item">
                 <el-input v-model="query.title" placeholder="溯源编号"></el-input>
             </el-form-item>
+            <el-form-item class="query-form-item">
+                <template>
+                <el-select v-model="query.value" placeholder="请选择状态">
+                    <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                    </el-option>
+                </el-select>
+            </template>
+            </el-form-item>
             <el-form-item>
                 <el-button-group>
                     <el-button type="primary" icon="el-icon-refresh" @click="getList"></el-button>
@@ -47,8 +59,8 @@
                 <template slot-scope="scope">
                     <el-image :src="scope.row.source_code_img">
                         <div slot="error" class="image-slot">
-                        正在加载中...
-                    </div>
+                            正在加载中...
+                        </div>
                     </el-image>
                 </template>
             </el-table-column>
@@ -82,7 +94,7 @@
                 fixed="right">
                 <template slot-scope="scope">
                    <!-- <el-button  class="g-success" size="small" @click.native="handleDel(scope.$index, scope.row)">删 除</el-button> -->
-                  <!--  <el-dropdown @command="handleverif" class="g-left-d10">
+                    <!--  <el-dropdown @command="handleverif" class="g-left-d10">
                     <el-button size="small" type="primary" class="g-success" >
                         审 核<i class="el-icon-arrow-down el-icon--right"></i>
                     </el-button>
@@ -98,7 +110,7 @@
                     >溯源详情</el-button>
                     <el-button type="success" size="small" @click="sourceAdd(scope.row.source_code,scope.row.source_code_img)">溯源码打印</el-button>
                     <!-- <el-button type="danger" size="small" @click.native="handleFormdel(scope.$index, scope.row)">删 除</el-button> -->
-                  <!--  <el-button type="primary" size="small" @click.native="handleFormemployee(scope.row.company_id)">员 工</el-button> -->
+                    <!--  <el-button type="primary" size="small" @click.native="handleFormemployee(scope.row.company_id)">员 工</el-button> -->
                    <!-- <el-button :type="scope.row.status | statusFilterType_handle" size="small" @click.native="handleFormstatus(scope.$index, scope.row)">{{scope.row.status | statusFilterName_handle}}</el-button> -->
                 </template>
             </el-table-column>
@@ -244,7 +256,17 @@ export default {
             sourceSrc: [],
             findsource: [],
             formRules:{},
-            fit:"contain"
+            fit:"contain",
+            options: [{
+                value: '1',
+                label: '未入库'
+            },{
+                value: '2',
+                label: '未出库'
+            },{
+                value: '3',
+                label: '已出库'
+            }],
         }
     },
     methods:{
@@ -328,10 +350,11 @@ export default {
         onSubmit(){
         //查询
             this.query.source_number = this.query.title
+            this.resetForm()
             this.getList();
+
         },
         handleCurrentChange(val) {
-
            this.query.page = (val - 1)*10 ;
            this.getList();
         },

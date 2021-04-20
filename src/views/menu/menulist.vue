@@ -4,7 +4,7 @@
         <!-- start search -->
         <el-form :inline="true" :model="query" class="query-form" size="mini">
             <el-form-item class="query-form-item">
-                <el-input v-model="query.title" placeholder="商品名称"></el-input>
+                <el-input v-model="query.menu_name" placeholder="商品名称"></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button-group>

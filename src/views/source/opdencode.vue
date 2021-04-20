@@ -8,7 +8,7 @@
       id="qrcode"
       class="qrcode"
       ref="qrcodeContainer"
-      style="display: none"
+      style="display:none;"
     ></div>
     <!-- <el-row>
       <el-col> -->
@@ -53,6 +53,7 @@ export default {
       test2: {},
       qrcodetext: "",
       sourceNumber:[],
+      codebox:"",
     };
   },
   methods: {
@@ -67,15 +68,15 @@ export default {
         .then(({ value }) => {
           console.log(value)
           if(value == null){
-            window.location.reload();
             this.$message({
               message: '请输入订单编号',
               type: 'warning'
             });
+            window.location.reload();
             return false;
           }
           this.orderNumber = value;
-          this.html(value);
+          this.html(value,0);
         })
         .catch(() => {
           this.$message({
@@ -93,19 +94,23 @@ export default {
           // return false;
           if(response.code == 555){
             this.$message({
-              message: '订单号'+value+'错误，请重试',
+              message: '批次号'+value+'错误，请重试',
               type: 'warning'
             });
             window.location.reload();
             return false;
           }else if(response.code == 963){
-            window.location.reload();
+            this.$message({
+              message: '批次生成中，请稍后....',
+              type: 'warning'
+            });
+            setTimeout(function(){window.location.reload()},"3000")
             return false;
           }
           this.sourceCode = response.data;
           var count_qrcode = this.sourceCode.length;
           var tmpg = 0;
-          var set_go = 5;
+          var set_go = 1;
           var _this = this;
           const loading = this.$loading({
             lock: true,
@@ -116,13 +121,13 @@ export default {
           console.log(count_qrcode);
           var showcode = setInterval(function () {
             for (var i = tmpg; i < set_go; i++) {
-              _this.makeqrcode(i);
+              setTimeout(function(){_this.makeqrcode(i)},300*(i+1))
             }
-            tmpg += 5;
-            set_go += 5;
+            tmpg += 1;
+            set_go += 1;
             if (tmpg >= count_qrcode) {
               clearInterval(showcode);
-              loading.close();
+              setTimeout(function(){loading.close();},300*(count_qrcode+1))
             }
           });
           var _this = this;
@@ -133,9 +138,16 @@ export default {
           this.list = [];
           this.total = 0;
         });
-
+        console.log(this.sourceSrc)
     },
     makeqrcode(index) {
+      console.log(this.sourceCode);
+      var index = index-1
+      if(index!=0){
+        console.log(index+"////"+this.$refs.qrcodeContainer.innerHTML)
+        this.$refs.qrcodeContainer.innerHTML = '';
+      }
+      
       let qrtext = MY_CODE_URL + "?source_code=" + this.sourceCode[index]['source_code'];
       this.$nextTick(() => {
         let qrcode = new QRCode(document.getElementById("qrcode"), {
@@ -150,23 +162,31 @@ export default {
         });
         setTimeout(() => {
           let qwe = this.$refs.qrcodeContainer.innerHTML;
-          console.log(qwe);
+          console.log(this.$refs.qrcodeContainer);
           var patt = /<img[^>]+src=['"]([^'"]+)['"]+/g;
           let tmpSrc = patt.exec(qwe);
-          // console.log(tmpSrc);
+          console.log(tmpSrc);
           this.sourceSrc[index] = tmpSrc[1];
-          this.$forceUpdate();
+          
+          
+          // console.log(qrtext);
           //document.getElementById("qrcode").innerHTML = "";
           // console.log("妙啊~");
           // console.log(this.sourceSrc);
+          
+        // this.$refs.qrcodeContainer.innerHTML = ""; 
+          this.$forceUpdate();
+          
         });
       });
     },
     smallcode(source,code,number) {
-      for(var ii = 0;ii<number;ii++){
-        this.sourceCode[ii] = source;
-        this.sourceSrc[ii] = code;
-      }
+      console.log(source+"/"+code+'/'+number)
+      this.sourceCode = [{source_number:'',source_code:''}]
+      console.log(this.sourceCode)
+      this.sourceCode[0]['source_number'] = parseInt(number)
+      this.sourceSrc[0] = code
+      this.sourceCode[0]['source_code'] = source 
     },
     PrintRow(index, row) {
       this.$print(this.$refs.print); // 使用
@@ -194,13 +214,13 @@ export default {
       var order_number = this.$route.query.order_number
       var order_total = this.$route.query.order_total 
       setTimeout(this.html(order_number,order_total),"1000")
-      
+      console.log("Add")
       // window.sessionStorage.removeItem("order_number");
     } else if (typeof window.sessionStorage.sourcecode_number != "undefined") {
       var source = window.sessionStorage.getItem("source");
       var sourcecode = window.sessionStorage.getItem("sourcecode");
       var sourcecode_number = window.sessionStorage.getItem("sourcecode_number");
-      // console.log(sourcecode)
+      console.log("source++")
       // console.log(sourcecode_number)
       this.smallcode(source, sourcecode, sourcecode_number);
       window.sessionStorage.removeItem("sourcecode");

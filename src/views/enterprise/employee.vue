@@ -111,7 +111,7 @@
  -->
                     <!-- <el-button v-permission="'enterprise/employee/edit'" type="success" size="small" @click.native="handleForm(scope.$index, scope.row)">编 辑</el-button> -->
                     <el-button v-permission="'enterprise/employee/del'" type="danger" size="small" @click="handleFormdel(scope.row.id,scope.$index)">踢出员工</el-button>
-                </template>s
+                </template>
             </el-table-column>
         </el-table>
 

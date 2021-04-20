@@ -122,13 +122,17 @@
                     // });
                     // window.sessionStorage.setItem("order_number",response.data)
                     // window.location.href = "#/source/opdencode"
-                    this.$router.push({
-                        path:'opdencode',
-                        query:{
-                            order_number:response.data.order_number,
-                            order_total:response.data.total 
-                        }
-                    })
+                    var _this=this
+                    setTimeout(function (){
+                        _this.$router.push({
+                            path:'opdencode',
+                            query:{
+                                order_number:response.data.order_number,
+                                order_total:response.data.total 
+                            }
+                        })
+                    },"1000");
+                    
                 })
                 .catch(() =>{
                     

@@ -305,14 +305,14 @@
                     //         trigger: "blur"
                     //     }
                     // ],
-                    menu_images_json: [
-                        {
-                            required: true,
-                            //message: "请上传至少一张商品图片",
-                            validator:validatemenuimglist,
-                            trigger: "blur",
-                        }
-                    ],
+                    // menu_images_json: [
+                    //     {
+                    //         required: true,
+                    //         //message: "请上传至少一张商品图片",
+                    //         validator:validatemenuimglist,
+                    //         trigger: "blur",
+                    //     }
+                    // ],
                     // business_name: [
                     //     {
                     //         required: true,

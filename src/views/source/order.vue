@@ -3,7 +3,10 @@
     <!-- start search -->
     <el-form :inline="true" :model="query" class="query-form" size="mini">
       <el-form-item class="query-form-item">
-        <el-input v-model="query.title" placeholder="订单编号"></el-input>
+        <el-input v-model="query.title" placeholder="批次编号"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input v-model="query.username" placeholder="创建人"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button-group>
@@ -90,7 +93,7 @@
       >
       </el-table-column>
       <el-table-column
-        label="溯源码数量"
+        label="溯源码总数量"
         prop="source_code_number"
         with="300"
         :show-overflow-tooltip="true"
@@ -124,6 +127,7 @@
           <el-button
             type="danger"
             size="small"
+            v-permission="'order/list/delete'"
             @click.native="orderdelete(scope.row.id,scope.$index)"
             >删 除</el-button>
           <!--  <el-button type="primary" size="small" @click.native="handleFormemployee(scope.row.company_id)">员 工</el-button> -->
