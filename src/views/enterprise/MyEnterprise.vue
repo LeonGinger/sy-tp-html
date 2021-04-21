@@ -154,7 +154,7 @@
                   <el-col :span="10"><div class="grid-content bg-purple-light">
                         <el-form-item label="商户证书" prop="pic" class="enterprise_logo">
                             <swiper  class="swiper swiper-cer" ref="mySwiper" :options="swiperOption">
-                             <swiper-slide  v-for="(img,index) in swiperImglist" :key="index">
+                             <swiper-slide  v-for="(img,index) in formData.business_images" :key="index">
                                     <!-- 测试 -->
 <!--                                <swiper-slide  v-for="(img,index) in swiperImglist" :key="index"> -->
                                   <img  @click="handlePictureCardPreview(img)" class="swiperimg" :src="img" />
@@ -167,9 +167,9 @@
                           <el-col :span="24"><div class="grid-content bg-purple-dark"></div></el-col>
                         </el-row>
 
-                        <el-form-item label="商户图集" prop="pic">
+                        <el-form-item label="商户图片" prop="pic">
                             <swiper  class="swiper swiper-cer" ref="mySwiper" :options="swiperOption">
-                             <swiper-slide  v-for="(img,index) in swiperImglist" :key="index">
+                             <swiper-slide  v-for="(img,index) in formData.business_appraisal" :key="index">
                                     <!-- 测试 -->
 <!--                                <swiper-slide  v-for="(img,index) in swiperImglist" :key="index"> -->
                                   <img  @click="handlePictureCardPreview(img)" class="swiperimg" :src="img" />
@@ -276,7 +276,7 @@ export default {
                 size: 10
             },
             loading: true,
-            list: [],
+            list:[],
             total:0,
             dialogFormVisibleverif:false,
             formverif:{},
@@ -308,8 +308,6 @@ export default {
 
         // 显示表单
         handleForm(index, row) {
-            console.log(row);
-            // console.log(index);
             this.formVisibledetails = true;
             // 刷新表单
             this.resetForm();
@@ -317,6 +315,15 @@ export default {
             if (row !== null) {
                 this.formData = Object.assign({}, row);
             }
+            // 处理图片数据
+            if(this.formData.business_images){
+                this.formData = JSON.parse(this.formData.business_images);
+            }else{this.formData.business_images = [];}
+
+            if(this.formData.business_appraisal){
+                this.formData.business_appraisal = JSON.parse(this.formData.business_appraisal[0].appraisal_image);
+            }else{this.formData.business_appraisal = [];}
+
             this.formName = "add";
             if (index !== null) {
                 this.index = index;

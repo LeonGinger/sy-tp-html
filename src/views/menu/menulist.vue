@@ -6,10 +6,29 @@
             <el-form-item class="query-form-item">
                 <el-input v-model="query.menu_name" placeholder="商品名称"></el-input>
             </el-form-item>
+			<el-form-item class="query-form-item" v-permission="'menu/menulist.searchbusiness'">
+				<el-select
+				  v-model="query.business_name"
+				  filterable
+				  remote
+				  reserve-keyword
+				  placeholder="商家名称"
+				  :remote-method="searchBusinessname"
+				  :loading="loading">
+				  <el-option
+				    v-for="item in optionsbusiness"
+				    :key="item.value"
+				    :label="item.label"
+				    :value="item.value">
+				  </el-option>
+				</el-select>
+			</el-form-item>
+
             <el-form-item>
                 <el-button-group>
                     <el-button type="primary" icon="el-icon-refresh" @click="getList"></el-button>
                     <el-button type="primary" icon="search" @click="onSubmit">查询</el-button>
+                    <el-button type="primary" icon="search" @click="onClearmit">清空</el-button>
                 </el-button-group>
                 &nbsp;
                 <el-button v-permission="'menu/menulist/add'" class="g-success" type="success" @click.native="handleForm(null,null)">发布商品</el-button>
@@ -115,6 +134,7 @@
 
 <script>
 import {menulist,menudel} from '@/api/menu/menuAll.js';
+import {enterpriseList} from "@/api/enterprise/enterprise";
 const formJson = {
 
 };
@@ -143,6 +163,8 @@ export default {
             formName:null,
             company_imgstyle:"{width: 100px; height: 100px;}",
             formLoading:false,
+            optionsbusiness:[],
+            busineslist:[],
 
         }
     },
@@ -211,9 +233,21 @@ export default {
             };
             this.getList();
         },
+        onClearmit(){
+          //清空搜索
+          this.query.menu_name = "";
+          this.query.business_name = '';
+          this.query.business_id = '';
+          this.$router.push({
+              path: "",
+              query: this.query
+          });
+        },
         getList(){
            this.loading = false;
            if(this.$store.state.admin.business_notice){this.query.business_id = this.$store.state.admin.business_notice;}
+           //仅管理员实际查询name转id
+           if(this.query.business_name){this.query.business_id = this.query.business_name;}
            menulist(this.query)
                 .then(response => {
                     //console.log(response);
@@ -244,6 +278,7 @@ export default {
             });
             this.getList();
         },
+
         handleCurrentChange(val) {
 
            this.query.page = val;
@@ -325,6 +360,39 @@ export default {
                         });
                 }
             });
+        },
+        searchBusinessname(query){
+            if (query !== '') {
+                      this.loading = true;
+                      setTimeout(() => {
+                        this.loading = false;
+                        // if(this.busineslist.length!=0){
+                        //     //直接使用本地数据
+                        //     this.optionsbusiness = this.busineslist.map(item => {
+                        //         return { value: `${item.id}`, label: `${item.business_name}` };
+                        //     });
+                        // }else{
+                            //请求数据
+                            enterpriseList({page:1,size:999,name:query})
+                                .then(response=>{
+                                    if(response.code!=200){this.$message.error(response.message);return;}
+                                    this.busineslist = response.data.list;
+                                    this.optionsbusiness = this.busineslist.map(item => {
+                                            return { value: `${item.id}`, label: `${item.business_name}` };
+                                          });
+                                })
+                                .catch(()=>{
+
+                                })
+
+                        // }
+
+
+
+                      }, 200);
+                    } else {
+                      this.optionsbusiness = [];
+                    }
         },
 
     },

@@ -7,7 +7,7 @@ import router from "../router/index";
 // 创建axios实例
 const service = axios.create({
     baseURL: BASE_URL, // api的base_url
-    timeout: 5000 // 请求超时时间
+    timeout: 5000 ,// 请求超时时间
 });
 
 // request拦截器
@@ -15,11 +15,11 @@ service.interceptors.request.use(
     config => {
         // Do something before request is sent
         if (store.getters.adminId && store.getters.token) {
-            // config.headers.ADMIN_ID = store.getters.adminId;
-            // config.headers.ADMIN_TOKEN = store.getters.token;
+            config.headers.common['Admin-Id']=store.getters.adminId;
+            config.headers.common['Admin-Token']=store.getters.token;
             config.params = {
-                ADMIN_ID: store.getters.adminId,
-                ADMIN_TOKEN: store.getters.token,
+                // ADMIN_ID: store.getters.adminId,
+                // ADMIN_TOKEN: store.getters.token,
                 ...config.params
             };
         }

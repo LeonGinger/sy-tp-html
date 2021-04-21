@@ -15,7 +15,7 @@
                 <i slot="prefix" class="el-input__icon"><icon-svg style="font-size: 32px;" icon-class="suyuan"/></i>
             </a>
         </div>
-        <div class="head-menu">
+        <div class="head-menu"  v-if="false">
             <i slot="prefix" class="el-input__icon"><icon-svg style="font-size: 32px;" icon-class="caidan-copy"/></i>
         </div>
 
@@ -24,27 +24,31 @@
                  label-position="left">
             <h3 class="title">溯源后台系统登录</h3>
             <div v-if="logintype==1">
-           <el-form-item prop="mobile" class="item">
-                <el-input
-                    maxlength="11"
-                    placeholder="手机号码"
-                    name="mobile"
-                    autoComplete="on"
-                    v-model="ruleForm.mobile">
-                    <i slot="prefix" class="el-input__icon"><icon-svg icon-class="shouji1"/></i>
-                </el-input>
-            </el-form-item>
-            <el-form-item prop="code" class="item">
-                 <el-input
+                <el-row>
+                  <el-col :span="24"><div class="grid-content bg-purple-dark">&nbsp;</div></el-col>
+                </el-row>
+
+                <el-form-item prop="mobile" class="item">
+                    <el-input
+                        maxlength="11"
+                        placeholder="手机号码"
+                        name="mobile"
+                        autoComplete="on"
+                        v-model="ruleForm.mobile">
+                        <i slot="prefix" class="el-input__icon"><icon-svg icon-class="shouji1"/></i>
+                    </el-input>
+                </el-form-item>
+                <el-form-item prop="code" class="item">
+                    <el-input
                      maxlength="8"
                      placeholder="验证码"
                      name="code"
                      autoComplete="on"
                      v-model="ruleForm.code">
                      <i slot="prefix" class="el-input__icon"><icon-svg icon-class="mima"/></i>
-                 </el-input>
-                 <el-button :disabled="disabled" @click="handleCode" type="primary">{{codetips}}</el-button>
-             </el-form-item>
+                    </el-input>
+                    <el-button :disabled="disabled" @click="handleCode" type="primary">{{codetips}}</el-button>
+                </el-form-item>
 
 <!--            <el-form-item prop="username" class="item">
                 <el-input
@@ -67,7 +71,7 @@
             </div>
             </div>
             <div v-if="logintype==2" id="wxbox">
-
+                 <h5 class="wxscan-title">使用微信扫一扫</h5>
                 <wxlogin :href="wxlogincss" :appid="appid" :scope="scope" :redirect_uri="redirect_uri"></wxlogin>
             </div>
             <div>
@@ -76,7 +80,7 @@
                            @click='showDialog = true'>
                     第三方登录
                 </el-button>
-                <a @click="curlogintype">{{logintips}}</a>
+                <a class="g-white cur-logintype" href="#" @click="curlogintype">{{logintips}}</a>
             </div>
         </el-form>
 
@@ -101,12 +105,12 @@
 <script>
 
 import { Swiper, SwiperSlide, directive } from 'vue-awesome-swiper';
-import { DOMAIN_ADMIN_URL } from "../../config/app";
+import { DOMAIN_ADMIN_URL,DOMAIN_URL } from "../../config/app";
 import wxlogin from 'vue-wxlogin';
 import {sendcode} from '@/api/auth/login.js';
 import {settingno} from "@/api/pool";
 const redirectUri = encodeURI("http://ai.zsicp.com/admin/login/sylogin?item=sy");
-const wxloginCss = "https://sy.zsicp.com/static/css/wxlogin.css";
+const wxloginCss = DOMAIN_URL+"/static/css/wxlogin.css";
 import 'swiper/css/swiper.css';
 export default {
     components: {
@@ -201,11 +205,11 @@ export default {
             this.codetime = 15;
             this.timer();
             sendcode(this.ruleForm)
-                .then(respnse=>{
-
+                .then(response=>{
+                    if(response.code!=200){this.$message.error(response.message);}
                 })
-                .cath(()=>{
-
+                .catch(()=>{
+                    this.$message.error('系统出现未知错误,请稍后再试');
                 });
         },
         timer() {
@@ -411,7 +415,7 @@ $light_gray: #eee;
     .title {
         font-size: 26px;
         color: $light_gray;
-        margin: 0 auto 0.5333rem auto;
+        margin: 0 auto 0.2333rem auto;
         text-align: center;
         font-weight: bold;
     }
@@ -444,6 +448,17 @@ $light_gray: #eee;
         .impowerBox{
             .title {display: none;}
         }
+    }
+    .wxscan-title{
+        width: 100%;
+        position: fixed;
+        text-align: center;
+        top: 50px;
+        font-size: 1.1rem;
+    }
+    .cur-logintype{
+        color: #eee!important;
+        text-decoration: underline;
     }
 }
 </style>

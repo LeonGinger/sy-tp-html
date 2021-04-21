@@ -4,7 +4,7 @@
         <!-- start search -->
         <el-form :inline="true" :model="query" class="query-form" size="mini">
             <el-form-item class="query-form-item">
-                <el-input v-model="business_name" placeholder="企业名称"></el-input>
+                <el-input v-model="query.name" placeholder="企业名称"></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button-group>
@@ -201,8 +201,6 @@
                         </el-form-item>
                   </div></el-col>
 
-
-
                 </el-row>
 
             </el-form>
@@ -225,13 +223,13 @@
         <!-- 审核拒绝表单 -->
         <el-dialog title="审核不通过" :visible.sync="dialogFormVisibleverif">
             <el-form :model="formverif" ref="formverif">
-            <el-form-item
-            label="原因:"
-            :label-width="formLabelverifWidth">
-                <el-input require v-model="formverif.content" autocomplete="off"></el-input>
-            </el-form-item>
-
+                <el-form-item
+                label="原因:"
+                :label-width="formLabelverifWidth">
+                    <el-input require v-model="formverif.content" autocomplete="off"></el-input>
+                </el-form-item>
             </el-form>
+
             <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisibleverif = false">取 消</el-button>
             <el-button type="primary" @click="verifstate()">确 定</el-button>
@@ -241,8 +239,6 @@
         <el-dialog :visible.sync="dialogVisible">
         <img width="100%" :src="dialogImageUrl" alt="">
         </el-dialog>
-        </el-form-item>
-
     </div>
 
 

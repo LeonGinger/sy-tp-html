@@ -4,7 +4,7 @@
             <div v-for="(item,index) in number" :key="index">
                 <el-row>
                     <el-col :span="4">
-                        <el-form-item  prop="business_name" label="所属商家" v-permission="menu/menumodify/businesslist">
+                        <el-form-item  prop="business_name" label="所属商家" v-permission="'menu/menumodify/businesslist'">
                             <el-select @change="onselectbusiness" v-model="formData.business_name" :disabled="business_namechanger" placeholder="请选择商家">
                             <el-option
                                 v-for="item in businessArr"
@@ -20,7 +20,7 @@
                             <el-select v-model="data[index].menu_id" placeholder="请选择商品">
                             <el-option v-for="(item,index) in menulist" :key="index" :label="item.menu_name" :value="item.id"></el-option>
                             </el-select>
-                        </el-form-item> 
+                        </el-form-item>
                     </el-col>
                     <el-col :span="3">
                         <el-form-item label="商品数量">
@@ -36,7 +36,7 @@
                         <i class="el-icon-circle-plus-outline" @click="numberup"></i>
                     </el-col>
                 </el-row>
-            </div>                                      
+            </div>
           <el-form-item>
             <el-button :type="formMap.type | formFilterType" @click="onSubmit">{{formMap.type | formFilterName}}</el-button>
             <el-button>取消</el-button>
@@ -108,7 +108,7 @@
                         message: '请输入完整再进行提交',
                         type: 'warning'
                     });
-                    return false; 
+                    return false;
                 }
                 for(var i=0; i<this.data.length; i++){
                     if(this.num(this.data[i]['number']) == false || this.num(this.data[i]['menu_number']) == false){
@@ -139,12 +139,20 @@
                             path:'opdencode',
                             query:{
                                 order_number:response.data.order_number,
-                                order_total:response.data.total 
+                                order_total:response.data.total
                             }
                         })
+<<<<<<< Updated upstream
                     },"1500");
                 })
                 .catch(() =>{ 
+=======
+                    },"1000");
+
+                })
+                .catch(() =>{
+
+>>>>>>> Stashed changes
                 });
             },
             //验证全是数字
@@ -165,11 +173,11 @@
                 menulist(this.query)
                     .then(response => {
                         this.menulist = response.data.list
-                        console.log(this.menulist)         
+                        console.log(this.menulist)
                     })
                     .catch(() => {
-                        
-                    }); 
+
+                    });
             },
             numberup(){
                 console.log(this.data)
