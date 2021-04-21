@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-form ref="form" :model="formData" label-width="80px">
-            <div v-for="(item,index) in number">
+            <div v-for="(item,index) in number" :key="index">
                 <el-row>
                     <el-col :span="4">
                         <el-form-item  prop="business_name" label="所属商家" v-permission="menu/menumodify/businesslist">
@@ -18,18 +18,18 @@
                     <el-col :span="5">
                         <el-form-item label="商品名称">
                             <el-select v-model="data[index].menu_id" placeholder="请选择商品">
-                            <el-option v-for="(item,index) in menulist" :label="item.menu_name" :value="item.id"></el-option>
+                            <el-option v-for="(item,index) in menulist" :key="index" :label="item.menu_name" :value="item.id"></el-option>
                             </el-select>
                         </el-form-item> 
                     </el-col>
                     <el-col :span="3">
                         <el-form-item label="商品数量">
-                            <el-input v-model="data[index].number"></el-input>
+                            <el-input maxlength="4" v-model="data[index].number"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="3">
                         <el-form-item label="每箱数量">
-                            <el-input v-model="data[index].menu_number"></el-input>
+                            <el-input maxlength="4" v-model="data[index].menu_number"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="2" class="addNumber">
@@ -110,6 +110,17 @@
                     });
                     return false; 
                 }
+                for(var i=0; i<this.data.length; i++){
+                    if(this.num(this.data[i]['number']) == false || this.num(this.data[i]['menu_number']) == false){
+                        this.$message({
+                            message: '输入的数据有误！请重试',
+                            type: 'warning'
+                        });
+                        // setTimeout(function(){window.location.reload()},2000);
+                        return false; 
+                    }
+                }
+                // return false;
                 this.formData.data = this.data
                 orderAdd(this.formData)
                 .then(response => {
@@ -131,13 +142,23 @@
                                 order_total:response.data.total 
                             }
                         })
-                    },"1000");
-                    
+                    },"1500");
                 })
-                .catch(() =>{
-                    
+                .catch(() =>{ 
                 });
-
+            },
+            //验证全是数字
+            num(value){
+                var n = /^[0-9]*$/;
+                var re = new RegExp(n);
+                if (re.test(value))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             },
             getList(){
                 this.loading = false;

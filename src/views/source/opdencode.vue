@@ -118,7 +118,7 @@ export default {
             spinner: "el-icon-loading",
             background: "rgba(0, 0, 0, 0.7)",
           });
-          console.log(count_qrcode);
+          // console.log(count_qrcode);
           var showcode = setInterval(function () {
             for (var i = tmpg; i < set_go; i++) {
               setTimeout(function(){_this.makeqrcode(i)},300*(i+1))

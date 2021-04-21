@@ -6,7 +6,7 @@
       id="qrcode"
       class="qrcode"
       ref="qrcodeContainer"
-      style="display: none"
+      style="display:none"
     ></div>
         <el-form :inline="true" :model="query" class="query-form" size="mini">
             <el-form-item class="query-form-item">
@@ -409,16 +409,36 @@ export default {
         },
         codeselect(data){
             var order = data
-            var _this = this
-            // console.log(order.length)
-            for(let i=0;i<order.length;i++){
-                var code_number = order[i]['source_code']
-                // console.log(i)
-                _this.makeqrcode(code_number,i);
-            }
+            // console.log(order)
+            var tmpg = 0;
+            var set_go = 1;
+            var _this = this;
+            var count_qrcode = order.length
+            // for(let i=0;i<order.length;i++){
+            //     var code_number = order[i]['source_code']
+            //     console.log(code_number)
+            //     _this.makeqrcode(code_number,i)
+            // }
+            var showcode = setInterval(function () {
+                for (var i = tmpg; i < set_go; i++) {
+                    var code_number = order[i]['source_code']
+                    setTimeout(function(){_this.makeqrcode(code_number,i)},500*(i+1))
+                }
+                tmpg += 1;
+                set_go += 1;
+                if (tmpg >= count_qrcode) {
+                    clearInterval(showcode);
+                    // setTimeout(function(){loading.close();},300*(count_qrcode+1))
+                }
+            });
             console.log(this.order)
         },
         makeqrcode(code_number,index) {
+            var index = index-1
+            // if(index!=0){
+                console.log(index+"////"+code_number)
+                this.$refs.qrcodeContainer.innerHTML = '';
+            // }
             let qrtext = MY_CODE_URL + "?source_code=" + code_number;
             // console.log(qrtext)
             this.$nextTick(() => {
@@ -438,12 +458,13 @@ export default {
                     var patt = /<img[^>]+src=['"]([^'"]+)['"]+/g;
                     let tmpSrc = patt.exec(qwe);
                     // console.log(tmpSrc);
-                    this.sourceSrc[index] = tmpSrc[1];
-                    this.$forceUpdate();
+                    // this.sourceSrc[index] = tmpSrc[1];
+                   
                     //document.getElementById("qrcode").innerHTML = "";
                     // console.log("妙啊~");
                     // console.log(this.sourceSrc);
                     this.order[index]['source_code_img'] = tmpSrc[1];
+                    this.$forceUpdate();
                 });
             });
         },
@@ -453,16 +474,37 @@ export default {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
             }).then(({ value }) => {
-                window.sessionStorage.setItem('source',source)
-                window.sessionStorage.setItem('sourcecode',code)
-                window.sessionStorage.setItem('sourcecode_number',value)
-                window.location.href = "#/source/opdencode"
+                if(this.num(value)){
+                    window.sessionStorage.setItem('source',source)
+                    window.sessionStorage.setItem('sourcecode',code)
+                    window.sessionStorage.setItem('sourcecode_number',value)
+                    window.location.href = "#/source/opdencode"
+                }else{
+                    this.$message({
+                    type: 'warning',
+                    message: '请输入纯数字的数量'
+                });
+                }
+                
             }).catch(() => {
                 this.$message({
                     type: 'info',
                     message: '取消'
                 });       
             });
+        },
+        //验证全是数字
+        num(value){
+            var n = /^[0-9]*$/;
+            var re = new RegExp(n);
+            if (re.test(value))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     },
     filters: {

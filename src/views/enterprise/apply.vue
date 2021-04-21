@@ -469,11 +469,8 @@ export default {
                    this.$message.error('审核失败');
                 });
             this.formverif = {};
-            this.dialogFormVisibleverif = false;
-            this.getList();
-
-
-
+            this.dialogFormVisibleverif = false
+            setTimeout(function(){this.getList()},"1000")
         },
         onSubmitverif(){
            //审核不通过
