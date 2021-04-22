@@ -6,7 +6,8 @@
                 <el-input v-model="formData.menu_name"></el-input>
             </el-col>
           </el-form-item>
-          <el-form-item  prop="business_name" label="所属商家" v-permission="'menu/menumodify/businesslist'">
+          
+          <el-form-item  prop="business_name" label="所属商家" v-permission="'bug/role'">
             <el-select @change="onselectbusiness" v-model="formData.business_name" :disabled="business_namechanger" placeholder="请选择商家">
                <el-option
                    v-for="item in businessArr"
@@ -785,6 +786,8 @@
 
             }else{
                 this.business_namechanger = false;
+                this.menu_weightt = ''
+                this.quality_timee = ''
                 this.clearForm();
                 //添加
             }

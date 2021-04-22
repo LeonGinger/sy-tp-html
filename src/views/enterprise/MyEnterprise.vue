@@ -115,27 +115,27 @@
                  <!--       <el-input v-model="formData.business_address" auto-complete="off"></el-input> -->
                         {{formData.business_address}}
                     </el-form-item>
-                    <el-form-item label="商家姓名:" prop="responsible_name">
+                    <!-- <el-form-item label="商家姓名:" prop="responsible_name"> -->
                    <!--     <el-input v-model="formData.responsible_name" auto-complete="off"></el-input> -->
-                    {{formData.responsible_name||"暂无"}}
-                    </el-form-item>
+                    <!-- {{formData.responsible_name||"暂无"}}
+                    </el-form-item> -->
                     <el-form-item label="法定代表人:" prop="responsible_name">
                          <!-- <el-input v-model="formData.responsible_name" auto-complete="off"></el-input> -->
                          {{formData.responsible_name||"暂无"}}
                      </el-form-item>
                     <el-form-item label="联系电话:" prop="mobile">
                    <!--     <el-input v-model="formData.mobile" auto-complete="off"></el-input> -->
-                    {{formData.mobile||"暂无"}}
+                    {{formData.responsible_phone||"暂无"}}
                     </el-form-item>
                     <!-- 用户信息 -->
-                    <el-form-item label="用户ID:" prop="user_id">
+                    <!-- <el-form-item label="用户ID:" prop="user_id"> -->
                     <!--    <el-input v-model="formData.user_id" auto-complete="off"></el-input> -->
-                        {{formData.user_id||"暂无"}}
-                    </el-form-item>
-                    <el-form-item label="用户名:" prop="username">
+                        <!-- {{formData.user_id||"暂无"}} -->
+                    <!-- </el-form-item> -->
+                    <!-- <el-form-item label="用户名:" prop="username"> -->
                   <!--      <el-input v-model="formData.username" auto-complete="off"></el-input> -->
-                    {{formData.username||"暂无"}}
-                    </el-form-item>
+                    <!-- {{formData.username||"暂无"}} -->
+                    <!-- </el-form-item> -->
                     <el-form-item label="入驻时间:" prop="create_time">
                    <!--     <el-input v-model="formData.create_time" auto-complete="off"></el-input> -->
                     {{formData.create_time||"暂无"}}
@@ -152,12 +152,13 @@
                     <el-col :span="1"><div class="grid-content bg-purple">&nbsp;</div></el-col>
                   <!-- 右边 -->
                   <el-col :span="10"><div class="grid-content bg-purple-light">
-                        <el-form-item label="商户证书" prop="pic" class="enterprise_logo">
+                        <el-form-item label="" prop="pic" class="enterprise_logo">
+                            <span>商户证书(<span style="color : red;">点击图片查看</span>)</span>
                             <swiper  class="swiper swiper-cer" ref="mySwiper" :options="swiperOption">
                              <swiper-slide  v-for="(img,index) in formData.business_images" :key="index">
                                     <!-- 测试 -->
 <!--                                <swiper-slide  v-for="(img,index) in swiperImglist" :key="index"> -->
-                                  <img  @click="handlePictureCardPreview(img)" class="swiperimg" :src="img" />
+                                  <img  @click="handlePictureCardPreview(img)" style="cursor:pointer" class="swiperimg" :src="img" />
                               </swiper-slide>
                               <div class="swiper-pagination swiper-pagination-bullets" slot="pagination"></div>
                             </swiper>
@@ -167,12 +168,13 @@
                           <el-col :span="24"><div class="grid-content bg-purple-dark"></div></el-col>
                         </el-row>
 
-                        <el-form-item label="商户图片" prop="pic">
+                        <el-form-item label="" prop="pic">
+                            <span>商户证书(<span style="color : red;">点击图片查看</span>)</span>
                             <swiper  class="swiper swiper-cer" ref="mySwiper" :options="swiperOption">
                              <swiper-slide  v-for="(img,index) in formData.business_appraisal" :key="index">
                                     <!-- 测试 -->
 <!--                                <swiper-slide  v-for="(img,index) in swiperImglist" :key="index"> -->
-                                  <img  @click="handlePictureCardPreview(img)" class="swiperimg" :src="img" />
+                                  <img  @click="handlePictureCardPreview(img)" style="cursor:pointer" class="swiperimg" :src="img" />
                               </swiper-slide>
                               <div class="swiper-pagination swiper-pagination-bullets" slot="pagination"></div>
                             </swiper>
@@ -192,15 +194,9 @@
                             <!-- <el-input v-model="formData.business_code" auto-complete="off"></el-input> -->
                     <!--        {{formData.business_code||"暂无"}}
                         </el-form-item> -->
-
                   </div></el-col>
-
-
-
                 </el-row>
-
             </el-form>
-
             <div slot="footer" class="dialog-footer">
 <!--                <el-dropdown @command="handleverif" class="g-left-d10">
                 <el-button type="primary" class="g-success" >
@@ -221,17 +217,17 @@
             <el-form-item label="原因:" :label-width="formLabelverifWidth">
                 <el-input v-model="formverif.content" autocomplete="off"></el-input>
             </el-form-item>
-
             </el-form>
             <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisibleverif = false">取 消</el-button>
             <el-button type="primary" @click="onSubmitverif">确 定</el-button>
             </div>
         </el-dialog>
-
+        <!-- 查看图片弹窗 -->
+        <el-dialog :visible.sync="dialogVisible">
+            <img width="100%" :src="dialogImageUrl" alt="" />
+        </el-dialog>
     </div>
-
-
 </template>
 
 <script>
@@ -308,6 +304,7 @@ export default {
 
         // 显示表单
         handleForm(index, row) {
+            // console.log(row)
             this.formVisibledetails = true;
             // 刷新表单
             this.resetForm();
@@ -317,7 +314,7 @@ export default {
             }
             // 处理图片数据
             if(this.formData.business_images){
-                this.formData = JSON.parse(this.formData.business_images);
+                this.formData.business_images = JSON.parse(this.formData.business_images);
             }else{this.formData.business_images = [];}
 
             if(this.formData.business_appraisal){
@@ -329,6 +326,7 @@ export default {
                 this.index = index;
                 this.formName = "edit";
             }
+            console.log(this.formData)
         },
         handleFormstatus(index,row){
             if(row.state==1){

@@ -4,7 +4,7 @@
             <div v-for="(item,index) in number" :key="index">
                 <el-row>
                     <el-col :span="4">
-                        <el-form-item  prop="business_name" label="所属商家" v-permission="'menu/menumodify/businesslist'">
+                        <el-form-item  prop="business_name" label="所属商家" v-permission="'bug/role'">
                             <el-select @change="onselectbusiness" v-model="formData.business_name" :disabled="business_namechanger" placeholder="请选择商家">
                             <el-option
                                 v-for="item in businessArr"
@@ -142,17 +142,11 @@
                                 order_total:response.data.total
                             }
                         })
-<<<<<<< Updated upstream
-                    },"1500");
-                })
-                .catch(() =>{ 
-=======
                     },"1000");
 
                 })
                 .catch(() =>{
 
->>>>>>> Stashed changes
                 });
             },
             //验证全是数字
@@ -203,6 +197,8 @@
                 console.log(obj)
                 this.formData.business_name = obj.business_name;
                 this.formData.business_id = obj.id;
+                this.query.business_id = obj.id;
+                this.getList()
             },
             businesslist(){
                 //商家列表

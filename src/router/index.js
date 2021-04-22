@@ -305,7 +305,7 @@ export const asyncRouterMap = [
                 name: "我的商户",
                 icon: "",
                 meta: {
-                    authRule: ["enterprise/MyEnterprise"]
+                    authRule: ["enterprise/myenterprise"]
                 }
             },
             {

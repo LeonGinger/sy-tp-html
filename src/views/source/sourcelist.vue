@@ -3,11 +3,11 @@
     <div>
         <!-- start search -->
         <div
-      id="qrcode"
-      class="qrcode"
-      ref="qrcodeContainer"
-      style="display:none"
-    ></div>
+        id="qrcode"
+        class="qrcode"
+        ref="qrcodeContainer"
+        style="display:none"
+        ></div>
         <el-form :inline="true" :model="query" class="query-form" size="mini">
             <el-form-item class="query-form-item">
                 <el-input v-model="query.title" placeholder="溯源编号"></el-input>

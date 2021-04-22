@@ -32,7 +32,7 @@
                 </el-button-group>
                 &nbsp;
                 <el-button v-permission="'menu/menulist/add'" class="g-success" type="success" @click.native="handleForm(null,null)">发布商品</el-button>
-                <el-button v-permission="'menu/menulist/del'" type="danger" @click.native="handleFormdell(null,null)">删除</el-button>
+                <!-- <el-button v-permission="'menu/menulist/del'" type="danger" @click.native="handleFormdell(null,null)">删除</el-button> -->
             </el-form-item>
         </el-form>
         <!-- end search -->

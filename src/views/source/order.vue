@@ -18,6 +18,11 @@
           <el-button type="primary" icon="search" @click="onSubmit"
             >查询</el-button
           >
+          <el-button type="primary" icon="search" @click="where(1)" v-if="thismypc == false"
+            >我创建的批次</el-button
+          ><el-button type="primary" icon="search" @click="where(2)" v-if="thismypc == true"
+            >恢复</el-button
+          >
         </el-button-group>
         &nbsp;
         <!-- <el-button v-permission="'menu/menulist/add'" class="g-success" type="success" @click.native="handleForm(null,null)">新建订单</el-button> -->
@@ -154,9 +159,11 @@
     >
       <template>
         <el-table :data="orderData" style="width: 100%" v-loading="formLoading">
-          <el-table-column prop="menu_id" label="商品名称" width="180">
+          <el-table-column prop="menu_id" label="商品名称" width="140">
           </el-table-column>
-          <el-table-column prop="number" label="数量" width="180">
+          <el-table-column prop="menu_weight" label="规格" width="140">
+          </el-table-column>
+          <el-table-column prop="number" label="数量" width="140">
           </el-table-column>
           <el-table-column prop="menu_number" label="个/箱"> </el-table-column>
         </el-table>
@@ -206,6 +213,7 @@ export default {
       formLoading: false,
       order: [],
       orderData: [],
+      thismypc: false
     };
   },
   methods: {
@@ -288,8 +296,22 @@ export default {
       this.query.order_number = this.query.title
       this.getList();
     },
+    where(key){
+      if(key == 1){
+        this.query.thismy = true
+        console.log(this.query)
+        this.getList()
+        this.thismypc = true
+      }else if(key == 2){
+        this.query.thismy = false
+        this.getList()
+        this.thismypc = false
+      }
+      
+    },
     handleCurrentChange(val) {
-      this.query.page = val - 1;
+      this.query.page = (val - 1)*10;
+      // this.query.limit = this.query.page + 10;
       this.getList();
     },
     handleverif(command) {
