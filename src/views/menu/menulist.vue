@@ -243,6 +243,16 @@ export default {
               query: this.query
           });
         },
+        onClearmit(){
+          //清空搜索
+          this.query.menu_name = "";
+          this.query.business_name = '';
+          this.query.business_id = '';
+          this.$router.push({
+              path: "",
+              query: this.query
+          });
+        },
         getList(){
            this.loading = false;
            if(this.$store.state.admin.business_notice){this.query.business_id = this.$store.state.admin.business_notice;}

@@ -4,7 +4,11 @@
             <div v-for="(item,index) in number" :key="index">
                 <el-row>
                     <el-col :span="4">
+<<<<<<< Updated upstream
                         <el-form-item  prop="business_name" label="所属商家" v-permission="'bug/role'">
+=======
+                        <el-form-item  prop="business_name" label="所属商家" v-permission="'menu/menumodify/businesslist'">
+>>>>>>> Stashed changes
                             <el-select @change="onselectbusiness" v-model="formData.business_name" :disabled="business_namechanger" placeholder="请选择商家">
                             <el-option
                                 v-for="item in businessArr"
@@ -109,6 +113,7 @@
                         type: 'warning'
                     });
                     return false;
+<<<<<<< Updated upstream
                 }
                 for(var i=0; i<this.data.length; i++){
                     if(this.num(this.data[i]['number']) == false || this.num(this.data[i]['menu_number']) == false){
@@ -119,6 +124,8 @@
                         // setTimeout(function(){window.location.reload()},2000);
                         return false; 
                     }
+=======
+>>>>>>> Stashed changes
                 }
                 // return false;
                 this.formData.data = this.data
