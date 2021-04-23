@@ -534,7 +534,7 @@ export default {
               type: "warning",
               message: response.message,
             });
-            setTimeout(function () {
+            setTimeout(()=>{
                 _this.getList()
             }, "1000");
             return false;
@@ -544,8 +544,8 @@ export default {
             type: "success",
             message: tips,
           });
-            setTimeout(function () {
-                this.getList()
+            setTimeout(()=>{
+                _this.getList()
             }, "1000");
         })
         .catch(() => {
@@ -606,7 +606,7 @@ export default {
     handleInfo(id) {
       this.$router.push({
         name: "信息管理",
-        
+
         params: {
           business_id: id,
         },

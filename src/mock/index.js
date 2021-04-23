@@ -104,6 +104,7 @@ Mock.mock(/\/admin\/ad\/ad\/delete/, "post", ad.del);
 
 //员工管理
 // Mock.mock(/\/web\/employee_list/, "get", pool.userlist);
+// Mock.mock(/\/web\/employeeuser_list/, "get", pool.employeelist);
 
 //商品管理
 // Mock.mock(/\/web\/menu_list/, "get", pool.menulist);
@@ -113,4 +114,5 @@ Mock.mock(/\/admin\/ad\/ad\/delete/, "post", ad.del);
 //Mock.mock(/\/web\/index_data/, "get", pool.indexdata);
 Mock.mock(/\/web\/index_echartsdata/, "get", pool.index_echartsdata);
 //Mock.mock(/\/web\/problem_list/, "get", pool.problem);
+
 export default Mock;

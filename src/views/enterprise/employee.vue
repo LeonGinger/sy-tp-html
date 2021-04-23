@@ -21,7 +21,11 @@
                  <!--   <el-button type="primary" @click.native="handleForm(null,null)">新增</el-button> -->
                 </el-button-group>
             </el-form-item>
+            <el-form-item>
+                 <el-button class="g-success" plain @click="handleAddemployee">添加员工</el-button>
+            </el-form-item>
         </el-form>
+
         <!-- end search -->
         <el-table
             v-loading="loading"
@@ -193,14 +197,64 @@
             <el-button type="primary" @click="onSubmitverif">确 定</el-button>
             </div>
         </el-dialog>
+        <!-- 添加员工表单 -->
+        <el-dialog title="添加员工"  :visible.sync="dialogFormVisibleemployee">
+            <div id="shareaddqrcode" v-if="!formemployeetype" ref="qrcodeContainer"></div>
+            <el-form :model="formemployee" :rules="formRules" ref="formemployee" v-if="formemployeetype">
+            <el-form-item label="员工手机号:" :label-width="formemployeeWidth" prop="phone">
+                <el-select
+                  @change="selectfindUser"
+                  v-model="formemployee.phone"
+                  filterable
+                  remote
+                  reserve-keyword
+                  placeholder="请输入员工手机号"
+                  :remote-method="(query)=>{searchemployee(query,'phone')}"
+                  :loading="loading">
+                  <el-option
+                    v-for="item in optionsPhone"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="员工姓名:" :label-width="formemployeeWidth" prop="username">
+                <el-select
+                  @change="selectfindUser"
+                  v-model="formemployee.username"
+                  filterable
+                  remote
+                  reserve-keyword
+                  placeholder="请输入员工姓名"
+                  :remote-method="(query)=>{searchemployee(query,'name')}"
+                  :loading="loading">
+                  <el-option
+                    v-for="item in optionsName"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+            </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+
+            <el-button @click="dialogFormVisibleemployee = false">取 消</el-button>
+            <el-button type="primary" @click="onSubmitemployee">确 定</el-button>
+            <el-button v-if="false" @click="sharecodEemployee">{{tips}}</el-button>
+            </div>
+        </el-dialog>
 
         </div>
 
 </template>
 
 <script>
-    import {employeelist,employeedel,employeeedit} from "@/api/user/user.js";
+
+    import {userids,userlist,employeelist,employeedel,employeeedit} from "@/api/user/user.js";
     import {authRoleList} from "@/api/auth/authRole.js"
+    import QRCode from "qrcodejs2";
     const formJson = {
         id:'',
         username:'',
@@ -237,7 +291,15 @@
                 list: [],
                 total:0,
                 dialogFormVisibleverif:false,
+                dialogFormVisibleemployee:false,
                 formverif:{},
+                formemployee:{
+                    id:'',
+                    phone:'',
+                    username:'',
+
+                },
+                formemployeeWidth:'120px',
                 formLabelverifWidth:'120px',
                 formName:null,
                 company_imgstyle:"{width: 100px; height: 100px;}",
@@ -261,10 +323,70 @@
                 },
                 fit:"contain",
                 rolelist:{},
+                searchquery:{
+                    phone:'',
+                    username:'',
+                    page:1,
+                    size:9999,
+                    roleid:4,
+                },
+                optionsPhone:[],
+                optionsName:[],
+                formemployeetype:true,
+                tips:"二维码添加"
 
             }
         },
         methods:{
+            selectfindUser(e){
+                userids({id:e})
+                    .then(response=>{
+                        if(response.code!=200){this.$message.error("系统发生错误,请稍后再试");return;}
+                        this.formemployee.phone = response.data.phone;
+                        this.formemployee.username = response.data.username;
+                        this.formemployee.id = response.data.id;
+                    })
+                    .catch(()=>{
+
+                    })
+            },
+            searchemployee(query,type){
+                if(query==''){return;}
+                this.searchquery = {
+                    phone:'',
+                    username:'',
+                    page:1,
+                    size:9999,
+                    roleid:4
+                };
+                this.formemployee = {
+                    id:'',
+                    phone:'',
+                    username:'',
+                };
+                if(type=='phone'){this.searchquery.phone = query;}
+                if(type=='name'){this.searchquery.username = query;};
+                userlist(this.searchquery)
+                    .then(response=>{
+                        console.log(response);
+                        if(response.code!=200){this.$message.error("系统发生错误,请稍后再试");return;}
+                        if(type=='phone'){
+                            this.optionsPhone = response.data.list.map((item)=>{
+                               return  { value: `${item.id}`, label: `${item.phone}` };
+                            });
+                        }
+                        if(type=='name'){
+                            this.optionsName = response.data.list.map((item)=>{
+                               return  { value: `${item.id}`, label: `${item.username}` };
+                            });
+                        };
+
+                    })
+                    .catch(()=>{
+
+                    })
+
+            },
             getrolelist(){
                 authRoleList(this.role_query)
                     .then(response=>{
@@ -287,8 +409,6 @@
             },
             // 显示表单
              handleForm(index, row) {
-                 // console.log(row);
-                 // console.log(index);
                  this.getrolelist();
                  this.formVisibledetails = true;
                  // 刷新表单
@@ -318,7 +438,6 @@
                         type: 'warning'
                     }).then(() => {
                         //点击确定的操作(调用接口)
-                        // console.log('aaa');
                         employeedel({out_id:out_id})
                             .then(response=>{
                                 if(response.code!=200){this.$message.error("删除失败,请稍后再试");}
@@ -364,7 +483,6 @@
                 this.loading = false;
                 employeelist(this.query)
                     .then(response => {
-                        console.log(response);
                         this.loading = false;
                         this.list = response.data.list || [];
                         this.total = response.data.total || 0;
@@ -438,6 +556,41 @@
                      }
                  });
              },
+             onSubmitemployee(){
+                 console.log(document.getElementById("shareaddqrcode").innerHTML);
+                 this.$refs['formemployee'].validate((valid) => {
+                    if (valid) {
+                        /*接口*/
+                    }
+                 });
+             },
+             sharecodEemployee(){
+                 /*分享二维码加入员工*/
+                 this.formemployeetype = this.formemployeetype?false:false;
+                 // if(this.formemployeetype){
+                 //     this.tips="二维码添加";
+                 // }else{
+                 //     this.tips="搜索添加";
+                 //     return;
+                 // }
+                 try{
+                     document.getElementById('shareaddqrcode').innerHTML = "";
+                 }catch(e){
+                 }
+                 setTimeout(()=>{},1000);
+                 let qrtext = "https://sy.zsicp.com/h5/#/pages/scan/staffscan?grant_code=415cd2ede3599b810c8c7973ec94616a";
+                 let qrcode = new QRCode(this.$refs.qrcodeContainer, {
+                   width: 100, // 二维码的宽
+                   height: 100, // 二维码的高
+                   text: qrtext, // 二维码的内容
+                   colorDark: "#000", // 二维码的颜色
+                   colorLight: "#fff",
+                   correctLevel: QRCode.CorrectLevel.H,
+                 });
+             },
+             handleAddemployee(){
+                 this.dialogFormVisibleemployee = true;
+             },
         },
         filters:{
             //权限相关状态
@@ -478,9 +631,7 @@
             //if(this.$store.getters.adminId=='1'){this.query.role_id="";}
             /*传参*/
             if(this.$route.params.employee_id){
-
                 this.query.business_notice = this.$route.params.employee_id;
-                console.log(this.query.business_notice);
                 this.employee_id = this.$route.params.employee_id;
             }
             // 加载表格数据

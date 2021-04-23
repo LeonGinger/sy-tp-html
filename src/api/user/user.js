@@ -16,3 +16,12 @@ let resquest =  "/web";
  export function employeeedit(params){
   return http.post(`${resquest}/employee_edit`,params);
 }
+
+//通用查询用户列表
+ export function userlist(params){
+  return http.get(`${resquest}/user_list`,params);
+}
+//通用查询单个用户
+ export function userids(params){
+  return http.get(`${resquest}/user_ids`,params);
+}

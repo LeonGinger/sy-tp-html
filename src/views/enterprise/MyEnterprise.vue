@@ -143,8 +143,8 @@
 
                     <el-form-item label="状态" prop="state">
                          <el-radio-group v-model="formData.state">
-                             <el-radio :label="1">正常</el-radio>
-                             <el-radio :label="2">冻结</el-radio>
+                             <el-radio :label="'1'">正常</el-radio>
+                             <el-radio :label="'2'">冻结</el-radio>
                          </el-radio-group>
                      </el-form-item>
 
