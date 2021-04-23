@@ -405,6 +405,8 @@
             returnlist(){
                 //返回商品列表
                 //先清空
+                this.menu_weightt = "";
+                this.quality_timee = "";
                 this.$refs.form.resetFields();
                 this.$router.push('menulist');
             },
@@ -759,12 +761,15 @@
                  this.formData = formJson;
                  this.formData.id = '';
                  this.formData.menu_weightt = '';
+                 this.menu_weightt = ''
+                 this.quality_timee = ''
                  this.menuimagelist = [];
                  this.formMap.type = "add";
                  this.monitor_imagechanger = true;
                  this.formData.business_name = "";
                  this.business_namechanger = false;
                  this.$refs.form.resetFields();
+                 document.title = "溯源码平台后台管理";
              }
 
            //from 对象中包含当前地址
@@ -794,6 +799,8 @@
         },
         destroyed(){
             this.clearForm();
+            this.menu_weightt = ''
+            this.quality_timee = ''
             document.title = "溯源码平台后台管理";
         }
 };

@@ -135,6 +135,7 @@
 <script>
 import {menulist,menudel} from '@/api/menu/menuAll.js';
 import {enterpriseList} from "@/api/enterprise/enterprise";
+import { Loading } from "element-ui";
 const formJson = {
 
 };
@@ -254,14 +255,14 @@ export default {
           });
         },
         getList(){
-           this.loading = false;
+           this.loading = true;
            if(this.$store.state.admin.business_notice){this.query.business_id = this.$store.state.admin.business_notice;}
            //仅管理员实际查询name转id
            if(this.query.business_name){this.query.business_id = this.query.business_name;}
            menulist(this.query)
                 .then(response => {
                     //console.log(response);
-                    this.loading = false;
+                    // this.loading = true;
                     this.list = response.data.list || [];
                     this.total = response.data.total || 0;
                     for(var i=0;i<this.list.length;i++){
@@ -273,6 +274,7 @@ export default {
                             //TODO handle the exception
                         }
                     }
+                    this.loading = false;
                 })
                 .catch(() => {
                     this.loading = false;
@@ -307,7 +309,7 @@ export default {
         },
         handleFormdel(index,row){
 
-            this.$confirm('此操作将删除该商品和相关的溯源信息,是否继续?', '提示', {
+            this.$confirm('此操作将删除该商品,是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'

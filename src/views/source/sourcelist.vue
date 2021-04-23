@@ -14,7 +14,7 @@
             </el-form-item>
             <el-form-item class="query-form-item">
                 <template>
-                <el-select v-model="query.value" placeholder="请选择状态">
+                <el-select @change="onSubmit" v-model="query.value" placeholder="请选择状态">
                     <el-option
                         v-for="item in options"
                         :key="item.value"

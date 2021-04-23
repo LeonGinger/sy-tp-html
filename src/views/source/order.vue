@@ -278,12 +278,13 @@ export default {
       this.getList();
     },
     getList() {
-      this.loading = false;
+      this.loading = true;
       orderList(this.query)
         .then((response) => {
           console.log(response);
           (this.order = response.data.list || 0),
-            (this.total = response.data.total || 0);
+          (this.total = response.data.total || 0);
+          this.loading = false;
         })
         .catch(() => {
           this.loading = false;
