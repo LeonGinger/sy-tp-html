@@ -241,8 +241,8 @@
             <div slot="footer" class="dialog-footer">
 
             <el-button @click="dialogFormVisibleemployee = false">取 消</el-button>
-            <el-button type="primary" @click="onSubmitemployee">确 定</el-button>
-            <el-button v-if="false" @click="sharecodEemployee">{{tips}}</el-button>
+            <el-button v-if="formemployeetype" type="primary" @click="onSubmitemployee">确 定</el-button>
+            <el-button @click="sharecodEemployee">{{tips}}</el-button>
             </div>
         </el-dialog>
 
@@ -566,26 +566,28 @@
              },
              sharecodEemployee(){
                  /*分享二维码加入员工*/
-                 this.formemployeetype = this.formemployeetype?false:false;
-                 // if(this.formemployeetype){
-                 //     this.tips="二维码添加";
-                 // }else{
-                 //     this.tips="搜索添加";
-                 //     return;
-                 // }
-                 try{
-                     document.getElementById('shareaddqrcode').innerHTML = "";
-                 }catch(e){
+                 this.formemployeetype = this.formemployeetype?false:true;
+                 if(this.formemployeetype){
+                     this.tips="二维码添加";
+                     return;
+                 }else{
+                     this.tips="搜索添加";
                  }
-                 setTimeout(()=>{},1000);
-                 let qrtext = "https://sy.zsicp.com/h5/#/pages/scan/staffscan?grant_code=415cd2ede3599b810c8c7973ec94616a";
-                 let qrcode = new QRCode(this.$refs.qrcodeContainer, {
-                   width: 100, // 二维码的宽
-                   height: 100, // 二维码的高
-                   text: qrtext, // 二维码的内容
-                   colorDark: "#000", // 二维码的颜色
-                   colorLight: "#fff",
-                   correctLevel: QRCode.CorrectLevel.H,
+                 // try{
+                 //     document.getElementById('shareaddqrcode').innerHTML = "";
+                 // }catch(e){
+                 // }
+                 // setTimeout(()=>{},1000);
+                 this.$nextTick(()=>{
+                    let qrtext = "https://sy.zsicp.com/h5/#/pages/scan/staffscan?grant_code=415cd2ede3599b810c8c7973ec94616a";
+                    let qrcode = new QRCode(this.$refs.qrcodeContainer, {
+                    width: 200, // 二维码的宽
+                    height: 200, // 二维码的高
+                    text: qrtext, // 二维码的内容
+                    colorDark: "#000", // 二维码的颜色
+                    colorLight: "#fff",
+                    correctLevel: QRCode.CorrectLevel.H,
+                    });
                  });
              },
              handleAddemployee(){
@@ -641,5 +643,8 @@
 </script>
 
 <style type="text/scss" lang="scss">
+    #shareaddqrcode img{
+        margin: 0 auto;
+    }
 
 </style>
