@@ -40,7 +40,7 @@
               </el-col>
           </el-form-item>
 
-          <el-form-item label="商品规格" prop="">
+          <el-form-item label="商品规格" prop="menu_weight">
 
               <el-row>
                 <el-col :span="8"><div class="grid-content bg-purple">
@@ -249,7 +249,7 @@
                          callback(new Error('请上传至少一张商品图片.'));
                     }
                     if(this.formData.monitor_image.length==0){
-                         callback(new Error('请上传至少一张商品图片.'));
+                         callback(new Error('请上传至少一张检测报告.'));
                     }
                 }
                 if(this.formMap.type == "edit"){
@@ -284,14 +284,14 @@
                             // type:"number",
                         }
                     ],
-                    // menu_weight: [
-                    //     {
-                    //         required: true,
-                    //         message: "请输入正确商品规格",
-                    //         trigger: "blur",
-                    //         // type:"number",
-                    //     }
-                    // ],
+                    menu_weight: [
+                        {
+                            required: true,
+                            message: "请输入商品规格",
+                            trigger: "blur",
+                            // type:"number",
+                        }
+                    ],
                     production_time: [
                         {
                             required: true,
@@ -299,21 +299,36 @@
                             trigger: "blur"
                         }
                     ],
-                    // quality_time: [
-                    //     {
-                    //         required: true,
-                    //         message: "请输入商品保质日期",
-                    //         trigger: "blur"
-                    //     }
-                    // ],
-                    // menu_images_json: [
-                    //     {
-                    //         required: true,
-                    //         //message: "请上传至少一张商品图片",
-                    //         validator:validatemenuimglist,
-                    //         trigger: "blur",
-                    //     }
-                    // ],
+                    menu_address: [
+                        {
+                            required: true,
+                            message: "请输入生产源地",
+                            trigger: "blur"
+                        }
+                    ],
+                    quality_time: [
+                        {
+                            required: true,
+                            message: '请输入保质期',
+                            trigger: 'blur',
+                        }
+                    ],
+                    menu_images_json: [
+                        {
+                            required: true,
+                            message: "请上传至少一张商品图片",
+                            validator:validatemenuimglist,
+                            trigger: "blur",
+                        }
+                    ],
+                    menu_monitor: [
+                        {
+                            required: true,
+                            message: "请上传至少一张检测报告",
+                            validator:validatemenuimglist,
+                            trigger: "blur",
+                        }
+                    ],
                     // business_name: [
                     //     {
                     //         required: true,

@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-form ref="form" :model="business" label-width="120px" :rules="formRules">
-          <el-form-item label="商家名称" prop="">
+          <el-form-item label="商家名称" prop="business_name">
             <el-col :span="12">
                 <el-input v-model="business.business_name"></el-input>
             </el-col>
@@ -16,29 +16,29 @@
                  </el-option>
             </el-select>
           </el-form-item> -->
-          <el-form-item label="负责人" prop="">
+          <el-form-item label="负责人" prop="responsible_name">
               <el-col :span="12">
                 <el-input v-model="business.responsible_name"></el-input>
               </el-col>
           </el-form-item>
-          <el-form-item label="负责人手机" prop="">
+          <el-form-item label="负责人手机" prop="responsible_phone">
               <el-col :span="12">
                 <el-input v-model="business.responsible_phone"></el-input>
               </el-col>
           </el-form-item>
-          <el-form-item label="商家地址" prop="">
+          <el-form-item label="商家地址" prop="business_address">
               <el-col :span="12">
                 <el-input v-model="business.business_address"></el-input>
               </el-col>
           </el-form-item>
-            <el-form-item label="商家介绍" prop="">
+            <el-form-item label="商家介绍" prop="business_introduction">
               <el-col :span="12">
                 <el-input type="textarea" rows="5" v-model="business.business_introduction"></el-input>
               </el-col>
             </el-form-item>
             <!-- 图片模块 -->
             <!-- 商家轮播图 -->
-            <el-form-item label="商家轮播图" prop="">
+            <el-form-item label="商家轮播图" prop="business_images">
             <!-- 编辑回显 -->
             <ul class="el-upload-list el-upload-list--picture-card">
 
@@ -75,7 +75,7 @@
             </el-dialog>
             </el-form-item>
             <!-- 商家证书 -->
-            <el-form-item label="商家证书" prop="">
+            <el-form-item label="商家证书" prop="appraisal_image">
             <!-- 编辑回显 -->
             <ul class="el-upload-list el-upload-list--picture-card">
 
@@ -209,34 +209,39 @@
                 },
                 menu_info:{},
                 formRules: {
-                    menu_name: [
+                    responsible_name: [
                         {
                             required: true,
-                            message: "请输入商品名称",
+                            message: "请输入负责人名称",
                             trigger: "blur"
                         }
                     ],
-                    menu_money: [
+                    responsible_phone: [
                         {
                             required: true,
-                            //message: "请输入正确商品售价",
+                            message: "请输入负责人手机号",
                             trigger: "blur",
-                            validator:checkMoney
+                        }
+                    ],
+                    business_name: [
+                        {
+                            required: true,
+                            message: "请输入商家名称",
+                            trigger: "blur",
                             // type:"number",
                         }
                     ],
-                    // menu_weight: [
-                    //     {
-                    //         required: true,
-                    //         message: "请输入正确商品规格",
-                    //         trigger: "blur",
-                    //         // type:"number",
-                    //     }
-                    // ],
-                    production_time: [
+                    business_address: [
                         {
                             required: true,
-                            message: "请输入商品生产日期",
+                            message: "请输入商家地址",
+                            trigger: "blur"
+                        }
+                    ],
+                    business_introduction: [
+                        {
+                            required: true,
+                            message: "请输入商家介绍",
                             trigger: "blur"
                         }
                     ],
@@ -247,10 +252,18 @@
                     //         trigger: "blur"
                     //     }
                     // ],
-                    menu_images_json: [
+                    business_images: [
                         {
                             required: true,
-                            //message: "请上传至少一张商品图片",
+                            message: "请上传至少一张商品图片",
+                            validator:validatemenuimglist,
+                            trigger: "blur",
+                        }
+                    ],
+                    appraisal_image: [
+                        {
+                            required: true,
+                            message: "请上传至少一张商品图片",
                             validator:validatemenuimglist,
                             trigger: "blur",
                         }
@@ -590,6 +603,7 @@
                 this.clearForm();
                 //添加
             }
+            console.log(this.$store)
         },
         destroyed(){
             this.clearForm();

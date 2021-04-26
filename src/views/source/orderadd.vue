@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-form ref="form" :model="formData" label-width="80px">
+        <el-form ref="form" :model="formData" label-width="80px" :rules="formRules">
             <div v-for="(item,index) in number" :key="index">
                 <el-row>
                     <el-col :span="4">
@@ -16,19 +16,19 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="5">
-                        <el-form-item label="商品名称">
+                        <el-form-item label="商品名称" prop="menu_name">
                             <el-select v-model="data[index].menu_id" placeholder="请选择商品">
                             <el-option v-for="(item,index) in menulist" :key="index" :label="item.menu_name" :value="item.id"></el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="3">
-                        <el-form-item label="商品数量">
+                        <el-form-item label="商品数量" prop="number">
                             <el-input maxlength="4" v-model="data[index].number"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="3">
-                        <el-form-item label="每箱数量">
+                        <el-form-item label="每箱数量" prop="menu_number">
                             <el-input maxlength="4" v-model="data[index].menu_number"></el-input>
                         </el-form-item>
                     </el-col>
@@ -125,6 +125,14 @@
                 orderAdd(this.formData)
                 .then(response => {
                     console.log(response);
+                    if(response.code == 1213){
+                        this.$message({
+                            message: response.message,
+                            type: 'warning'
+                        });
+                        setTimeout(function(){window.location.reload()},2000);
+                        return false;
+                    }
                     // this.$router.push({
                     //     name:'批次列表',
                     //     params:{
