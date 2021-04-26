@@ -6,7 +6,7 @@
                 <el-input v-model="formData.menu_name"></el-input>
             </el-col>
           </el-form-item>
-          
+
           <el-form-item  prop="business_name" label="所属商家" v-permission="'bug/role'">
             <el-select @change="onselectbusiness" v-model="formData.business_name" :disabled="business_namechanger" placeholder="请选择商家">
                <el-option
@@ -245,7 +245,7 @@
         data() {
             var validatemenuimglist = (rule, value, callback) =>{
                 if(this.formMap.type == "add"){
-                    if(this.formData.menu_images_json.length==0){
+                    if(this.menuimagelist.length==0){
                          callback(new Error('请上传至少一张商品图片.'));
                     }
                     if(this.formData.monitor_image.length==0){
@@ -508,24 +508,10 @@
             },
             onSubmit(){
                 //提交表单
-                // console.log(window.localStorage)
-                // this.formData.business_name =
-                // this.formData.userid = formJson
-                // business_Find({business_id : this.$store.adminId})
-                // .then(response => {
-                //     // console.log(response.data)
-                //     this.formData.business_id = response.data['id']
-                // })
-                // .catch(() => {
-                // });
-
                 if(this.$store.state.admin.business_notice){this.formData.business_id = this.$store.state.admin.business_notice;}
-                // this.formData.menu_weight = this.formData.menu_weightt+this.formData.menu_weight;
-                // this.formData.quality_time = this.formData.quality_timee+this.formData.quality_time;
                 this.formData.menu_weight_copy = this.menu_weightt+this.formData.menu_weight;
                 this.formData.quality_time_copy = this.quality_timee+this.formData.quality_time;
                 this.$refs["form"].validate(valid => {
-                    console.log(valid)
                     if (valid) {
                         let data = Object.assign({}, this.formData);
                         // console.log(data);

@@ -6,16 +6,6 @@
                 <el-input v-model="business.business_name"></el-input>
             </el-col>
           </el-form-item>
-          <!-- <el-form-item  prop="business_name" label="所属商家" v-permission="'menu/menumodify/businesslist'">
-            <el-select @change="onselectbusiness" v-model="formData.business_name" :disabled="business_namechanger" placeholder="请选择商家">
-               <el-option
-                   v-for="item in businessArr"
-                   :key="item.id"
-                   :label="item.business_name"
-                   :value="item.id">
-                 </el-option>
-            </el-select>
-          </el-form-item> -->
           <el-form-item label="负责人" prop="responsible_name">
               <el-col :span="12">
                 <el-input v-model="business.responsible_name"></el-input>
@@ -69,7 +59,6 @@
             <i class="el-icon-plus"></i>
             </el-upload>
 
-
             <el-dialog :visible.sync="dialogVisible">
             <img width="100%" :src="dialogImageUrl" alt="">
             </el-dialog>
@@ -97,7 +86,7 @@
             :limit="1"
             :action="uploadUrl"
             list-type="picture-card"
-            :data="{type:'menumonitor'}"
+            :data="{type:'appraisal'}"
             :on-success="handleSuccess"
             :on-exceed="handleExceed"
             :on-preview="handlePictureCardPreview"
@@ -115,14 +104,34 @@
             <!-- 商家图集 -->
             <el-form-item label="商家图集" prop="certificate_image">
             <!-- 编辑回显 -->
-            <ul class="el-upload-list el-upload-list--picture-card">
+            <ul class="el-upload-list el-upload-list--picture-card business_image_injson">
 
                 <li class="el-upload-list__item is-success" v-for="(fit,index) in business.business_img.business_image_injson" :key="fit">
                     <img :src="fit" alt="" class="el-upload-list__item-thumbnail">
                     <el-input v-model="input[index]" placeholder="请输入内容"></el-input>
                     <a class="el-upload-list__item-name"><i class="el-icon-document"></i>timg.jpg</a>
-                    <label class="el-upload-list__item-status-label"><i class="el-icon-upload-success el-icon-check"></i>
-                </label><i class="el-icon-close"></i><i class="el-icon-close-tip">按 delete 键可删除</i>
+                    <!-- <label class="el-upload-list__item-status-label"><i class="el-icon-upload-success el-icon-check"></i> -->
+                    <label class="" style="
+                        transform: rotate( 45deg);
+                        border-left: 20px solid transparent;
+                        border-right: 22px solid transparent;
+                        border-bottom: 20px solid #13ce66;
+                        position: absolute;
+                        right: -15px;
+                        top: -7px;
+                        width: 40px;
+                        height: 24px;
+                        border-radius: 5px;
+
+                    "><i style="
+                        margin-left: -6px;
+                        transform: rotate(-40deg);
+                        font-size: 12px;
+                        margin-top: 10px;
+                    " class="el-icon-upload-success el-icon-check"></i>
+                       <!-- <i slot="prefix" class="el-input__icon"><icon-svg style="font-size: 32px;" icon-class="chenggong"/></i> -->
+                    </label>
+                    <i class="el-icon-close"></i><i class="el-icon-close-tip">按 delete 键可删除</i>
 
                 <span class="el-upload-list__item-actions"><span class="el-upload-list__item-preview"><i @click="handlePictureCardPreview(fit,true)" class="el-icon-zoom-in"></i></span>
                 <span class="el-upload-list__item-delete"><i @click="handlePicturedel(fit,'tre',index)" class="el-icon-delete"></i></span></span>
@@ -136,7 +145,7 @@
             :action="uploadUrl"
             ref="upload3"
             list-type="picture-card"
-            :data="{type:'certificate'}"
+            :data="{type:'business_image_injson'}"
             :on-success="handleSuccess"
             :on-exceed="handleExceed"
             :on-preview="handlePictureCardPreview"
@@ -190,7 +199,6 @@
                 if(this.formMap.type == "add"){
                     if(this.menuimagelist.length==0){
                          callback(new Error('请上传至少一张商品图片.'));
-
                     }
                 }
                 if(this.formMap.type == "edit"){
@@ -245,13 +253,6 @@
                             trigger: "blur"
                         }
                     ],
-                    // quality_time: [
-                    //     {
-                    //         required: true,
-                    //         message: "请输入商品保质日期",
-                    //         trigger: "blur"
-                    //     }
-                    // ],
                     business_images: [
                         {
                             required: true,
@@ -302,7 +303,7 @@
     },
         methods:{
             returnlist(){
-                this.getlist()
+                this.getdetails()
                  this.$message({
                     message: '重置成功',
                     type: 'success'
@@ -322,37 +323,8 @@
                          //this.total = 0;
                      });
             },
-            details(){
-                console.log(this.formMap);
-                //详情接口
-                menudetails({id:this.formData.id})
-                    .then(response => {
-                        // console.log(response);
-                        if(response.data){
-                            this.formData = response.data;
-                            try{
-                                if(this.formData.monitor_menu.monitor_image){
-                                    this.formData.monitor_image = this.formData.monitor_menu.monitor_image;
-                                    this.monitor_imagechanger = false;
-                                }
-                                if(this.formData.certificate_menu.certificate_image){
-                                    this.formData.certificate_image = this.formData.certificate_menu.certificate_image;
-                                }
-                            }catch(e){}
-
-                            // console.log(this.formData.)
-                            if(this.formData.business_name){
-                                this.business_namechanger = true;
-                            }
-                        }
-                    })
-                    .catch(() =>{
-
-                    });
-            },
             onSubmit(){
                 this.business['business_img']['business_img_contentjson'] = this.input
-                // console.log(this.business)
                 business_update({business:this.business})
                 .then(response => {
                     var data = response.data
@@ -386,22 +358,15 @@
 
                 });
             },
-            getlist(){
+            getdetails(){
                 this.loading = true;
                 business_Find({business_id:this.business_id})
                     .then(response => {
+                        console.log(response)
                         this.business = response.data || 0
                         this.input = this.business['business_img']['business_img_contentjson']
-                        console.log(this.input)
-                        // var _this = this;
-                        // this.loading = false
-                        // this.codeselect(response.data);
-                        // this.findsource = this.order[0]
                     })
                     .catch(() => {
-                        // this.loading = false;
-                        // this.list = [];
-                        // this.total = 0;
                     });
             },
             onselectbusiness(e){
@@ -412,7 +377,6 @@
                     //这里的operateOption就是上面遍历的数据源
                     return item.id === e; //筛选出匹配数据
                 });
-                console.log(obj)
                 this.formData.business_name = obj.business_name;
                 this.formData.business_id = obj.id;
 
@@ -442,14 +406,17 @@
                 this.$forceUpdate();
                 switch(response.data.type){
                     case 'list':
+                        //商家轮播图
                         this.$refs.upload1.clearFiles();
                         this.menuimagelist.push(response.data.key);
-                       this.business.business_images.push(IMG_BASE_URL+response.data.key);
+                        if(this.business.business_images==null){this.business.business_images =[];}
+                        this.business.business_images.push(IMG_BASE_URL+response.data.key);
                         if(this.business.business_images.length == 6){
                             this.businessimg = false
                         }
                         break;
-                    case 'menumonitor':
+                    case 'appraisal':
+                        //商家证书
                         // this.formData.monitor_image[0] = IMG_BASE_URL+response.data.key;
                         // this.monitor_imagechanger = false;
                         this.$refs.upload2.clearFiles();
@@ -458,11 +425,18 @@
                             this.monitor_imagechanger = false
                         }
                         break;
-                    case 'certificate':
-                        // fileList
+                    case 'business_image_injson':
+                        //商家图集-图文
                         this.$refs.upload3.clearFiles();
+                        // typeof(this.business.business_img.business_image_injson)=='undefined' || 必要时添加
+                        if(this.business.business_img.business_image_injson==null){this.business.business_img.business_image_injson = [];}
                         this.business.business_img.business_image_injson.push(IMG_BASE_URL+response.data.key);
-                        this.input.push('');
+
+                        if(this.input) this.input.push("-");
+                        else{
+                            this.input = [];
+                            this.input[0] = "-";
+                        }
                         if(this.input.length == 6){
                             this.imgjson = false
                         }
@@ -502,6 +476,9 @@
                             case 'one':
                                 var index = this.business.business_images.indexOf(file);
                                 this.business.business_images.splice(index,1);
+                                if(this.business.business_images.length<6){
+                                    this.imgjson = true;
+                                }
                                 break;
                             case 'two':
                                 var index = this.business.business_appraisal.appraisal_image.indexOf(file);
@@ -512,6 +489,9 @@
                                 var index = this.business.business_img.business_image_injson.indexOf(file);
                                 this.business.business_img.business_image_injson.splice(index,1);
                                 this.input.splice(indexx,1);
+                                if(this.input.length<6){
+                                    this.imgjson = true;
+                                }
                                 break;
                             default:
                                 break;
@@ -589,33 +569,20 @@
             }else{
                 this.business_id = this.$store.state.admin.business_notice;
             }
-            this.businesslist();
-            this.getlist();
-            if(this.$route.query.menuid){
-                //修改
-                document.title = "修改商品 - "+document.title;
-                this.formData.id = this.$route.query.menuid;
-                this.formMap.type = "edit";
-                this.details();
-
-            }else{
-                this.business_namechanger = false;
-                this.clearForm();
-                //添加
-            }
-            console.log(this.$store)
+            // this.businesslist();
+            this.getdetails();
         },
-        destroyed(){
-            this.clearForm();
-            document.title = "溯源码平台后台管理";
-        }
+
 };
 
 </script>
 
-<style type="text/scss" lang="scss">
+<style lang="less">
     .MenuCarousel,.MenuMonitor{display: inline-block;}
     .menu-span{color: #000000;}
-    ::v-deep.el-upload-list--picture-card .el-upload-list__item-status-label i{margin-top: 0px !important;}
-    ::v-deep.el-upload-list--picture-card .el-upload-list__item{overflow: visible !important;}
+    .business_image_injson{
+       .el-upload-list__item-status-label i{margin-top: 0px !important;}
+       .el-upload-list__item{overflow: visible !important;}
+    }
+
 </style>
