@@ -80,6 +80,16 @@
                 :show-overflow-tooltip="true">
             </el-table-column>
             <el-table-column
+                label="溯源码数量"
+                prop="menu_money"
+                with="300"
+                :show-overflow-tooltip="true">
+                <template slot-scope="scope">
+                    {{scope.row.cout_sourcecode | countcodeFilters}}
+
+                </template>
+            </el-table-column>
+            <el-table-column
                 label="所属商家"
                 prop="business_name"
                 with="300"
@@ -91,12 +101,15 @@
                 with="300"
                 :show-overflow-tooltip="true">
             </el-table-column>
-<!--            <el-table-column
-                label="状态">
+          <el-table-column
+                label="热卖">
                 <template slot-scope="scope">
-                    <el-tag :type="scope.row.status | statusFilterType">{{scope.row.status | statusFilterName}}</el-tag>
+                    <el-switch
+                      @change="handleSell(scope.$index,scope.row)"
+                      v-model="scope.row.recommend_menu">
+                    </el-switch>
                 </template>
-            </el-table-column> -->
+            </el-table-column>
             <el-table-column
                 width="300"
                 label="操作"
@@ -114,6 +127,7 @@
                         <el-dropdown-item command="2">拒 绝</el-dropdown-item>
                     </el-dropdown-menu>
                     </el-dropdown> -->
+                    <el-button type="info" size="small" @click.native="handleSoucecode(scope.$index, scope.row)">溯源码</el-button>
                     <el-button type="success" size="small" @click.native="handleForm(scope.$index, scope.row)">编 辑</el-button>
                     <el-button type="danger" size="small" @click.native="handleFormdel(scope.$index, scope.row)">删 除</el-button>
                   <!--  <el-button type="primary" size="small" @click.native="handleFormemployee(scope.row.company_id)">员 工</el-button> -->
@@ -233,16 +247,6 @@ export default {
                 limit: 10
             };
             this.getList();
-        },
-        onClearmit(){
-          //清空搜索
-          this.query.menu_name = "";
-          this.query.business_name = '';
-          this.query.business_id = '';
-          this.$router.push({
-              path: "",
-              query: this.query
-          });
         },
         onClearmit(){
           //清空搜索
@@ -406,9 +410,31 @@ export default {
                       this.optionsbusiness = [];
                     }
         },
+        handleSoucecode(index,row){
+            this.$router.push({
+                path:'/source/sourcelist',
+                query:{
+                    menu_id:row.id,
+                }
+            });
+
+        },
+        handleSell(index,row){
+            console.log(row)
+        },
 
     },
     filters: {
+        recommendFilters(row){
+            if(!row){return false}
+            return true;
+
+        },
+        countcodeFilters(row){
+            //溯源码数量
+            if(!row){return 0;}
+            return row.cout_code;
+        },
         getlistmenuimg(row){
             if(!row.menu_images_json){return;}
             let tmpmenu_img = JSON.parse(row.menu_images_json);

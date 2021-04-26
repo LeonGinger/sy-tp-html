@@ -198,9 +198,9 @@
             </div>
         </el-dialog>
         <!-- 添加员工表单 -->
-        <el-dialog title="添加员工"  :visible.sync="dialogFormVisibleemployee">
+        <el-dialog title="添加员工"  :visible.sync="dialogFormVisibleemployee" customClass="customWidth">
             <div id="shareaddqrcode" v-if="!formemployeetype" ref="qrcodeContainer"></div>
-            <el-form :model="formemployee" :rules="formRules" ref="formemployee" v-if="formemployeetype">
+            <el-form :model="formemployee" :rules="formRules" ref="formemployee" v-if="formemployeetype" style="margin: 0 auto;width: 70%;">
             <el-form-item label="员工手机号:" :label-width="formemployeeWidth" prop="phone">
                 <el-select
                   @change="selectfindUser"
@@ -646,5 +646,7 @@
     #shareaddqrcode img{
         margin: 0 auto;
     }
-
+    .customWidth{
+        width:34%;
+    }
 </style>

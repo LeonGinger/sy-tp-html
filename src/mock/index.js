@@ -112,7 +112,7 @@ Mock.mock(/\/admin\/ad\/ad\/delete/, "post", ad.del);
 
 //面板数据
 //Mock.mock(/\/web\/index_data/, "get", pool.indexdata);
-Mock.mock(/\/web\/index_echartsdata/, "get", pool.index_echartsdata);
+// Mock.mock(/\/web\/index_echartsdata/, "get", pool.index_echartsdata);
 //Mock.mock(/\/web\/problem_list/, "get", pool.problem);
 
 export default Mock;

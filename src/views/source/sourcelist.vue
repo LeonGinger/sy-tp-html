@@ -140,7 +140,7 @@
                     </el-form-item>
                   <el-col :span="12"><div class="grid-content bg-purple">
                    <!-- 商户信息 -->
-                    
+
                     <el-form-item label="商品名称:" prop="">
                        <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
                         {{findsource.menu_name||"暂无"}}
@@ -160,17 +160,17 @@
                        <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
                         {{findsource.menu_address||"暂无"}}
                     </el-form-item>
-                    
+
                     <el-form-item label="商品规格:" prop="">
                        <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
                         {{findsource.menu_weight||"暂无"}}
                     </el-form-item>
-                    
+
                     <el-form-item label="生产日期:" prop="">
                        <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
                         {{findsource.production_time||"暂无"}}
                     </el-form-item>
-                    
+
                     <el-form-item label="保质日期:" prop="">
                        <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
                         {{findsource.quality_time||"暂无"}}
@@ -182,32 +182,32 @@
                        <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
                         {{findsource.source_code||"暂无"}}
                     </el-form-item>
-                    
-                    
+
+
                     <el-form-item label="码数量/批:" prop="quality_time">
                        <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
                         {{findsource.source_code_number||"暂无"}}
                     </el-form-item>
-                    
-                    
+
+
                     <el-form-item label="入库人员:" prop="enter_user">
                        <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
                         {{findsource.enter_user||"暂无"}}
                     </el-form-item>
-                    
-                    
+
+
                     <el-form-item label="入库时间:" prop="storage_time">
                        <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
                         {{findsource.storage_time||"暂无"}}
                     </el-form-item>
-                    
-                    
+
+
                     <el-form-item label="出库人员:" prop="out_user">
                        <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
                         {{findsource.out_user||"暂无"}}
                     </el-form-item>
-                    
-                    
+
+
                     <el-form-item label="出库时间:" prop="deliver_time">
                        <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
                         {{findsource.deliver_time||"暂无"}}
@@ -323,7 +323,8 @@ export default {
             this.query = {
                 title: "",
                 page: 0,
-                limit: 10
+                limit: 10,
+                menu_id:'',
             };
             this.getList();
         },
@@ -331,7 +332,7 @@ export default {
             this.loading = true;
             sourceList(this.query)
                 .then(response => {
-                    console.log(response);
+                    //console.log(response);
                     this.order = response.data.list || 0,
                     this.total = response.data.total || 0;
                     var _this = this;
@@ -431,12 +432,12 @@ export default {
                     // setTimeout(function(){loading.close();},300*(count_qrcode+1))
                 }
             });
-            console.log(this.order)
+            //console.log(this.order)
         },
         makeqrcode(code_number,index) {
             var index = index-1
             // if(index!=0){
-                console.log(index+"////"+code_number)
+                //console.log(index+"////"+code_number)
                 this.$refs.qrcodeContainer.innerHTML = '';
             // }
             let qrtext = MY_CODE_URL + "?source_code=" + code_number;
@@ -454,12 +455,12 @@ export default {
                 });
                 setTimeout(() => {
                     let qwe = this.$refs.qrcodeContainer.innerHTML;
-                    console.log(qwe);
+                    //console.log(qwe);
                     var patt = /<img[^>]+src=['"]([^'"]+)['"]+/g;
                     let tmpSrc = patt.exec(qwe);
                     // console.log(tmpSrc);
                     // this.sourceSrc[index] = tmpSrc[1];
-                   
+
                     //document.getElementById("qrcode").innerHTML = "";
                     // console.log("妙啊~");
                     // console.log(this.sourceSrc);
@@ -469,7 +470,7 @@ export default {
             });
         },
         sourceAdd(source,code){
-            console.log(code)
+            //console.log(code)
             this.$prompt('请输入打印数量', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -485,12 +486,12 @@ export default {
                     message: '请输入纯数字的数量'
                 });
                 }
-                
+
             }).catch(() => {
                 this.$message({
                     type: 'info',
                     message: '取消'
-                });       
+                });
             });
         },
         //验证全是数字
@@ -543,6 +544,9 @@ export default {
     },
     created() {
     //
+        if(this.$route.query.menu_id){
+            this.query.menu_id = this.$route.query.menu_id;
+        }
         // 加载表格数据
         this.getList();
     }

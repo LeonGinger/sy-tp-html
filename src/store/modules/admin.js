@@ -101,7 +101,7 @@ const actions = {
                     commit(types.RECEIVE_ADMIN_NAME, data.username);
                     commit(types.RECEIVE_ADMIN_AVATAR, data.avatar);
                     commit(types.RECEIVE_ADMIN_AUTH_RULES, data.authRules);
-                    commit(types.RECEIVE_ADMIN_BUSINESSNOTICE, data.business_notice)
+                    commit(types.RECEIVE_ADMIN_BUSINESSNOTICE, data.business_notice);
                     resolve(data);
                 })
                 .catch(error => {

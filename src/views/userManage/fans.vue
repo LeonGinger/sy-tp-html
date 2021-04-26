@@ -48,7 +48,9 @@
                         :show-overflow-tooltip="true"
                         fixed>
                             <template slot-scope="scope">
-                                <el-avatar shape="square" :size="100" fit="cover" :src="scope.row.headimgurl"></el-avatar>
+                                <el-avatar  @error="errorHandler" shape="square" size="large" fit="cover" :src="scope.row.headimgurl">
+                                    <img :src="loseImg"/>
+                                </el-avatar>
                             </template>
                     </el-table-column>
                     <el-table-column
@@ -144,10 +146,12 @@
 
 <script>
     import {fans_index,fans_sync,fans_syncstate} from "@/api/pool.js";
+    import {DOMAIN_URL} from "@/config/app.js";
     const formJson = {};
     export default {
         data() {
             return {
+                loseImg:DOMAIN_URL+"static/images/0fc7d20532fdaf769a25683617711png.png",
                 timer:"",
                 syncchanger:true,
                 syncclass:"g-success",
@@ -165,6 +169,10 @@
             }
     },
         methods:{
+            errorHandler(){
+                //图片丢失返回
+                return true;
+            },
             handleFansys(){
                 //同步粉丝
                 clearInterval(this.timer);

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="ms-doc">
-            <h3>README.md</h3>
+  <!--          <h3>README.md</h3>
             <article>
                 <h1>vue-admin</h1>
                 <p>基于Vue.js 2.x系列 + Element UI + RBAC/AUTH权限 的后台管理系统</p>
@@ -21,7 +21,7 @@
                 <br>
                 <el-checkbox disabled checked>权限管理</el-checkbox>
                 <br>
-            </article>
+            </article> -->
         </div>
 
     </div>

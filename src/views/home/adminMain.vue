@@ -103,6 +103,13 @@
 
 
         <div class="echartsbox">
+
+            <el-date-picker
+                 v-model="query.month"
+                 type="month"
+                 placeholder="选择月"
+                 @change="getcharts">
+            </el-date-picker>
             <div id="myChart" :style="{width: '100%', height: '400px'}"></div>
         </div>
     </div>
@@ -110,6 +117,7 @@
 
 <script>
     import {getindex_data,getecharts_data} from "@/api/pool.js";
+    import time from "@/utils/utils.filter.js"
     import countTo from "vue-count-to";
     const formJson = {};
     const echartsoptions = {
@@ -206,6 +214,7 @@
         components: { countTo },
         data() {
             return {
+                // echartsMonth:'',
                 panelinfo:{},
                 echartsdata:{},
                 chartsoptions:echartsoptions,
@@ -234,16 +243,21 @@
                 window.onresize = myChart.resize;
             },
             getcharts(){
+                let data = Object.assign({}, this.query);
+                if(typeof(data.month)=='object'){data.month = time.formatDateTime(data.month);}
                 //表格数据
-                getecharts_data(this.query)
+                getecharts_data(data)
                 .then(response=>{
                     //console.log(this.chartsoptions)
                     this.echartsdata = response.data;
                     //待优化 这里循环速度慢
+                    this.chartsoptions.xAxis[0].data = [];
+                    this.chartsoptions.series[0].data = [];
+                    this.chartsoptions.series[1].data = [];
                     this.echartsdata.forEach((item,index)=>{
-                        this.chartsoptions.xAxis[0].data.push(item.day);
-                        this.chartsoptions.series[0].data.push(item.user_num);
-                        this.chartsoptions.series[1].data.push(item.order_num);
+                        this.chartsoptions.xAxis[0].data.push(item.datelist);
+                        this.chartsoptions.series[0].data.push(item.count_user);
+                        this.chartsoptions.series[1].data.push(item.count_source);
                     })
                     //重新生成实例
                     this.drawLine();

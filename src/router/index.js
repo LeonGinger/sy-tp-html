@@ -58,10 +58,10 @@ const err404 = r =>
     require.ensure([], () => r(require("../views/error/err404.vue")), "home");
 const login = r =>
     require.ensure([], () => r(require("../views/login/index.vue")), "home");
-// const main = r =>
-//     require.ensure([], () => r(require("../views/home/main.vue")), "home");
 const main = r =>
-    require.ensure([], () => r(require("../views/home/adminMain.vue")), "home");
+    require.ensure([], () => r(require("../views/home/main.vue")), "home");
+// const main = r =>
+//     require.ensure([], () => r(require("../views/home/adminMain.vue")), "home");
 // 注意 权限字段 authRule （严格区分大小写）
 export const constantRouterMap = [
     {
@@ -96,9 +96,26 @@ export const constantRouterMap = [
     {
         path: "/",
         component: Home,
-        redirect: "/readme",
+        redirect: "/home/adminMain",
         name: "首页",
         hidden: true
+    },
+    {
+        path: "/home",
+        component: Home,
+        redirect: "/home/adminMain",
+        icon: "shouye",
+        name: "首页",
+        noDropdown: true,
+        meta: {
+            authRule: ["adminMain"]
+        },
+        children: [
+            {
+                path: "adminMain",
+                component: adminMain
+            }
+        ]
     },
     {
         path: "/readme",
@@ -155,23 +172,6 @@ export default new VueRouter({
 });
 
 export const asyncRouterMap = [
-    {
-        path: "/home",
-        component: Home,
-        redirect: "/home/adminMain",
-        icon: "shouye",
-        name: "首页",
-        noDropdown: true,
-        meta: {
-            authRule: ["adminMain"]
-        },
-        children: [
-            {
-                path: "adminMain",
-                component: adminMain
-            }
-        ]
-    },
     // {
     //     path: "/home",
     //     component: Home,

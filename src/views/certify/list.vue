@@ -87,46 +87,51 @@
                 </template>
             </el-table-column>
             <el-table-column
+                center
                 label="头像"
                 prop="headimgurl"
                 with="300"
                 :show-overflow-tooltip="true"
                 fixed>
                     <template slot-scope="scope">
-                        <el-avatar shape="square" :size="100" fit="cover" :src="scope.row.guser | FilterUserhead"></el-avatar>
+                        <el-avatar @error="errorHandler" shape="square" size="large" fit="cover" :src="scope.row.guser | FilterUserhead">
+                             <img :src="loseImg"/>
+                        </el-avatar>
                     </template>
             </el-table-column>
         <!--    待添加 -->
-<!--            <el-table-column
+           <el-table-column
                 label="IP"
-                prop="IP"
+                prop="ip"
                 with="300"
                 :show-overflow-tooltip="true">
             </el-table-column>
             <el-table-column
                 label="经纬度"
-                prop="username"
                 with="300"
                 :show-overflow-tooltip="true">
+                <template slot-scope="scope">
+                   {{scope.row.longitude}}</br>{{scope.row.latitude}}
+                </template>
             </el-table-column>
             <el-table-column
                 label="省"
-                prop="username"
+                prop="province"
                 with="300"
                 :show-overflow-tooltip="true">
             </el-table-column>
             <el-table-column
                 label="市"
-                prop="username"
+                prop="city"
                 with="300"
                 :show-overflow-tooltip="true">
             </el-table-column>
             <el-table-column
                 label="县"
-                prop="username"
+                prop="county"
                 with="300"
                 :show-overflow-tooltip="true">
-            </el-table-column> -->
+            </el-table-column>
 <!--                end wait add -->
             <el-table-column
                 width="300"
@@ -151,10 +156,12 @@
 <script>
 
     import {sourceLogindex,sourceLogDel} from "@/api/source/sourceapi.js";
+    import {DOMAIN_URL} from "@/config/app.js";
     const formJson = {};
     export default {
         data() {
             return {
+                loseImg:DOMAIN_URL+"static/images/0fc7d20532fdaf769a25683617711png.png",
                 formData: formJson,
                 formRules:{},
                 query: {
@@ -172,6 +179,11 @@
             }
     },
         methods:{
+            errorHandler(){
+                //图片丢失返回
+                return true;
+
+            },
             returnPage(){
                 //返回上一页
                 if (window.history.length <= 1) {
