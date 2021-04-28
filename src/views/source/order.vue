@@ -154,7 +154,7 @@
       :title="formMap[formName]"
       :visible.sync="formVisibledetails"
       :before-close="hideFormdetails"
-      width="30%"
+      width="580px"
       top="5vh"
     >
       <template>

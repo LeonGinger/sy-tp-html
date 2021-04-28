@@ -109,6 +109,7 @@
                     @click.native="handleForm(scope.$index)"
                     >溯源详情</el-button>
                     <el-button type="success" size="small" @click="sourceAdd(scope.row.source_code,scope.row.source_code_img)">溯源码打印</el-button>
+                    <el-button type="success" size="small" @click="ordergoto(scope.row.source_code,scope.row.source_code_img)">寄件信息修改</el-button>
                     <!-- <el-button type="danger" size="small" @click.native="handleFormdel(scope.$index, scope.row)">删 除</el-button> -->
                     <!--  <el-button type="primary" size="small" @click.native="handleFormemployee(scope.row.company_id)">员 工</el-button> -->
                    <!-- <el-button :type="scope.row.status | statusFilterType_handle" size="small" @click.native="handleFormstatus(scope.$index, scope.row)">{{scope.row.status | statusFilterName_handle}}</el-button> -->
@@ -218,6 +219,44 @@
                 </el-row>
             </el-form>
         </el-dialog>
+        <!-- 修改发货信息 -->
+        <el-dialog
+        :title="formMap[formName]"
+        :visible.sync="gotoformshow"
+        :before-close="hideFormdetails"
+        width="50%"
+        top="5vh"
+        >
+            <el-form label-position="right" label-width="120px" :model="findsource" :rules="formRules" ref="dataForm">
+                <el-row>
+                  <!-- 左边 -->
+                  <el-form-item prop="">
+                       <el-image
+                         style="width: 20%; height: 20%; margin-left:27%;"
+                         :src="findsource.source_code_img"
+                         :fit="fit"></el-image>
+                    </el-form-item>
+                  <el-col :span="12"><div class="grid-content bg-purple">
+                   <!-- 商户信息 -->
+
+                    <el-form-item label="快递单号" prop="">
+                       <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
+                        {{findsource.goto_order||"暂无"}}
+                    </el-form-item>
+                    <el-form-item label="收件人名称" prop="">
+                       <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
+                        {{findsource.goto_username||"暂无"}}
+                    </el-form-item>
+                    <el-form-item label="收件人手机号" prop="">
+                       <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
+                        {{findsource.goto_mobile||"暂无"}}
+                    </el-form-item>
+                      </div>
+                  </el-col>
+                    <el-col :span="1"><div class="grid-content bg-purple">&nbsp;</div></el-col>
+                </el-row>
+            </el-form>
+        </el-dialog>
     </div>
 </template>
 
@@ -237,6 +276,7 @@ export default {
                 edit: "编 辑"
             },
             formVisibledetails:false,
+            gotoformshow:false,
             formData: formJson,
             query: {
                 title: "",
@@ -506,6 +546,13 @@ export default {
             {
                 return false;
             }
+        },
+        ordergoto(){
+            this.formLoading = true
+            this.gotoformshow = true;
+            // 刷新表单
+            this.resetForm();
+            this.findsource = this.order[index]
         }
     },
     filters: {
