@@ -24,6 +24,11 @@ let resquest =  "/web";
  export function menudel(params){
   return http.post(`${resquest}/menu_del`,params);
 }
+//状态
+ export function menustate(params){
+  return http.post(`${resquest}/menu_state`,params);
+}
+
 
 //  export function authAdminSave(params,formName){
 //     if(formName === "add"){

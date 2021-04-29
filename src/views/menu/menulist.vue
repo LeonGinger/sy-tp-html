@@ -106,7 +106,9 @@
                 <template slot-scope="scope">
                     <el-switch
                       @change="handleSell(scope.$index,scope.row)"
-                      v-model="scope.row.recommend_menu">
+                      v-model="scope.row.recommend"
+                      :active-value="1"
+                      :inactive-value="0">
                     </el-switch>
                 </template>
             </el-table-column>
@@ -147,7 +149,7 @@
 </template>
 
 <script>
-import {menulist,menudel} from '@/api/menu/menuAll.js';
+import {menulist,menustate,menudel} from '@/api/menu/menuAll.js';
 import {enterpriseList} from "@/api/enterprise/enterprise";
 import { Loading } from "element-ui";
 const formJson = {
@@ -421,6 +423,15 @@ export default {
         },
         handleSell(index,row){
             console.log(row)
+            let recommend = row.recommend?0:1;
+            menustate({id:row.id,recommend:recommend})
+                .then(response=>{
+                    if(response.code!=200){this.$message.errro("系统发生错误,请稍后再试");}
+                    this.$message.success("更新状态成功");
+                })
+                .catch(()=>{
+
+                })
         },
 
     },

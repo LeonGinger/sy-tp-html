@@ -586,8 +586,8 @@ export default {
           })
             .then((response) => {
               this.formLoading = false;
-              this.$message.error(response.message);
               if (response.code != 200) {
+                this.$message.error(response.message);
                 this.getList();
                 return false;
               }
