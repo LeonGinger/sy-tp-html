@@ -95,6 +95,27 @@
                 </div></el-col>
               </el-row>
             </el-form-item>
+            <el-form-item label="样品名称" prop="monitor_menu.sample_name">
+                <el-col :span="12">
+                    <el-input v-model="formData.monitor_menu.sample_name"></el-input>
+                </el-col>
+            </el-form-item>
+            <el-form-item label="检测日期" prop="monitor_menu.monitoring_time">
+                <!-- <el-col :span="12">
+                    <el-input v-model="formData.menu_url.monitoring_time"></el-input>
+                </el-col> -->
+                 <el-date-picker
+                type="datetime"
+                v-model="formData.monitor_menu.monitoring_time"
+                placeholder="选择日期时间"
+                default-time="12:00:00">
+                </el-date-picker>
+            </el-form-item>
+            <el-form-item label="检验地点" prop="monitor_menu.test_location">
+                <el-col :span="12">
+                    <el-input v-model="formData.monitor_menu.test_location"></el-input>
+                </el-col>
+            </el-form-item>
             <el-form-item label="购买链接" prop="menu_url">
                 <el-col :span="12">
                     <el-input v-model="formData.menu_url"></el-input>
@@ -239,6 +260,7 @@
         monitor_image:[],
         menu_weightt: '',
         quality_time: '',
+        monitor_menu:{sample_name:'',monitoring_time:'',test_location:''}
         // menu_weight:'1',
     };
     export default {
@@ -259,6 +281,22 @@
                 }
                 callback();
             };
+            var hasone = (rule, value, callback) =>{
+                if(this.formData.monitor_menu.sample_name.length == 0){
+                    callback(new Error('请输入样品名称'));
+                }
+                callback()
+            }
+            var hastwo = (rule, value, callback) =>{
+                if(this.formData.monitor_menu.monitoring_time.length == 0){
+                    callback(new Error('请输入检测日期'));
+                }
+            }
+            var hastre = (rule, value, callback) =>{
+                if(this.formData.monitor_menu.test_location.length == 0){
+                    callback(new Error('请输入检测地点'));
+                }
+            }
             return {
                 uploadUrl: BASE_URL + "/web/file/uploadfile",
                 formMap: {
@@ -311,6 +349,30 @@
                             required: true,
                             message: '请输入保质期',
                             trigger: 'blur',
+                        }
+                    ],
+                    'monitor_menu.sample_name': [
+                        {
+                            required: true,
+                            message: '请输入样品名称',
+                            trigger: 'blur',
+                            // validator:hasone,
+                        }
+                    ],
+                    'monitor_menu.monitoring_time': [
+                        {
+                            required: true,
+                            message: '请输入检测日期',
+                            trigger: 'blur',
+                            // validator:hastwo,
+                        }
+                    ],
+                    'monitor_menu.test_location': [
+                        {
+                            required: true,
+                            message: '请输入检测地点',
+                            trigger: 'blur',
+                            // validator:hastre,
                         }
                     ],
                     menu_images_json: [
@@ -508,10 +570,12 @@
             },
             onSubmit(){
                 //提交表单
+                console.log(this.formMap.type)
                 if(this.$store.state.admin.business_notice){this.formData.business_id = this.$store.state.admin.business_notice;}
                 this.formData.menu_weight_copy = this.menu_weightt+this.formData.menu_weight;
                 this.formData.quality_time_copy = this.quality_timee+this.formData.quality_time;
                 this.$refs["form"].validate(valid => {
+                    console.log(valid)
                     if (valid) {
                         let data = Object.assign({}, this.formData);
                         // console.log(data);
@@ -520,6 +584,7 @@
                             data.id = "";
                             //时间处理
                             data.production_time = time.formatDateTime(data.production_time);
+                            data.monitor_menu.monitoring_time = time.formatDateTime(data.monitor_menu.monitoring_time);
                             // data.quality_time = time.formatDateTime(data.quality_time);
                             //图片处理
                             if(this.menuimagelist){
@@ -558,7 +623,8 @@
                         }
                         if(this.formMap.type=='edit'){
                             //处理数据
-                            if(typeof(data.production_time)=='object'){data.production_time = time.formatDateTime(data.production_time);}
+                            if(typeof(data.production_time)=='object'){data.production_time = time.formatDateTime(data.production_time);
+                            data.monitor_menu.monitoring_time = time.formatDateTime(data.monitor_menu.monitoring_time);}
                             // if(typeof(data.quality_time)=='object'){data.quality_time = time.formatDateTime(data.quality_time);}
                             //检测报告
                             let menuimagearr = [];
@@ -734,9 +800,11 @@
                     menu_weightt: '',
                     quality_time: '',
                     // menu_weightt:'1',
+                    monitor_menu:{sample_name:'',monitoring_time:'',test_location:''}
                 };
                 this.menu_weightt = "";
                 this.quality_timee = "";
+                
             },
         },
         filters:{
@@ -769,6 +837,9 @@
                  this.monitor_imagechanger = true;
                  this.formData.business_name = "";
                  this.business_namechanger = false;
+                 this.formData.monitor_menu.sample_name = '';
+                 this.formData.monitor_menu.test_location = '';
+                 this.formData.monitor_menu.monitoring_time = '';
                  this.$refs.form.resetFields();
                  document.title = "溯源码平台后台管理";
              }
@@ -794,6 +865,9 @@
                 this.business_namechanger = false;
                 this.menu_weightt = ''
                 this.quality_timee = ''
+                this.formData.monitor_menu.sample_name = '';
+                this.formData.monitor_menu.test_location = '';
+                this.formData.monitor_menu.monitoring_time = '';
                 this.clearForm();
                 //添加
             }

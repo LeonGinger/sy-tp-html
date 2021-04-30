@@ -107,8 +107,8 @@
                     <el-switch
                       @change="handleSell(scope.$index,scope.row)"
                       v-model="scope.row.recommend"
-                      :active-value="1"
-                      :inactive-value="0">
+                      :active-value="0"
+                      :inactive-value="1">
                     </el-switch>
                 </template>
             </el-table-column>

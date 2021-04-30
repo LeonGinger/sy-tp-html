@@ -89,7 +89,7 @@
                 :show-overflow-tooltip="true">
             </el-table-column>
             <el-table-column
-                width="300"
+                width="500"
                 label="操作"
                 fixed="right">
                 <template slot-scope="scope">
@@ -223,8 +223,8 @@
         <el-dialog
         :title="formMap[formName]"
         :visible.sync="gotoformshow"
-        :before-close="hideFormdetails"
-        width="50%"
+        :before-close="hideFormdetailss"
+        width="480px"
         top="5vh"
         >
             <el-form label-position="right" label-width="120px" :model="findsource" :rules="formRules" ref="dataForm">
@@ -232,26 +232,27 @@
                   <!-- 左边 -->
                   <el-form-item prop="">
                        <el-image
-                         style="width: 20%; height: 20%; margin-left:27%;"
+                         style="width: 200px; height: 200px;"
                          :src="findsource.source_code_img"
                          :fit="fit"></el-image>
                     </el-form-item>
-                  <el-col :span="12"><div class="grid-content bg-purple">
-                   <!-- 商户信息 -->
-
-                    <el-form-item label="快递单号" prop="">
-                       <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
-                        {{findsource.goto_order||"暂无"}}
-                    </el-form-item>
-                    <el-form-item label="收件人名称" prop="">
-                       <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
-                        {{findsource.goto_username||"暂无"}}
-                    </el-form-item>
-                    <el-form-item label="收件人手机号" prop="">
-                       <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
-                        {{findsource.goto_mobile||"暂无"}}
-                    </el-form-item>
-                      </div>
+                  <el-col :span="24">
+                    <div class="grid-content bg-purple">
+                        <p style="text-align:center;color:red;">请用手机扫码修改↑</p>
+                        <!-- 商户信息 -->
+                        <el-form-item label="快递单号" prop="">
+                        <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
+                            {{findsource.goto_order||"暂无"}}
+                        </el-form-item>
+                        <el-form-item label="收件人名称" prop="">
+                        <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
+                            {{findsource.goto_user||"暂无"}}
+                        </el-form-item>
+                        <el-form-item label="收件人手机号" prop="">
+                        <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
+                            {{findsource.goto_mobile||"暂无"}}
+                        </el-form-item>
+                    </div>
                   </el-col>
                     <el-col :span="1"><div class="grid-content bg-purple">&nbsp;</div></el-col>
                 </el-row>
@@ -418,6 +419,11 @@ export default {
         hideFormdetails(){
             // 更改值
             this.formVisibledetails = !this.formVisibledetails;
+            return true;
+        },
+        hideFormdetailss(){
+            // 更改值
+            this.gotoformshow = !this.gotoformshow;
             return true;
         },
         formSubmit(){
