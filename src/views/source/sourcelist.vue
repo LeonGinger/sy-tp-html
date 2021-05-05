@@ -155,7 +155,7 @@
                     </el-form-item>
                     <el-form-item label="扫码次数:" prop="">
                        <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
-                        {{findsource.source_number||"暂无"}}
+                        {{findsource.source_number||'0'}}
                     </el-form-item>
                     <el-form-item label="生产源地:" prop="">
                        <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->

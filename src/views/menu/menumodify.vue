@@ -354,7 +354,7 @@
                     'monitor_menu.sample_name': [
                         {
                             required: true,
-                            message: '请输入样品名称',
+                            message: '请填写该产品相应样品名称',
                             trigger: 'blur',
                             // validator:hasone,
                         }
@@ -383,14 +383,14 @@
                             trigger: "blur",
                         }
                     ],
-                    menu_monitor: [
-                        {
-                            required: true,
-                            message: "请上传至少一张检测报告",
-                            validator:validatemenuimglist,
-                            trigger: "blur",
-                        }
-                    ],
+                    // menu_monitor: [
+                    //     {
+                    //         required: true,
+                    //         message: "请上传至少一张检测报告",
+                    //         validator:validatemenuimglist,
+                    //         trigger: "blur",
+                    //     }
+                    // ],
                     // business_name: [
                     //     {
                     //         required: true,
@@ -804,7 +804,7 @@
                 };
                 this.menu_weightt = "";
                 this.quality_timee = "";
-                
+
             },
         },
         filters:{

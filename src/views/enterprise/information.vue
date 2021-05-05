@@ -23,7 +23,7 @@
           </el-form-item>
             <el-form-item label="商家介绍" prop="business_introduction">
               <el-col :span="12">
-                <el-input type="textarea" rows="5" v-model="business.business_introduction"></el-input>
+                <el-input type="textarea" maxlength="150" show-word-limit rows="5" v-model="business.business_introduction"></el-input>
               </el-col>
             </el-form-item>
             <!-- 图片模块 -->

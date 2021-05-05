@@ -1,5 +1,5 @@
 <template>
-        <div>
+        <div id="employee">
         <!-- start search -->
         <el-form :inline="true" :model="query" class="query-form" size="mini">
             <el-form-item class="query-form-item">
@@ -199,7 +199,13 @@
         </el-dialog>
         <!-- 添加员工表单 -->
         <el-dialog title="添加员工"  :visible.sync="dialogFormVisibleemployee" customClass="customWidth">
-            <div id="shareaddqrcode" v-if="!formemployeetype" ref="qrcodeContainer"></div>
+            <el-row>
+              <el-col v-if="!formemployeetype" :span="24"><div class="grid-content bg-purple-dark">
+                <span class="join_span">请用户打开微信扫描下方二维码进行微信绑定</span>
+                <div id="shareaddqrcode"  ref="qrcodeContainer"></div>
+              </div></el-col>
+            </el-row>
+
             <el-form :model="formemployee" :rules="formRules" ref="formemployee" v-if="formemployeetype" style="margin: 0 auto;width: 70%;">
             <el-form-item label="员工手机号:" :label-width="formemployeeWidth" prop="phone">
                 <el-select
@@ -241,8 +247,8 @@
             <div slot="footer" class="dialog-footer">
 
             <el-button @click="dialogFormVisibleemployee = false">取 消</el-button>
-            <el-button v-if="formemployeetype" type="primary" @click="onSubmitemployee">确 定</el-button>
-            <el-button @click="sharecodEemployee">{{tips}}</el-button>
+          <!--  <el-button v-if="formemployeetype" type="primary" @click="onSubmitemployee">确 定</el-button> -->
+            <!-- <el-button @click="sharecodEemployee">{{tips}}</el-button> -->
             </div>
         </el-dialog>
 
@@ -253,7 +259,9 @@
 <script>
 
     import {userids,userlist,employeelist,employeedel,employeeedit} from "@/api/user/user.js";
-    import {authRoleList} from "@/api/auth/authRole.js"
+    import {business_Find} from "@/api/business/business.js";
+    import {authRoleList} from "@/api/auth/authRole.js";
+    import {DOMAIN_H5_URL} from "@/config/app.js";
     import QRCode from "qrcodejs2";
     const formJson = {
         id:'',
@@ -265,6 +273,7 @@
     export default {
         data() {
             return {
+                businessInfo:[],
                 employee_id:'',
                 formMap: {
                     add: "新 增",
@@ -332,8 +341,9 @@
                 },
                 optionsPhone:[],
                 optionsName:[],
-                formemployeetype:true,
-                tips:"二维码添加"
+                formemployeetype:false,
+                tips:"二维码添加",
+
 
             }
         },
@@ -557,29 +567,29 @@
                  });
              },
              onSubmitemployee(){
-                 console.log(document.getElementById("shareaddqrcode").innerHTML);
+                 // console.log(document.getElementById("shareaddqrcode").innerHTML);
                  this.$refs['formemployee'].validate((valid) => {
                     if (valid) {
-                        /*接口*/
+                        /*API-FUCK*/
                     }
                  });
              },
              sharecodEemployee(){
                  /*分享二维码加入员工*/
-                 this.formemployeetype = this.formemployeetype?false:true;
-                 if(this.formemployeetype){
-                     this.tips="二维码添加";
-                     return;
-                 }else{
-                     this.tips="搜索添加";
-                 }
-                 // try{
-                 //     document.getElementById('shareaddqrcode').innerHTML = "";
-                 // }catch(e){
+                 // this.formemployeetype = this.formemployeetype?false:true;
+                 // if(this.formemployeetype){
+                 //     this.tips="二维码添加";
+                 //     return;
+                 // }else{
+                 //     this.tips="搜索添加";
                  // }
-                 // setTimeout(()=>{},1000);
+                 try{
+                     document.getElementById('shareaddqrcode').innerHTML = "";
+                 }catch(e){
+                     //FUCK
+                 }
                  this.$nextTick(()=>{
-                    let qrtext = "https://sy.zsicp.com/h5/#/pages/scan/staffscan?grant_code=415cd2ede3599b810c8c7973ec94616a";
+                    let qrtext = DOMAIN_H5_URL+"/#/pages/scan/staffscan?grant_code="+this.businessInfo.grant_code;
                     let qrcode = new QRCode(this.$refs.qrcodeContainer, {
                     width: 200, // 二维码的宽
                     height: 200, // 二维码的高
@@ -592,7 +602,24 @@
              },
              handleAddemployee(){
                  this.dialogFormVisibleemployee = true;
+                 this.sharecodEemployee();
              },
+            getBussinessInfo(ids){
+                //获取商家信息
+                let request_param = {
+                    business_id:ids?ids:"",
+                };
+                business_Find(request_param)
+                    .then(response=>{
+                        if(response.code==200){
+                            this.businessInfo = response.data;
+                        }
+                    })
+                    .catch(()=>{
+
+                    })
+
+            },
         },
         filters:{
             //权限相关状态
@@ -623,7 +650,6 @@
                 return business;
                 // return business.business_name;
             },
-
         },
         mounted() {
         //
@@ -635,6 +661,9 @@
             if(this.$route.params.employee_id){
                 this.query.business_notice = this.$route.params.employee_id;
                 this.employee_id = this.$route.params.employee_id;
+                this.getBussinessInfo(this.employee_id);
+            }else{
+                this.getBussinessInfo("");
             }
             // 加载表格数据
             this.getList();
@@ -643,10 +672,22 @@
 </script>
 
 <style type="text/scss" lang="scss">
-    #shareaddqrcode img{
-        margin: 0 auto;
-    }
-    .customWidth{
-        width:34%;
+    #employee{
+        #shareaddqrcode img{
+            margin: 0 auto;
+        }
+        .customWidth{
+            width:34%;
+        }
+        .join_span{
+            background-color: #d9edf7;
+            border-color: #c6e4f3;
+            color: #3a87ad;
+            text-align: center;
+            display: block;
+            margin: 10px auto;
+            padding: 14px;
+            margin-bottom: 20px;
+        }
     }
 </style>
