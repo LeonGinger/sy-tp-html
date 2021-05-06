@@ -14,9 +14,11 @@ import './assets/icons/GNLEON/iconfont';
 import IconSvg from "./components/common/IconSvg.vue"; // svg组件
 import * as echarts from 'echarts';
 import '@/directive/permission.js'; //自定义权限组件
+import VueI18n from 'vue-i18n'
 import Print from 'vue-print-nb';
 Vue.use(Print);  //注册
 Vue.prototype.$echarts = echarts;
+Vue.use(VueI18n)
 
 //
 Vue.prototype.baseURL = "http://sy.zsicp.com";
@@ -27,10 +29,14 @@ Vue.component("icon-svg", IconSvg);
 Object.keys(filters).forEach(key => {
     Vue.filter(key, filters[key]);
 });
-
+const i18n = new VueI18n({
+    locale: 'zh', // 语言标识
+    
+})
 Vue.config.productionTip = false;
 new Vue({
     router,
     store,
+    i18n,
     render: h => h(App)
 }).$mount("#app");

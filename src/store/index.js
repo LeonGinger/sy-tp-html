@@ -1,10 +1,11 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import * as actions from "./actions";
-import * as getters from "./getters";
+// import * as getters from "./getters";
+import getters from "./getters";
 import app from "./modules/app";
 import admin from "./modules/admin";
-import tagsView from "./modules/tagsView.js";
+import tagsView from "./modules/tagsView";
 
 if (process.env.NODE_ENV === "development") {
     Vue.use(Vuex);
