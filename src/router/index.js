@@ -340,15 +340,6 @@ export const asyncRouterMap = [
         // noDropdown: true,
         children: [
             {
-                path: "menulist",
-                component: menulist,
-                name: "商品列表",
-                icon: "",
-                meta: {
-                    authRule: ["menu/menulist"]
-                }
-            },
-            {
                 path: "add",
                 component: menumodify,
                 name: "新增商品",
@@ -365,6 +356,15 @@ export const asyncRouterMap = [
                 icon: "",
                 meta: {
                     authRule: ["menu/menu.menulist/edit"]
+                }
+            },
+            {
+                path: "menulist",
+                component: menulist,
+                name: "商品列表",
+                icon: "",
+                meta: {
+                    authRule: ["menu/menulist"]
                 }
             },
             // {

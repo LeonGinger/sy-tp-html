@@ -281,8 +281,12 @@
                         /*初始化*/
                         this.chartsoptionsBar.dataset.source = [];
                         this.chartsoptionsBar.dataset.source.push(['product', '查询总次数', '首查查询次数'])
+                        /*饼图*/
+                        this.chartsoptionsPerson.series[0].data = [];
+
                         this.list.forEach((item,index)=>{
                             this.chartsoptionsBar.dataset.source.push([item.menu_name,item.track,item.first_count]);
+                            this.chartsoptionsPerson.series[0].data.push({name:item.menu_name,value:item.track});
                         });
                         //重新生成实例
                         this.drawBar();
@@ -301,7 +305,7 @@
                          //console.log(response);
                          this.loading = false;
                          this.listarea = response.data.list || [];
-                         this.areatotal = response.data.total_search;
+                         this.areatotal = parseInt(response.data.total_search);
                          if(this.listarea.length>0){
                             this.chartsoptionsMap.series[0]['data'] = [];
                             this.listarea.forEach((item,index)=>{

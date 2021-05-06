@@ -62,3 +62,7 @@ let resquest =  "/web/";
  export function authAdminDelete(params){
   return http.post(`${resquest}/admin_del`,params);
 }
+ export function authAdminCHphone(params){
+  return http.post(`${resquest}/admin_chphone`,params);
+}
+

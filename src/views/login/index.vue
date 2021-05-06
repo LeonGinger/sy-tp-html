@@ -65,7 +65,7 @@
                 <!--</span>-->
 <!--s -->
             <div>
-                <el-button type="primary" style="width:100%;margin-bottom:30px;" :loading="loading"
+                <el-button type="primary" style="width:100%;margin-bottom:30px;" v-loading.fullscreen.lock="loading"
                            @click.native="handleLogin()">登录
                 </el-button>
             </div>
@@ -232,9 +232,9 @@ export default {
                     this.$store
                         .dispatch("loginName", this.ruleForm)
                         .then(response => {
-                            this.loading = false;
                             if (response.code!=200) {
                                 this.$message.error(response.message);
+                                this.loading = false;
                                 return;
                             }
                             let path = "/";
@@ -300,7 +300,8 @@ export default {
     },
     created() {
         if(this.$route.params.refresh){
-            location. reload();
+            //错误页面 回来的刷新
+            location.reload();
         }
         // 将参数拷贝进查询对象
         this.getsetting();

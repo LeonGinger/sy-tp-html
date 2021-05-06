@@ -58,7 +58,7 @@
                         <!-- <i class="el-icon-setting" style="margin-right: 15px"></i> -->
                          <span>{{username}}<i class="el-icon-arrow-down el-icon--right"></i></span>
                         <el-avatar style="margin: 10px;" shape="circle" :size="40" fit="cover" :src="avatar"></el-avatar>
-                       
+
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item @click.native="handlePhone"><span @click="handlePhone">修改手机号</span></el-dropdown-item>
                             <el-dropdown-item @click.native="loginOut"><span @click="loginOut">退出登录</span></el-dropdown-item>
@@ -89,7 +89,7 @@
                 <!-- 修改手机号 -->
                 <el-dialog title="修改手机号" :visible.sync="phoneFormVisible" width="55%" top="5vh">
                     <el-form :model="phoneFormData" :rules="phoneFormDataRules" ref="phoneFormData">
-                        <el-form-item label="原手机号" prop="old_phone">
+                        <el-form-item label="原手机号" prop="old_phone" v-if="phoneFormData.old_phone">
                             <el-input disabled type="text" v-model="phoneFormData.old_phone" auto-complete="off"></el-input>
                         </el-form-item>
                         <el-form-item label="新手机号" prop="new_phone">
@@ -103,7 +103,7 @@
                     </el-form>
                     <div slot="footer" class="dialog-footer">
                         <el-button @click.native="phoneFormVisible = !phoneFormVisible">取消</el-button>
-                        <el-button type="primary" @click.native="addSubmitphone('phoneFormData')" :loading="phoneLoading">提交</el-button>
+                        <el-button type="primary" @click.native="addSubmitphone" :loading="phoneLoading">提交</el-button>
                     </div>
                 </el-dialog>
             </el-header>
@@ -132,6 +132,8 @@ import { password } from "../../api/auth/login";
 import { getAdminId } from "../../utils/auth";
 import {sendcode} from '@/api/auth/login.js';
 import {setting} from "@/api/pool.js";
+import {userids} from "@/api/user/user.js";
+import {authAdminCHphone} from "@/api/auth/authAdmin.js";
 export default {
     data() {
         let validatePass = (rule, value, callback) => {
@@ -157,6 +159,7 @@ export default {
         };
         return {
             sysinfo:[],
+            userinfo:[],
             disabledcode:false,
             codetips:"发送验证码",
             phoneLoading:false,
@@ -179,8 +182,14 @@ export default {
                 userName: [
                     { required: true, message: "请输入登录名", trigger: "blur" }
                 ],
-                new_phone: [{ required: true, message: "请输入手机号", trigger: "blur" }],
-                code: [{ required: true, message: "请输入验证码", trigger: "blur"}],
+                new_phone: [
+                    { required: true, message: "请输入手机号", trigger: "blur" },
+                    { min: 11, max: 11, message: '请输入正确手机号格式', trigger: 'blur' }
+                    ],
+                code: [
+                    { required: true, message: "请输入验证码", trigger: "blur"},
+                    { min: 6, max: 6, message: '请输入六位数验证码', trigger: 'blur' }
+                ],
             },
             passwordFormDataRules: {
                 old_password: [
@@ -234,7 +243,23 @@ export default {
     },
     mounted() {},
     methods: {
+        getuserinfo(){
+            let uid = this.$store.getters.adminId?this.$store.getters.adminId:"";
+            userids({id:uid})
+                .then(response=>{
+                    if(response.code==200){
+                        this.userinfo = response.data;
+                        if(this.userinfo.phone){
+                            this.phoneFormData.old_phone = this.userinfo.phone;
+                        }
+                    }
+                })
+                .catch(()=>{
+
+                })
+        },
         getsetting(){
+            //获取系统面板信息
             setting()
                 .then(response=>{
                     this.sysinfo = response.data;
@@ -242,8 +267,6 @@ export default {
                 .catch(()=>{
 
                 })
-
-
         },
         toggleSideBar() {
             this.$store.dispatch("ToggleSideBar");
@@ -275,12 +298,12 @@ export default {
         },
         // 显示更换手机号页面
         handlePhone(){
-            this.phoneFormVisible = true,
-            this.phoneFormData = {
-                old_phone:"",
-                new_phone:"",
-                code:"",
-            };
+            this.phoneFormVisible = true;
+            // this.phoneFormData = {
+            //     old_phone:"",
+            //     new_phone:"",
+            //     code:"",
+            // };
         },
         // 显示修改密码界面
         handlePassword() {
@@ -328,13 +351,22 @@ export default {
             });
         },
         handleCode(){
+            if(this.codetips!="发送验证码"){this.$message.error('操作频繁,请稍后再试');return;}
             if(!this.phoneFormData.new_phone){this.$message.error('请输入手机号');return;}
-            this.phoneFormData.mobile = this.phoneFormData.new_phone;
             this.codetime = 15;
             this.timer();
-            sendcode(this.phoneFormData)
-                .then(respnse=>{
-
+            let request_param = {
+                mobile:this.phoneFormData.new_phone,
+                type:this.phoneFormData.old_phone?"CHPHONE":"BENDIN",
+            }
+            sendcode(request_param)
+                .then(response=>{
+                    if(response.code!=200){
+                        this.$message.error(response.message);
+                        this.phoneFormData.code="";
+                        return;
+                    }
+                    this.$message.success("发送成功");
                 })
                 .cath(()=>{
 
@@ -352,11 +384,32 @@ export default {
           this.disabled=false;
          }
          },
-        addSubmitphone(){}
+        addSubmitphone(){
+            //提交修改手机号 表单
+            this.$refs["phoneFormData"].validate(valid => {
+                if (valid) {
+                    authAdminCHphone(this.phoneFormData)
+                        .then(response=>{
+                            if(response.code!=200){this.$message.error(response.message);return;}
+                            this.$message.success("成功绑定新手机号");
+                            this.getuserinfo();
+                            this.phoneFormData.code = "";
+                            this.phoneFormData.new_phone = "";
+
+                        })
+                        .catch(()=>{
+
+                        })
+                }
+            });
+
+        }
     },
     created() {
+        console.log(this.$store)
         this.getBreadcrumb();
         this.getsetting();
+        this.getuserinfo();
     },
     watch: {
         $route() {

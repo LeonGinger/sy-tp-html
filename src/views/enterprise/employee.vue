@@ -663,7 +663,11 @@
                 this.employee_id = this.$route.params.employee_id;
                 this.getBussinessInfo(this.employee_id);
             }else{
-                this.getBussinessInfo("");
+                //超级管理员无需
+                if(this.$store.getters.adminId!='1'){
+                    this.getBussinessInfo("");
+                }
+
             }
             // 加载表格数据
             this.getList();
