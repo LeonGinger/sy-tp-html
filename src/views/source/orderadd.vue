@@ -22,18 +22,21 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="3">
+                    <el-col :span="4" style="width:220px">
                         <el-form-item label="商品数量" prop="number">
-                            <el-input maxlength="4" v-model="data[index].number"></el-input>
+                            <el-input maxlength="4" v-model="data[index].number" show-word-limit><template slot="append">箱</template></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="3">
+                    <el-col :span="4" style="width:220px">
                         <el-form-item label="每箱数量" prop="menu_number">
-                            <el-input maxlength="4" v-model="data[index].menu_number"></el-input>
+                            <el-input maxlength="4" v-model="data[index].menu_number" show-word-limit><template slot="append">个</template></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="2" class="addNumber">
+                    <el-col :span="1" class="addNumber" v-if="index === number-1">
                         <i class="el-icon-circle-plus-outline" @click="numberup"></i>
+                    </el-col>
+                    <el-col :span="1" class="addNumber" v-if="index !== number-1">
+                        <i class="el-icon-remove-outline" style="color:#147cd4;" @click="numberde"></i>
                     </el-col>
                 </el-row>
             </div>
@@ -193,6 +196,10 @@
                 }
                 this.data.push({menu_id:'',number:'',menu_number:''})
                 this.number++
+            },
+            numberde(){
+                this.data.pop()
+                this.number--
             },
             onselectbusiness(e){
                 //选择商家

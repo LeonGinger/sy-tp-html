@@ -2,8 +2,8 @@
     <div>
         <el-form ref="form" :model="formData" label-width="120px" :rules="formRules">
           <el-form-item label="商品名称" prop="menu_name">
-            <el-col :span="12">
-                <el-input v-model="formData.menu_name"></el-input>
+            <el-col :span="12" style='max-width:300px'>
+                <el-input v-model="formData.menu_name" maxlength="30" show-word-limit></el-input>
             </el-col>
           </el-form-item>
 
@@ -25,9 +25,9 @@
             </el-select>
           </el-form-item> -->
           <el-form-item label="商品售价" prop="menu_money">
-              <el-col :span="12">
+              <el-col :span="12" style="max-width:300px">
                 <el-col :span="8">
-                    <el-input v-model="formData.menu_money"></el-input>
+                    <el-input v-model="formData.menu_money" maxlength="5" show-word-limit></el-input>
                 </el-col>
                 <el-col :span="1">
                      <span class="menu-span">&nbsp;元</span>
@@ -35,8 +35,8 @@
               </el-col>
           </el-form-item>
           <el-form-item label="生产源地" prop="menu_address">
-              <el-col :span="12">
-                <el-input v-model="formData.menu_address"></el-input>
+              <el-col :span="12" style="max-width:300px">
+                <el-input v-model="formData.menu_address" maxlength="40" show-word-limit></el-input>
               </el-col>
           </el-form-item>
 
@@ -44,7 +44,7 @@
 
               <el-row>
                 <el-col :span="8"><div class="grid-content bg-purple">
-                    <el-input v-model="menu_weightt" @input="change($event)"></el-input>
+                    <el-input v-model="menu_weightt" @input="change($event)" maxlength="1000" show-word-limit></el-input>
                 </div></el-col>
 
                 <el-col :span="11"><div class="grid-content bg-purple-light">
@@ -81,7 +81,7 @@
             <el-form-item label="保质日期" prop="quality_time">
               <el-row>
                 <el-col :span="8"><div class="grid-content bg-purple">
-                    <el-input v-model="quality_timee"></el-input>
+                    <el-input v-model="quality_timee" maxlength="100" show-word-limit></el-input>
                 </div></el-col>
                 <el-col :span="11"><div class="grid-content bg-purple-light">
                     <el-select v-model="formData.quality_time" placeholder="请选择">
@@ -96,8 +96,8 @@
               </el-row>
             </el-form-item>
             <el-form-item label="样品名称" prop="monitor_menu.sample_name">
-                <el-col :span="12">
-                    <el-input v-model="formData.monitor_menu.sample_name"></el-input>
+                <el-col :span="12" style="max-width:300px">
+                    <el-input v-model="formData.monitor_menu.sample_name" maxlength="30" show-word-limit></el-input>
                 </el-col>
             </el-form-item>
             <el-form-item label="检测日期" prop="monitor_menu.monitoring_time">
@@ -112,13 +112,13 @@
                 </el-date-picker>
             </el-form-item>
             <el-form-item label="检验地点" prop="monitor_menu.test_location">
-                <el-col :span="12">
-                    <el-input v-model="formData.monitor_menu.test_location"></el-input>
+                <el-col :span="12" style="max-width:300px">
+                    <el-input v-model="formData.monitor_menu.test_location" maxlength="30" show-word-limit></el-input>
                 </el-col>
             </el-form-item>
             <el-form-item label="购买链接" prop="menu_url">
                 <el-col :span="12">
-                    <el-input v-model="formData.menu_url"></el-input>
+                    <el-input v-model="formData.menu_url" maxlength="100" show-word-limit></el-input>
                 </el-col>
             </el-form-item>
             <!-- 商品轮播图 -->
@@ -268,35 +268,39 @@
             var validatemenuimglist = (rule, value, callback) =>{
                 if(this.formMap.type == "add"){
                     if(this.menuimagelist.length==0){
+                        console.log(this.formData)
                          callback(new Error('请上传至少一张商品图片.'));
                     }
-                    if(this.formData.monitor_image.length==0){
-                         callback(new Error('请上传至少一张检测报告.'));
-                    }
+                    // if(this.formData.monitor_image.length==0){
+                    //      callback(new Error('请上传至少一张检测报告.'));
+                    // }
                 }
                 if(this.formMap.type == "edit"){
                     if(typeof(this.formData.menu_images_json)=='object' && this.formData.menu_images_json.length>0){callback();}
-                    if(this.menuimagelist.length>0){callback();}
+                    if(this.formData.menu_images_json.length>0){callback();}
                      callback(new Error('请上传至少一张商品图片.'));
                 }
                 callback();
             };
-            var hasone = (rule, value, callback) =>{
-                if(this.formData.monitor_menu.sample_name.length == 0){
-                    callback(new Error('请输入样品名称'));
+            var listtwo = (rule, value, callback) =>{
+                if(this.formData.quality_time.length==0){
+                    callback(new Error('请输入保质期'));
                 }
-                callback()
-            }
-            var hastwo = (rule, value, callback) =>{
-                if(this.formData.monitor_menu.monitoring_time.length == 0){
-                    callback(new Error('请输入检测日期'));
+                if(this.quality_timee.length==0){
+                    callback(new Error('请输入保质期'));
                 }
-            }
-            var hastre = (rule, value, callback) =>{
-                if(this.formData.monitor_menu.test_location.length == 0){
-                    callback(new Error('请输入检测地点'));
+                callback();
+            };
+            var listtwo2 = (rule, value, callback) =>{
+                console.log(this.formData)
+                if(this.formData.menu_weight){}else{
+                    callback(new Error('请输入商品规格'));
                 }
-            }
+                if(this.menu_weightt.length==0){
+                    callback(new Error('请输入商品规格'));
+                }
+                callback();
+            };
             return {
                 uploadUrl: BASE_URL + "/web/file/uploadfile",
                 formMap: {
@@ -325,9 +329,10 @@
                     menu_weight: [
                         {
                             required: true,
-                            message: "请输入商品规格",
-                            trigger: "blur",
+                            // message: "请输入商品规格",
+                            // trigger: "blur",
                             // type:"number",
+                            validator:listtwo2
                         }
                     ],
                     production_time: [
@@ -347,48 +352,52 @@
                     quality_time: [
                         {
                             required: true,
-                            message: '请输入保质期',
-                            trigger: 'blur',
+                            // message: '请输入保质期',
+                            // trigger: 'blur',
+                            validator:listtwo
                         }
                     ],
-                    'monitor_menu.sample_name': [
-                        {
-                            required: true,
-                            message: '请填写该产品相应样品名称',
-                            trigger: 'blur',
-                            // validator:hasone,
-                        }
-                    ],
-                    'monitor_menu.monitoring_time': [
-                        {
-                            required: true,
-                            message: '请输入检测日期',
-                            trigger: 'blur',
-                            // validator:hastwo,
-                        }
-                    ],
-                    'monitor_menu.test_location': [
-                        {
-                            required: true,
-                            message: '请输入检测地点',
-                            trigger: 'blur',
-                            // validator:hastre,
-                        }
-                    ],
+                    // 'monitor_menu.sample_name': [
+                    //     {
+                    //         required: true,
+                    //         // message: '请填写该产品相应样品名称',
+                    //         // trigger: 'blur',
+                    //         validator:testing,
+                    //     }
+                    // ],
+                    // 'monitor_menu.monitoring_time': [
+                    //     {
+                    //         required: true,
+                    //         // message: '请输入检测日期',
+                    //         // trigger: 'blur',
+                    //         // validator:hastwo,
+                    //         validator:testing,
+                    //     }
+                    // ],
+                    // 'monitor_menu.test_location': [
+                    //     {
+                    //         required: true,
+                    //         // message: '请输入检测地点',
+                    //         // trigger: 'blur',
+                    //         // validator:hastre,
+                    //         validator:testing,
+                    //     }
+                    // ],
                     menu_images_json: [
                         {
                             required: true,
-                            message: "请上传至少一张商品图片",
+                            // message: "请上传至少一张商品图片",
                             validator:validatemenuimglist,
-                            trigger: "blur",
+                            // trigger: "blur",
                         }
                     ],
                     // menu_monitor: [
                     //     {
                     //         required: true,
-                    //         message: "请上传至少一张检测报告",
-                    //         validator:validatemenuimglist,
-                    //         trigger: "blur",
+                    //         // message: "请上传至少一张检测报告",
+                    //         // validator:validatemenuimglist,
+                    //         // trigger: "blur",
+                    //         validator:testing,
                     //     }
                     // ],
                     // business_name: [
@@ -570,7 +579,27 @@
             },
             onSubmit(){
                 //提交表单
-                console.log(this.formMap.type)
+                console.log(this.formData.monitor_menu.sample_name.length)
+                console.log(this.formData.monitor_menu.monitoring_time.length)
+                console.log(this.formData.monitor_menu.test_location.length)
+                console.log(this.formData.monitor_image.length)
+                var monitorKEY = true
+                if(this.formData.monitor_menu.sample_name.length == 0 &&
+                    this.formData.monitor_menu.monitoring_time.length == 0 &&
+                    this.formData.monitor_menu.test_location.length == 0 &&
+                    this.formData.monitor_image.length == 0){
+                        monitorKEY = false
+                }else if(this.formData.monitor_menu.sample_name.length != 0 &&
+                    this.formData.monitor_menu.monitoring_time.length != 0 &&
+                    this.formData.monitor_menu.test_location.length != 0 &&
+                    this.formData.monitor_image.length != 0){
+                }else{
+                    this.$message({
+                        message: '检测信息填写完整(没有可以不填写)',
+                        type: 'warning'
+                    });
+                    return false;
+                }
                 if(this.$store.state.admin.business_notice){this.formData.business_id = this.$store.state.admin.business_notice;}
                 this.formData.menu_weight_copy = this.menu_weightt+this.formData.menu_weight;
                 this.formData.quality_time_copy = this.quality_timee+this.formData.quality_time;
@@ -584,7 +613,11 @@
                             data.id = "";
                             //时间处理
                             data.production_time = time.formatDateTime(data.production_time);
-                            data.monitor_menu.monitoring_time = time.formatDateTime(data.monitor_menu.monitoring_time);
+                            if(monitorKEY == true){
+                                data.monitor_menu.monitoring_time = time.formatDateTime(data.monitor_menu.monitoring_time); 
+                            }else{
+                                data.monitor_menu.monitoring_time = ''
+                            }
                             // data.quality_time = time.formatDateTime(data.quality_time);
                             //图片处理
                             if(this.menuimagelist){
@@ -623,8 +656,14 @@
                         }
                         if(this.formMap.type=='edit'){
                             //处理数据
-                            if(typeof(data.production_time)=='object'){data.production_time = time.formatDateTime(data.production_time);
-                            data.monitor_menu.monitoring_time = time.formatDateTime(data.monitor_menu.monitoring_time);}
+                            if(typeof(data.production_time)=='object'){
+                                data.production_time = time.formatDateTime(data.production_time);
+                                if(monitorKEY == true){
+                                    data.monitor_menu.monitoring_time = time.formatDateTime(data.monitor_menu.monitoring_time); 
+                                }else{
+                                    data.monitor_menu.monitoring_time = ''
+                                }
+                            }
                             // if(typeof(data.quality_time)=='object'){data.quality_time = time.formatDateTime(data.quality_time);}
                             //检测报告
                             let menuimagearr = [];

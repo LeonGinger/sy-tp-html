@@ -125,6 +125,11 @@
                     </el-dropdown-menu>
                     </el-dropdown> -->
           <el-button
+            type="primary"
+            size="small"
+            @click.native="opdencode(scope.row.order_number)"
+            >打印</el-button>
+          <el-button
             type="success"
             size="small"
             @click.native="handleForm(scope.row.order_number)"
@@ -360,6 +365,16 @@ export default {
             });
         }
       });
+    },
+    opdencode(this_order_number){
+      var _this = this
+      _this.$router.push({
+          path:'opdencode',
+          query:{
+              order_number:this_order_number,
+              order_total:0
+          }
+      })
     },
     open() {
       window.location.href = "#/source/orderadd";

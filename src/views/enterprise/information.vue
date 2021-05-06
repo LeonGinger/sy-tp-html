@@ -2,23 +2,23 @@
     <div>
         <el-form ref="form" :model="business" label-width="120px" :rules="formRules">
           <el-form-item label="商家名称" prop="business_name">
-            <el-col :span="12">
-                <el-input v-model="business.business_name"></el-input>
+            <el-col :span="6">
+                <el-input v-model="business.business_name" maxlength="30" show-word-limit></el-input>
             </el-col>
           </el-form-item>
           <el-form-item label="负责人" prop="responsible_name">
-              <el-col :span="12">
-                <el-input v-model="business.responsible_name"></el-input>
+              <el-col :span="3">
+                <el-input v-model="business.responsible_name" maxlength="4" show-word-limit></el-input>
               </el-col>
           </el-form-item>
           <el-form-item label="负责人手机" prop="responsible_phone">
-              <el-col :span="12">
-                <el-input v-model="business.responsible_phone"></el-input>
+              <el-col :span="5">
+                <el-input v-model="business.responsible_phone" maxlength="11" show-word-limit></el-input>
               </el-col>
           </el-form-item>
           <el-form-item label="商家地址" prop="business_address">
-              <el-col :span="12">
-                <el-input v-model="business.business_address"></el-input>
+              <el-col :span="6">
+                <el-input v-model="business.business_address" maxlength="30" show-word-limit></el-input>
               </el-col>
           </el-form-item>
             <el-form-item label="商家介绍" prop="business_introduction">

@@ -303,7 +303,7 @@ export default {
                 label: '未入库'
             },{
                 value: '2',
-                label: '未出库'
+                label: '已入库'
             },{
                 value: '3',
                 label: '已出库'
