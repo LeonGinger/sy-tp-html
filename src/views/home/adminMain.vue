@@ -270,9 +270,7 @@
                 //面板数据
                 getindex_data()
                     .then(response=>{
-                        console.log(response);
                         this.panelinfo = response.data;
-
                     })
                     .catch(()=>{
 
@@ -285,6 +283,7 @@
         //
         },
         created() {
+            console.log(this.$store)
             this.paneldata();
             this.getcharts();
 

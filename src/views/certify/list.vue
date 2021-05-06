@@ -287,7 +287,6 @@
                 this.query.user_id = this.$route.params.user_id;
                 // this.user_id = this.$route.params.user_id;
             }
-            console.log(this.$store);
             if(this.$store.state.admin.business_notice){
                 this.query.business_id = this.$store.state.admin.business_notice;
             }

@@ -95,6 +95,9 @@
                 <el-form-item label="用户名" prop="username">
                     <el-input v-model="formData.username" auto-complete="off"></el-input>
                 </el-form-item>
+                <el-form-item label="手机号" prop="phone">
+                    <el-input v-model="formData.phone" auto-complete="off"></el-input>
+                </el-form-item>
              <!--   <el-form-item label="登录密码" prop="password">
                     <el-input type="password" v-model="formData.password" auto-complete="off"></el-input>
                 </el-form-item>
@@ -138,6 +141,7 @@ const formJson = {
     password: "",
     username: "",
     checkPassword: "",
+    phone:"",
     status: 1,
     roles: []
 };
@@ -184,6 +188,9 @@ export default {
             addRules: {
                 username: [
                     { required: true, message: "请输入姓名", trigger: "blur" }
+                ],
+                phone: [
+                    { required: true, message: "请输入手机号码", trigger: "blur" }
                 ],
                 password: [
                     { required: true, message: "请输入密码", trigger: "blur" },

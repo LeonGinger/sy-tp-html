@@ -4,6 +4,7 @@ import * as actions from "./actions";
 import * as getters from "./getters";
 import app from "./modules/app";
 import admin from "./modules/admin";
+import tagsView from "./modules/tagsView.js";
 
 if (process.env.NODE_ENV === "development") {
     Vue.use(Vuex);
@@ -16,7 +17,8 @@ export default new Vuex.Store({
     getters,
     modules: {
         app,
-        admin
+        admin,
+        tagsView
     },
     strict: debug
     // plugins: debug ? [createLogger()] : []

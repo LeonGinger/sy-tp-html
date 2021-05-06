@@ -107,7 +107,9 @@
                     </div>
                 </el-dialog>
             </el-header>
-
+            <!-- TabsView -->
+              <!-- <div style="width: 100%; height: 20px;background-color: red;">12</div> -->
+            <!-- <TabsView></TabsView> -->
             <!--遮板-->
             <div class="main-mask"
                  v-show="menuShow"
@@ -134,6 +136,7 @@ import {sendcode} from '@/api/auth/login.js';
 import {setting} from "@/api/pool.js";
 import {userids} from "@/api/user/user.js";
 import {authAdminCHphone} from "@/api/auth/authAdmin.js";
+import TabsView from "@/views/components/TagsView.vue";
 export default {
     data() {
         let validatePass = (rule, value, callback) => {
@@ -219,7 +222,8 @@ export default {
         };
     },
     components: {
-        SidebarItem
+        SidebarItem,
+        TabsView
     },
     computed: {
         ...mapGetters({
@@ -406,7 +410,6 @@ export default {
         }
     },
     created() {
-        console.log(this.$store)
         this.getBreadcrumb();
         this.getsetting();
         this.getuserinfo();
