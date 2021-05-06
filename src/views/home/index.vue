@@ -107,10 +107,8 @@
                     </div>
                 </el-dialog>
             </el-header>
-            <!-- TabsView -->
-              <!-- <div style="width: 100%; height: 20px;background-color: red;">12</div> -->
-            <!-- <TabsView></TabsView> -->
-            <div class="tags-view-container">
+            <!-- TabsView 顶部标签-->
+            <div class="tags-view-container" v-if="false">
               <scroll-pane ref="scrollPane" class="tags-view-wrapper">
                 <router-link
                   v-for="tag in Array.from(visitedViews)"
@@ -306,7 +304,6 @@ export default {
             this.$store.dispatch("ShowSideBar");
         },
         getBreadcrumb() {
-            console.log(1)
             let matched = this.$route.matched.filter(item => item.name);
             const first = matched[0];
             if (first && (first.name !== "首页" || first.path !== "")) {
