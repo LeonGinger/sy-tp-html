@@ -67,30 +67,45 @@ export const constantRouterMap = [
     {
         path: "*",
         component: err404,
+        meta:{
+            keepalive:true,
+        },
         hidden: true
     },
     {
         path: "/401",
         component: err401,
         name: "401",
+        meta:{
+            keepalive:true,
+        },
         hidden: true
     },
     {
         path: "/404",
         component: err404,
         name: "404",
+        meta:{
+            keepalive:true,
+        },
         hidden: true
     },
     {
         path: "/500",
         component: err404,
         name: "500",
+        meta:{
+            keepalive:true,
+        },
         hidden: true
     },
     {
         path: "/login",
         component: login,
         name: "登录",
+        meta:{
+            keepalive:true,
+        },
         hidden: true
     },
     {
@@ -98,7 +113,10 @@ export const constantRouterMap = [
         component: Home,
         redirect: "/home/adminMain",
         name: "首页",
-        hidden: true
+        hidden: true,
+        meta:{
+            keepalive:true,
+        }
     },
     {
         path: "/home",
@@ -108,12 +126,16 @@ export const constantRouterMap = [
         name: "首页",
         noDropdown: true,
         meta: {
+            keepalive:true,
             authRule: ["adminMain"]
         },
         children: [
             {
                 path: "adminMain",
-                component: adminMain
+                component: adminMain,
+                meta:{
+                    keepalive:true,
+                }
             }
         ]
     },
@@ -125,10 +147,16 @@ export const constantRouterMap = [
         name: "控制台",
         hidden:true,
         noDropdown: true,
+        meta:{
+            keepalive:true,
+        },
         children: [
             {
                 path: "main",
-                component: main
+                component: main,
+                meta:{
+                    keepalive:true,
+                }
             }
         ]
     },
@@ -139,10 +167,16 @@ export const constantRouterMap = [
         component: Home,
         name: "components",
         icon: "tongyong",
+        meta:{
+            keepalive:true,
+        },
         children: [
             {
                 path: "uploadList",
                 name: "上传图片的展示",
+                meta:{
+                    keepalive:true,
+                },
                 component: r =>
                     require.ensure(
                         [],
@@ -153,12 +187,18 @@ export const constantRouterMap = [
             {
                 path: "tinymce",
                 name: "tinymce富文本编辑器",
-                component: tinymce
+                component: tinymce,
+                meta:{
+                    keepalive:true,
+                }
             },
             {
                 path: "upload",
                 name: "上传的demo",
-                component: upload
+                component: upload,
+                meta:{
+                    keepalive:true,
+                }
             }
         ]
     }
@@ -193,7 +233,8 @@ export const asyncRouterMap = [
         icon: "guanliyuan1",
         name: "用户管理",
         meta: {
-            authRule: ["user_manage"]
+            authRule: ["user_manage"],
+            keepalive:true,
         },
         // noDropdown: true,
         children: [
@@ -203,6 +244,7 @@ export const asyncRouterMap = [
                 name: "粉丝管理",
                 icon: "",
                 meta: {
+                    keepalive:true,
                     authRule: ["admin/auth.fans/index"]
                 }
             },
@@ -213,6 +255,7 @@ export const asyncRouterMap = [
                 name: "管理组",
                 icon: "",
                 meta: {
+                    keepalive:true,
                     authRule: ["user_manage/admin_manage"]
                 },
                 children: [
@@ -222,6 +265,7 @@ export const asyncRouterMap = [
                         name: "管理员管理",
                         icon: "",
                         meta: {
+                            keepalive:true,
                             authRule: ["admin/auth.admin/index"]
                         }
                     },
@@ -231,6 +275,7 @@ export const asyncRouterMap = [
                         name: "角色管理",
                         icon: "",
                         meta: {
+                            keepalive:true,
                             authRule: ["admin/auth.role/index"]
                         }
                     },
@@ -240,6 +285,7 @@ export const asyncRouterMap = [
                         name: "权限管理",
                         icon: "",
                         meta: {
+                            keepalive:true,
                             authRule: ["admin/auth.permission_rule/index"]
                         }
                     }
@@ -255,6 +301,7 @@ export const asyncRouterMap = [
         name: "广告相关",
         hidden:true,
         meta: {
+            keepalive:true,
             authRule: ["ad_manage"]
         },
         // noDropdown: true,
@@ -265,6 +312,7 @@ export const asyncRouterMap = [
                 name: "广告位管理",
                 icon: "",
                 meta: {
+                    keepalive:true,
                     authRule: ["admin/ad.site/index"]
                 }
             },
@@ -274,6 +322,7 @@ export const asyncRouterMap = [
                 name: "广告管理",
                 icon: "",
                 meta: {
+                    keepalive:true,
                     authRule: ["admin/ad.ad/index"]
                 }
             }
@@ -286,6 +335,7 @@ export const asyncRouterMap = [
         icon: "shangjia",
         name: "商户管理",
         meta: {
+            keepalive:true,
             authRule: ["enterprise"]
         },
         // noDropdown: true,
@@ -296,6 +346,7 @@ export const asyncRouterMap = [
                 name: "商户申请管理",
                 icon: "",
                 meta: {
+                    keepalive:true,
                     authRule: ["enterprise/apply"]
                 }
             },
@@ -305,6 +356,7 @@ export const asyncRouterMap = [
                 name: "我的商户",
                 icon: "",
                 meta: {
+                    keepalive:true,
                     authRule: ["enterprise/myenterprise"]
                 }
             },
@@ -314,6 +366,7 @@ export const asyncRouterMap = [
                 name: "员工管理",
                 icon: "",
                 meta: {
+                    keepalive:true,
                     authRule: ["enterprise/employee"]
                 }
             },
@@ -323,6 +376,7 @@ export const asyncRouterMap = [
                 name: "信息管理",
                 icon: "",
                 meta: {
+                    keepalive:true,
                     authRule: ["enterprise/information"]
                 }
             }
@@ -335,6 +389,7 @@ export const asyncRouterMap = [
         icon: "shangpin1",
         name: "商品管理",
         meta: {
+            keepalive:true,
             authRule: ["menu"]
         },
         // noDropdown: true,
@@ -345,6 +400,7 @@ export const asyncRouterMap = [
                 name: "新增商品",
                 icon: "",
                 meta: {
+                    keepalive:true,
                     authRule: ["menu/menu.menulist/add"]
                 }
             },
@@ -355,6 +411,7 @@ export const asyncRouterMap = [
                 hidden:true,
                 icon: "",
                 meta: {
+                    keepalive:true,
                     authRule: ["menu/menu.menulist/edit"]
                 }
             },
@@ -364,6 +421,7 @@ export const asyncRouterMap = [
                 name: "商品列表",
                 icon: "",
                 meta: {
+                    keepalive:true,
                     authRule: ["menu/menulist"]
                 }
             },
@@ -385,6 +443,7 @@ export const asyncRouterMap = [
         icon: "pici",
         name: "批次管理",
         meta: {
+            keepalive:true,
             authRule: ["source"]
         },
         // noDropdown: true,
@@ -395,6 +454,7 @@ export const asyncRouterMap = [
                 name: "新建批次",
                 icon: "",
                 meta: {
+                    keepalive:true,
                     authRule: ["source/orderadd"]
                 }
             },
@@ -404,6 +464,7 @@ export const asyncRouterMap = [
                 name: "批次列表",
                 icon: "",
                 meta: {
+                    keepalive:true,
                     authRule: ["source/order"]
                 }
             },
@@ -413,6 +474,7 @@ export const asyncRouterMap = [
                 name: "溯源码列表",
                 icon: "",
                 meta: {
+                    keepalive:true,
                     authRule: ["source/sourcelist"]
                 }
             },
@@ -422,6 +484,7 @@ export const asyncRouterMap = [
                 name: "溯源码打印",
                 icon: "",
                 meta: {
+                    keepalive:true,
                     authRule: ["source/opdencode"]
                 }
             }
@@ -434,6 +497,7 @@ export const asyncRouterMap = [
         icon: "tongjidefuben3",
         name: "查询管理",
         meta: {
+            keepalive:true,
             authRule: ["certify"]
         },
         // noDropdown: true,
@@ -444,6 +508,7 @@ export const asyncRouterMap = [
                 name: "查询记录",
                 icon: "",
                 meta: {
+                    keepalive:true,
                     authRule: ["certify/list"]
                 }
             },
@@ -453,6 +518,7 @@ export const asyncRouterMap = [
                 name: "查询统计",
                 icon: "",
                 meta: {
+                    keepalive:true,
                     authRule: ["certify/statistics"]
                 }
             },
@@ -465,6 +531,7 @@ export const asyncRouterMap = [
         icon: "tongji-copy",
         name: "系统设置",
         meta: {
+            keepalive:true,
             authRule: ["setting"]
         },
         // noDropdown: true,
@@ -475,6 +542,7 @@ export const asyncRouterMap = [
                 name: "系统设置",
                 icon: "",
                 meta: {
+                    keepalive:true,
                     authRule: ["sys/seeting"]
                 }
             },
@@ -484,6 +552,7 @@ export const asyncRouterMap = [
                 name: "数据备份",
                 icon: "",
                 meta: {
+                    keepalive:true,
                     authRule: ["sys/database"]
                 }
             },

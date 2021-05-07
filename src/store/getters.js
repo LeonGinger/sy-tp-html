@@ -10,7 +10,8 @@
 // }
 
 
-const getters ={
-  visitedviews:state => state.tagsview.visitedviews
-}
-export default getters
+// const getters ={
+//   visitedviews:state => state.tagsview.visitedviews,
+//   cachedViews:state => state.tagsview.cachedViews,
+// }
+// export default getters

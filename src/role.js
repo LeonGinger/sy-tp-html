@@ -119,6 +119,11 @@ router.beforeEach((to, from, next) => {
         // 没有动态改变权限的需求可直接next() 删除下方权限判断 ↓
         if (hasRole(store.getters.authRules, to.meta.authRule)) {
             NProgress.done();
+            // console.log(store)
+            // store.dispatch("addVisitedViews", to);
+            // // setTimeout(function(){alert(1);},1000);
+            // console.log("卡卡那这是")
+            // console.log(to)
             next(); //
             return;
         }
