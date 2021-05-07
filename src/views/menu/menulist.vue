@@ -107,8 +107,8 @@
                     <el-switch
                       @change="handleSell(scope.$index,scope.row)"
                       v-model="scope.row.recommend"
-                      :active-value="0"
-                      :inactive-value="1">
+                      :active-value="1"
+                      :inactive-value="0">
                     </el-switch>
                 </template>
             </el-table-column>
@@ -423,15 +423,19 @@ export default {
         },
         handleSell(index,row){
             console.log(row)
-            let recommend = row.recommend?0:1;
+            let recommend = row.recommend;
+            // if(recommend == 1){
+            //     recommend = 0;
+            // }else{
+            //     recommend = 1;
+            // }
             menustate({id:row.id,recommend:recommend})
-                .then(response=>{
-                    if(response.code!=200){this.$message.errro("系统发生错误,请稍后再试");}
-                    this.$message.success("更新状态成功");
-                })
-                .catch(()=>{
-
-                })
+            .then(response=>{
+                if(response.code!=200){this.$message.errro("系统发生错误,请稍后再试");}
+                this.$message.success("更新状态成功");
+            })
+            .catch(()=>{
+            })
         },
 
     },

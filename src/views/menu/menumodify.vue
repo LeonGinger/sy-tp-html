@@ -27,7 +27,7 @@
           <el-form-item label="商品售价" prop="menu_money">
               <el-col :span="12" style="max-width:300px">
                 <el-col :span="8">
-                    <el-input v-model="formData.menu_money" maxlength="5" show-word-limit></el-input>
+                    <el-input v-model="formData.menu_money" maxlength="8"></el-input>
                 </el-col>
                 <el-col :span="1">
                      <span class="menu-span">&nbsp;元</span>
@@ -43,11 +43,11 @@
           <el-form-item label="商品规格" prop="menu_weight">
 
               <el-row>
-                <el-col :span="8"><div class="grid-content bg-purple">
-                    <el-input v-model="menu_weightt" @input="change($event)" maxlength="1000" show-word-limit></el-input>
+                <el-col :span="2"><div class="grid-content bg-purple">
+                    <el-input v-model="menu_weightt" @input="change($event)" maxlength="3"></el-input>
                 </div></el-col>
 
-                <el-col :span="11"><div class="grid-content bg-purple-light">
+                <el-col :span="11" style="width:120px;"><div class="grid-content bg-purple-light">
                     <el-select v-model="formData.menu_weight" placeholder="请选择">
                         <el-option
                             v-for="item in optionsweight"
@@ -80,10 +80,10 @@
             </el-form-item> -->
             <el-form-item label="保质日期" prop="quality_time">
               <el-row>
-                <el-col :span="8"><div class="grid-content bg-purple">
-                    <el-input v-model="quality_timee" maxlength="100" show-word-limit></el-input>
+                <el-col :span="2"><div class="grid-content bg-purple">
+                    <el-input v-model="quality_timee" maxlength="4"></el-input>
                 </div></el-col>
-                <el-col :span="11"><div class="grid-content bg-purple-light">
+                <el-col :span="11" style="width:120px;"><div class="grid-content bg-purple-light">
                     <el-select v-model="formData.quality_time" placeholder="请选择">
                         <el-option
                             v-for="item in optionstime"
@@ -277,7 +277,7 @@
                 }
                 if(this.formMap.type == "edit"){
                     if(typeof(this.formData.menu_images_json)=='object' && this.formData.menu_images_json.length>0){callback();}
-                    if(this.formData.menu_images_json.length>0){callback();}
+                    if(this.formData.menu_images_json.length>0 || this.menuimagelist.length>0){callback();}
                      callback(new Error('请上传至少一张商品图片.'));
                 }
                 callback();
@@ -580,17 +580,17 @@
             onSubmit(){
                 //提交表单
                 console.log(this.formData.monitor_menu.sample_name.length)
-                console.log(this.formData.monitor_menu.monitoring_time.length)
+                console.log(this.formData.monitor_menu.monitoring_time)
                 console.log(this.formData.monitor_menu.test_location.length)
                 console.log(this.formData.monitor_image.length)
                 var monitorKEY = true
                 if(this.formData.monitor_menu.sample_name.length == 0 &&
-                    this.formData.monitor_menu.monitoring_time.length == 0 &&
+                    this.formData.monitor_menu.monitoring_time == null &&
                     this.formData.monitor_menu.test_location.length == 0 &&
                     this.formData.monitor_image.length == 0){
                         monitorKEY = false
                 }else if(this.formData.monitor_menu.sample_name.length != 0 &&
-                    this.formData.monitor_menu.monitoring_time.length != 0 &&
+                    this.formData.monitor_menu.monitoring_time != null &&
                     this.formData.monitor_menu.test_location.length != 0 &&
                     this.formData.monitor_image.length != 0){
                 }else{

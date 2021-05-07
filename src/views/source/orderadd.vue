@@ -24,12 +24,12 @@
                     </el-col>
                     <el-col :span="4" style="width:220px">
                         <el-form-item label="商品数量" prop="number">
-                            <el-input maxlength="4" v-model="data[index].number" show-word-limit><template slot="append">箱</template></el-input>
+                            <el-input maxlength="4" v-model="data[index].number"><template slot="append">箱</template></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="4" style="width:220px">
                         <el-form-item label="每箱数量" prop="menu_number">
-                            <el-input maxlength="4" v-model="data[index].menu_number" show-word-limit><template slot="append">个</template></el-input>
+                            <el-input maxlength="4" v-model="data[index].menu_number"><template slot="append">个</template></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="1" class="addNumber" v-if="index === number-1">

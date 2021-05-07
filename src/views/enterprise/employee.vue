@@ -114,7 +114,7 @@
                     </el-dropdown>
  -->
                     <!-- <el-button v-permission="'enterprise/employee/edit'" type="success" size="small" @click.native="handleForm(scope.$index, scope.row)">编 辑</el-button> -->
-                    <el-button v-permission="'enterprise/employee/del'" v-if="scope.row.role_id != 2" type="danger" size="small" @click="handleFormdel(scope.row.id,scope.$index)">踢出员工</el-button>
+                    <el-button v-permission="'enterprise/employee/del'" v-if="scope.row.role_id != 2 && scope.row.role_id != 1" type="danger" size="small" @click="handleFormdel(scope.row.id,scope.$index)">踢出员工</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -606,19 +606,20 @@
              },
             getBussinessInfo(ids){
                 //获取商家信息
-                let request_param = {
-                    business_id:ids?ids:"",
-                };
-                business_Find(request_param)
-                    .then(response=>{
-                        if(response.code==200){
-                            this.businessInfo = response.data;
-                        }
-                    })
-                    .catch(()=>{
+                if(ids != ''){
+                    let request_param = {
+                        business_id:ids?ids:"",
+                    };
+                    business_Find(request_param)
+                        .then(response=>{
+                            if(response.code==200){
+                                this.businessInfo = response.data;
+                            }
+                        })
+                        .catch(()=>{
 
-                    })
-
+                        })
+                }
             },
         },
         filters:{

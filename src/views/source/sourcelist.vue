@@ -109,7 +109,7 @@
                     @click.native="handleForm(scope.$index)"
                     >溯源详情</el-button>
                     <el-button type="success" size="small" @click="sourceAdd(scope.row.source_code,scope.row.source_code_img)">溯源码打印</el-button>
-                    <el-button type="success" size="small" @click="ordergoto(scope.row.source_code,scope.row.source_code_img)">寄件信息修改</el-button>
+                    <el-button type="success" v-if="scope.row.state == '已出库'" size="small" @click="ordergoto(scope.$index)">寄件信息修改</el-button>
                     <!-- <el-button type="danger" size="small" @click.native="handleFormdel(scope.$index, scope.row)">删 除</el-button> -->
                     <!--  <el-button type="primary" size="small" @click.native="handleFormemployee(scope.row.company_id)">员 工</el-button> -->
                    <!-- <el-button :type="scope.row.status | statusFilterType_handle" size="small" @click.native="handleFormstatus(scope.$index, scope.row)">{{scope.row.status | statusFilterName_handle}}</el-button> -->
@@ -536,7 +536,7 @@ export default {
             }).catch(() => {
                 this.$message({
                     type: 'info',
-                    message: '取消'
+                    message: '取消打印'
                 });
             });
         },
@@ -553,12 +553,13 @@ export default {
                 return false;
             }
         },
-        ordergoto(){
+        ordergoto(index){
             this.formLoading = true
             this.gotoformshow = true;
             // 刷新表单
             this.resetForm();
             this.findsource = this.order[index]
+            // console.log(this.findsource)
         }
     },
     filters: {
