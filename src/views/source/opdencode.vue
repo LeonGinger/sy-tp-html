@@ -25,8 +25,8 @@
          v-for="(itemm, indexx) in item.source_number"
         :key="indexx">
         <!--     <div :id="'qrCode'+index" :ref="'qrcodeContainer'+index"></div> -->
-        <img :src="sourceSrc[index]" />
-        <div style="margin-top: 10px"></div>
+        <img :src="sourceSrc[index]" style="width:15mm;height:15mm"/>
+        <div style="margin-top: 0mm"></div>
         <a :title="item.source_code">{{ item.source_code }}</a>
         </div>
       </div>
@@ -147,13 +147,13 @@ export default {
         console.log(index+"////"+this.$refs.qrcodeContainer.innerHTML)
         this.$refs.qrcodeContainer.innerHTML = '';
       }
-      
-      let qrtext = MY_CODE_URL + "?source_code=" + this.sourceCode[index]['source_code'];
+      // this.sourceCode[index]['source_code'];
+      let qrtext = MY_CODE_URL + "?source_code=" + '1'
       this.$nextTick(() => {
         let qrcode = new QRCode(document.getElementById("qrcode"), {
           // let qrcode = new QRCode(this.$refs.qrcodeContainer, {
-          width: 100, // 二维码的宽
-          height: 100, // 二维码的高
+          width: 120, // 二维码的宽
+          height: 120, // 二维码的高
           text: qrtext, // 二维码的内容
           // text: "123", // 二维码的内容
           colorDark: "#000", // 二维码的颜色
@@ -246,10 +246,10 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   text-align: center;
-  border: 1px solid black;
-  padding: 10px;
-  width: 138px;
-  height: 149px;
+  // border: 1px solid black;
+  // padding: 10px;
+  width: 20mm;
+  height: 20mm;
   float: left;
   margin: 3px;
 }

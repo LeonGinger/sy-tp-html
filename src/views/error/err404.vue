@@ -4,7 +4,7 @@
             <div class="error404-body-con-title">4<span>0</span>4</div>
             <p class="error404-body-con-message">YOU&nbsp;&nbsp;LOOK&nbsp;&nbsp;LOST</p>
             <div class="error404-btn-con">
-                <a href="/" class="error404-home-button">返回首页</a>
+                <a href="/admin" class="error404-home-button">返回首页</a>
                 <div class="error404-block-button" @click="backPage">返回上一页</div>
             </div>
         </div>

@@ -46,6 +46,7 @@ import opdencode from "../views/source/opdencode.vue";
 //查询管理
 import certify_list from "../views/certify/list";
 import statistics from "../views/certify/statistics";
+import orderpull from "../views/certify/orderpull"
 
 //系统设置
 import system from "../views/setting/system.vue";
@@ -522,6 +523,16 @@ export const asyncRouterMap = [
                     authRule: ["certify/statistics"]
                 }
             },
+            {
+                path: "orderpull",
+                component: orderpull,
+                name: "发货统计",
+                icon: "",
+                meta: {
+                    keepalive:true,
+                    authRule: ["certify/orderpull"]
+                }
+            }
         ]
     },
     {

@@ -51,4 +51,12 @@ export function orderdelete(params){
  export function srouceareaEcharts(params){
    return http.get(`${resquest}/sroucearea_echarts`,params);
  }
+ /*查询发货统计*/
+ export function sourceListWhere(params){
+  return http.get(`${resquest}/source_list_where`,params);
+}
+
+ export function orderupdate(params){
+  return http.get(`${resquest}/orderupdate`,params);
+ }
  
