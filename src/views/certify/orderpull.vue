@@ -138,7 +138,7 @@
                     </el-col>
                 </el-form-item>
                 <el-form-item>
-                        <el-button type="primary" @click="submit">修改</el-button>
+                    <el-button type="primary" @click="submit">修改</el-button>
                 </el-form-item>
             </el-form>
         </el-dialog>
@@ -156,7 +156,6 @@
     export default {
         data() {
             return {
-                loseImg:DOMAIN_URL+"static/images/0fc7d20532fdaf769a25683617711png.png",
                 formData: formJson,
                 formRules:{},
                 formLoading:true,
@@ -178,7 +177,6 @@
             errorHandler(){
                 //图片丢失返回
                 return true;
-
             },
             returnPage(){
                 //返回上一页

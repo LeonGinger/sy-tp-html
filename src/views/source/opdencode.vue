@@ -1,6 +1,9 @@
 
 <template>
   <div>
+    <!-- <div>
+      <vue-qr :correctLevel="3" :autoColor="false" colorDark="#000" :text="codeUrl" :size="60" :margin="0" :logoMargin="3"></vue-qr>
+    </div> -->
     <el-button type="primary" class="button" v-print="'#sourcebox'"
       >打印</el-button
     >
@@ -25,7 +28,8 @@
          v-for="(itemm, indexx) in item.source_number"
         :key="indexx">
         <!--     <div :id="'qrCode'+index" :ref="'qrcodeContainer'+index"></div> -->
-        <img :src="sourceSrc[index]" style="width:15mm;height:15mm"/>
+        <!-- <img :src="sourceSrc[index]" style="width:15mm;height:15mm"/> -->
+        <vue-qr :correctLevel="3" :autoColor="false" colorDark="#000" :text="sourceSrc[index]" :size="60" :margin="0" :logoMargin="3"></vue-qr>
         <div style="margin-top: 0mm"></div>
         <a :title="item.source_code">{{ item.source_code }}</a>
         </div>
@@ -40,6 +44,7 @@
 import { ScodeList } from "@/api/source/sourceapi.js";
 import QRCode from "qrcodejs2";
 import { MY_CODE_URL } from "../../config/app";
+import VueQr from 'vue-qr'
 const formJson = {
   id: "",
 };
@@ -54,7 +59,11 @@ export default {
       qrcodetext: "",
       sourceNumber:[],
       codebox:"",
+      codeUrl: 'https://sy.zsicp.com/web/urlGo?code=SUE-99999A'
     };
+  },
+  components: {
+    VueQr
   },
   methods: {
     getbase(e) {
@@ -108,9 +117,6 @@ export default {
             return false;
           }
           this.sourceCode = response.data;
-          var count_qrcode = this.sourceCode.length;
-          var tmpg = 0;
-          var set_go = 1;
           var _this = this;
           const loading = this.$loading({
             lock: true,
@@ -118,18 +124,23 @@ export default {
             spinner: "el-icon-loading",
             background: "rgba(0, 0, 0, 0.7)",
           });
+          for( var i=0;i <this.sourceCode.length;i++){
+            this.sourceSrc[i] = MY_CODE_URL + '?code=' + this.sourceCode[i]['source_code']
+          }
+          console.log(this.sourceSrc)
           // console.log(count_qrcode);
-          var showcode = setInterval(function () {
-            for (var i = tmpg; i < set_go; i++) {
-              setTimeout(function(){_this.makeqrcode(i)},300*(i+1))
-            }
-            tmpg += 1;
-            set_go += 1;
-            if (tmpg >= count_qrcode) {
-              clearInterval(showcode);
-              setTimeout(function(){loading.close();},300*(count_qrcode+1))
-            }
-          });
+          // var showcode = setInterval(function () {
+          //   for (var i = tmpg; i < set_go; i++) {
+          //     setTimeout(function(){_this.makeqrcode(i)},300*(i+1))
+          //   }
+          //   tmpg += 1;
+          //   set_go += 1;
+          //   if (tmpg >= count_qrcode) {
+          //     clearInterval(showcode);
+          //     setTimeout(function(){loading.close();},300*(count_qrcode+1))
+          //   }
+          // });
+          loading.close();
           var _this = this;
           _this.PrintRow();
         }, 100)
@@ -140,46 +151,45 @@ export default {
         });
         console.log(this.sourceSrc)
     },
-    makeqrcode(index) {
-      console.log(this.sourceCode);
-      var index = index-1
-      if(index!=0){
-        console.log(index+"////"+this.$refs.qrcodeContainer.innerHTML)
-        this.$refs.qrcodeContainer.innerHTML = '';
-      }
-      // this.sourceCode[index]['source_code'];
-      let qrtext = MY_CODE_URL + "?source_code=" + '1'
-      this.$nextTick(() => {
-        let qrcode = new QRCode(document.getElementById("qrcode"), {
-          // let qrcode = new QRCode(this.$refs.qrcodeContainer, {
-          width: 120, // 二维码的宽
-          height: 120, // 二维码的高
-          text: qrtext, // 二维码的内容
-          // text: "123", // 二维码的内容
-          colorDark: "#000", // 二维码的颜色
-          colorLight: "#fff",
-          correctLevel: QRCode.CorrectLevel.H,
-        });
-        setTimeout(() => {
-          let qwe = this.$refs.qrcodeContainer.innerHTML;
-          console.log(this.$refs.qrcodeContainer);
-          var patt = /<img[^>]+src=['"]([^'"]+)['"]+/g;
-          let tmpSrc = patt.exec(qwe);
-          console.log(tmpSrc);
-          this.sourceSrc[index] = tmpSrc[1];
+    // makeqrcode(index) {
+    //   console.log(this.sourceCode);
+    //   var index = index-1
+    //   if(index!=0){
+    //     console.log(index+"////"+this.$refs.qrcodeContainer.innerHTML)
+    //     this.$refs.qrcodeContainer.innerHTML = '';
+    //   }
+    //   let qrtext = MY_CODE_URL + "?code=" + this.sourceCode[index]['source_code'];
+    //   this.$nextTick(() => {
+    //     let qrcode = new QRCode(document.getElementById("qrcode"), {
+    //       // let qrcode = new QRCode(this.$refs.qrcodeContainer, {
+    //       width: 120, // 二维码的宽
+    //       height: 120, // 二维码的高
+    //       text: qrtext, // 二维码的内容
+    //       // text: "123", // 二维码的内容
+    //       colorDark: "#000", // 二维码的颜色
+    //       colorLight: "#fff",
+    //       correctLevel: QRCode.CorrectLevel.H,
+    //     });
+    //     setTimeout(() => {
+    //       let qwe = this.$refs.qrcodeContainer.innerHTML;
+    //       console.log(this.$refs.qrcodeContainer);
+    //       var patt = /<img[^>]+src=['"]([^'"]+)['"]+/g;
+    //       let tmpSrc = patt.exec(qwe);
+    //       console.log(tmpSrc);
+    //       this.sourceSrc[index] = tmpSrc[1];
           
           
-          // console.log(qrtext);
-          //document.getElementById("qrcode").innerHTML = "";
-          // console.log("妙啊~");
-          // console.log(this.sourceSrc);
+    //       // console.log(qrtext);
+    //       //document.getElementById("qrcode").innerHTML = "";
+    //       // console.log("妙啊~");
+    //       // console.log(this.sourceSrc);
           
-        // this.$refs.qrcodeContainer.innerHTML = ""; 
-          this.$forceUpdate();
+    //     // this.$refs.qrcodeContainer.innerHTML = ""; 
+    //       this.$forceUpdate();
           
-        });
-      });
-    },
+    //     });
+    //   });
+    // },
     smallcode(source,code,number) {
       console.log(source+"/"+code+'/'+number)
       this.sourceCode = [{source_number:'',source_code:''}]

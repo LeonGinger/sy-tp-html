@@ -13,5 +13,5 @@ let DOMAIN_H5_URL = "http://sy.zsicp.com/h5";
 // let ROUTER_MODE = "history";
 let ROUTER_MODE = "";
 let IMG_BASE_URL = "http://sy.zsicp.com/uploads/";
-let MY_CODE_URL = "http://sy.zsicp.com/h5/#/pages/traceability/traceability";
+let MY_CODE_URL = "http://sy.zsicp.com/web/urlGo";
 export { BASE_URL, ROUTER_MODE, IMG_BASE_URL, MY_CODE_URL,DOMAIN_URL,DOMAIN_ADMIN_URL,DOMAIN_H5_URL};

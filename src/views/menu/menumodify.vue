@@ -34,11 +34,11 @@
                 </el-col>
               </el-col>
           </el-form-item>
-          <el-form-item label="生产源地" prop="menu_address">
-              <el-col :span="12" style="max-width:300px">
-                <el-input v-model="formData.menu_address" maxlength="40" show-word-limit></el-input>
-              </el-col>
-          </el-form-item>
+            <el-form-item label="生产源地" prop="menu_address">
+                <el-col :span="13" style="max-width:300px">
+                    <el-input v-model="formData.menu_address" maxlength="40" show-word-limit></el-input>
+                </el-col>
+            </el-form-item>
 
           <el-form-item label="商品规格" prop="menu_weight">
 
@@ -585,12 +585,14 @@
                 console.log(this.formData.monitor_image.length)
                 var monitorKEY = true
                 if(this.formData.monitor_menu.sample_name.length == 0 &&
-                    this.formData.monitor_menu.monitoring_time == null &&
+                    (this.formData.monitor_menu.monitoring_time == '' ||
+                    this.formData.monitor_menu.monitoring_time == null) &&
                     this.formData.monitor_menu.test_location.length == 0 &&
                     this.formData.monitor_image.length == 0){
                         monitorKEY = false
                 }else if(this.formData.monitor_menu.sample_name.length != 0 &&
-                    this.formData.monitor_menu.monitoring_time != null &&
+                    (this.formData.monitor_menu.monitoring_time != '' ||
+                    this.formData.monitor_menu.monitoring_time !=null) &&
                     this.formData.monitor_menu.test_location.length != 0 &&
                     this.formData.monitor_image.length != 0){
                 }else{

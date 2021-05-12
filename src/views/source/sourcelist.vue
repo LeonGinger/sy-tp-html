@@ -57,11 +57,12 @@
                 with="300"
                 >
                 <template slot-scope="scope">
-                    <el-image :src="scope.row.source_code_img">
+                    <!-- <el-image :src="scope.row.source_code_img">
                         <div slot="error" class="image-slot">
                             正在加载中...
                         </div>
-                    </el-image>
+                    </el-image> -->
+                    <vue-qr :correctLevel="3" :autoColor="false" colorDark="#000" :text="scope.row.source_code_img" :size="60" :margin="0" :logoMargin="3"></vue-qr>
                 </template>
             </el-table-column>
             <el-table-column
@@ -134,10 +135,11 @@
                 <el-row>
                   <!-- 左边 -->
                   <el-form-item prop="">
-                       <el-image
+                       <!-- <el-image
                          style="width: 20%; height: 20%; margin-left:27%;"
                          :src="findsource.source_code_img"
-                         :fit="fit"></el-image>
+                         :fit="fit"></el-image> -->
+                         <vue-qr style="width: 20%; height: 20%; margin-left:27%;" :correctLevel="3" :autoColor="false" colorDark="#000" :text="findsource.source_code_img" :size="120" :margin="0" :logoMargin="3"></vue-qr>
                     </el-form-item>
                   <el-col :span="12"><div class="grid-content bg-purple">
                    <!-- 商户信息 -->
@@ -228,34 +230,24 @@
         top="5vh"
         >
             <el-form label-position="right" label-width="120px" :model="findsource" :rules="formRules" ref="dataForm">
-                <el-row>
-                  <!-- 左边 -->
-                  <el-form-item prop="">
-                       <el-image
-                         style="width: 200px; height: 200px;"
-                         :src="findsource.source_code_img"
-                         :fit="fit"></el-image>
-                    </el-form-item>
-                  <el-col :span="24">
-                    <div class="grid-content bg-purple">
-                        <p style="text-align:center;color:red;">请用手机扫码修改↑</p>
-                        <!-- 商户信息 -->
-                        <el-form-item label="快递单号" prop="">
-                        <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
-                            {{findsource.goto_order||"暂无"}}
-                        </el-form-item>
-                        <el-form-item label="收件人名称" prop="">
-                        <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
-                            {{findsource.goto_user||"暂无"}}
-                        </el-form-item>
-                        <el-form-item label="收件人手机号" prop="">
-                        <!-- <el-input v-model="formData.business_name" auto-complete="off"></el-input> -->
-                            {{findsource.goto_mobile||"暂无"}}
-                        </el-form-item>
-                    </div>
-                  </el-col>
-                    <el-col :span="1"><div class="grid-content bg-purple">&nbsp;</div></el-col>
-                </el-row>
+                <el-form-item label="快递单号">
+                    <el-col :span="12" style="max-width:300px">
+                        <el-input v-model="findsource.goto_order"></el-input>
+                    </el-col>
+                </el-form-item>
+                <el-form-item label="收件人姓名">
+                    <el-col :span="12" style="max-width:300px" maxlength="4">
+                        <el-input v-model="findsource.goto_user"></el-input>
+                    </el-col>
+                </el-form-item>
+                <el-form-item label="收件人手机号">
+                    <el-col :span="12" style="max-width:300px">
+                        <el-input v-model="findsource.goto_mobile" maxlength="11"></el-input>
+                    </el-col>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="submit">修改</el-button>
+                </el-form-item>
             </el-form>
         </el-dialog>
     </div>
@@ -265,7 +257,9 @@
 import QRCode from "qrcodejs2";
 import { MY_CODE_URL } from "../../config/app";
 import {sourceList} from '@/api/source/sourceapi.js';
+import {sourceListWhere,orderupdate} from '@/api/source/sourceapi.js';
 import { Loading } from 'element-ui';
+import VueQr from 'vue-qr'
 const formJson = {
 
 };
@@ -309,6 +303,9 @@ export default {
                 label: '已出库'
             }],
         }
+    },
+    components: {
+        VueQr
     },
     methods:{
     //方法
@@ -457,64 +454,69 @@ export default {
         codeselect(data){
             var order = data
             // console.log(order)
-            var tmpg = 0;
-            var set_go = 1;
+            // var tmpg = 0;
+            // var set_go = 1;
             var _this = this;
-            var count_qrcode = order.length
+            for(var i=0;i<order.length;i++){
+                _this.order[i]['source_code_img'] = MY_CODE_URL + "?code=" + order[i]['source_code']; 
+            }
+            console.log(_this.sourceSrc)
+            // var count_qrcode = order.length
             // for(let i=0;i<order.length;i++){
             //     var code_number = order[i]['source_code']
             //     console.log(code_number)
             //     _this.makeqrcode(code_number,i)
             // }
-            var showcode = setInterval(function () {
-                for (var i = tmpg; i < set_go; i++) {
-                    var code_number = order[i]['source_code']
-                    setTimeout(function(){_this.makeqrcode(code_number,i)},500*(i+1))
-                }
-                tmpg += 1;
-                set_go += 1;
-                if (tmpg >= count_qrcode) {
-                    clearInterval(showcode);
-                    // setTimeout(function(){loading.close();},300*(count_qrcode+1))
-                }
-            });
+            // var showcode = setInterval(function () {
+            //     for (var i = tmpg; i < set_go; i++) {
+            //         var code_number = order[i]['source_code']
+            //         setTimeout(function(){_this.makeqrcode(code_number,i)},500*(i+1))
+            //     }
+            //     tmpg += 1;
+            //     set_go += 1;
+            //     if (tmpg >= count_qrcode) {
+            //         clearInterval(showcode);
+            //         // setTimeout(function(){loading.close();},300*(count_qrcode+1))
+            //     }
+            // });
             //console.log(this.order)
         },
-        makeqrcode(code_number,index) {
-            var index = index-1
-            // if(index!=0){
-                //console.log(index+"////"+code_number)
-                this.$refs.qrcodeContainer.innerHTML = '';
-            // }
-            let qrtext = MY_CODE_URL + "?source_code=" + code_number;
+        // makeqrcode(code_number,index) {
+        //     var index = index-1
+        //     // if(index!=0){
+        //         //console.log(index+"////"+code_number)
+        //         this.$refs.qrcodeContainer.innerHTML = '';
+        //     // }
+        //     let qrtext = MY_CODE_URL + "?code=" + code_number;
+            
             // console.log(qrtext)
-            this.$nextTick(() => {
-                let qrcode = new QRCode(document.getElementById("qrcode"), {
-                    // let qrcode = new QRCode(this.$refs.qrcodeContainer, {
-                    width: 100, // 二维码的宽
-                    height: 100, // 二维码的高
-                    text: qrtext, // 二维码的内容
-                    // text: "123", // 二维码的内容
-                    colorDark: "#000", // 二维码的颜色
-                    colorLight: "#fff",
-                    correctLevel: QRCode.CorrectLevel.H,
-                });
-                setTimeout(() => {
-                    let qwe = this.$refs.qrcodeContainer.innerHTML;
-                    //console.log(qwe);
-                    var patt = /<img[^>]+src=['"]([^'"]+)['"]+/g;
-                    let tmpSrc = patt.exec(qwe);
-                    // console.log(tmpSrc);
-                    // this.sourceSrc[index] = tmpSrc[1];
+            // this.$nextTick(() => {
+            //     let qrcode = new QRCode(document.getElementById("qrcode"), {
+            //         // let qrcode = new QRCode(this.$refs.qrcodeContainer, {
+            //         width: 100, // 二维码的宽
+            //         height: 100, // 二维码的高
+            //         text: qrtext, // 二维码的内容
+            //         // text: "123", // 二维码的内容
+            //         colorDark: "#000", // 二维码的颜色
+            //         colorLight: "#fff",
+            //         correctLevel: QRCode.CorrectLevel.H,
+            //     });
+            //     setTimeout(() => {
+            //         let qwe = this.$refs.qrcodeContainer.innerHTML;
+            //         //console.log(qwe);
+            //         var patt = /<img[^>]+src=['"]([^'"]+)['"]+/g;
+            //         let tmpSrc = patt.exec(qwe);
+            //         // console.log(tmpSrc);
+            //         // this.sourceSrc[index] = tmpSrc[1];
 
-                    //document.getElementById("qrcode").innerHTML = "";
-                    // console.log("妙啊~");
-                    // console.log(this.sourceSrc);
-                    this.order[index]['source_code_img'] = tmpSrc[1];
-                    this.$forceUpdate();
-                });
-            });
-        },
+            //         //document.getElementById("qrcode").innerHTML = "";
+            //         // console.log("妙啊~");
+            //         // console.log(this.sourceSrc);
+            //         this.order[index]['source_code_img'] = tmpSrc[1];
+            //         this.$forceUpdate();
+            //     });
+            // });
+        // },
         sourceAdd(source,code){
             //console.log(code)
             this.$prompt('请输入打印数量', '提示', {
@@ -560,6 +562,26 @@ export default {
             this.resetForm();
             this.findsource = this.order[index]
             // console.log(this.findsource)
+        },
+        submit(){
+            console.log(this.findsource)
+            console.log(this.list)
+            var _this = this
+            orderupdate(this.findsource)
+                .then(response=>{
+                    if(response.code == 200){
+                        this.$message({
+                            showClose: true,
+                            message: '修改成功',
+                            type: 'success'
+                        });
+                    this.gotoformshow = !this.gotoformshow;
+                    _this.getList()
+                    }
+                })
+                .catch(()=>{
+
+                })
         }
     },
     filters: {
