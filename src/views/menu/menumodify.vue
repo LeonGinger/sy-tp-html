@@ -586,13 +586,15 @@
                 var monitorKEY = true
                 if(this.formData.monitor_menu.sample_name.length == 0 &&
                     (this.formData.monitor_menu.monitoring_time == '' ||
-                    this.formData.monitor_menu.monitoring_time == null) &&
+                    this.formData.monitor_menu.monitoring_time == null ||
+                    this.formData.monitor_menu.monitoring_time == '0000-00-00 00:00:00') &&
                     this.formData.monitor_menu.test_location.length == 0 &&
                     this.formData.monitor_image.length == 0){
                         monitorKEY = false
                 }else if(this.formData.monitor_menu.sample_name.length != 0 &&
-                    (this.formData.monitor_menu.monitoring_time != '' ||
-                    this.formData.monitor_menu.monitoring_time !=null) &&
+                    (this.formData.monitor_menu.monitoring_time != '' &&
+                    this.formData.monitor_menu.monitoring_time !=null &&
+                    this.formData.monitor_menu.monitoring_time != '0000-00-00 00:00:00') &&
                     this.formData.monitor_menu.test_location.length != 0 &&
                     this.formData.monitor_image.length != 0){
                 }else{

@@ -132,23 +132,23 @@ export default {
         return {
             weburl:DOMAIN_ADMIN_URL,
             swiperImglist:[
-                'http://sy.zsicp.com/static/images/bg1.jpg',
-                'http://sy.zsicp.com/static/images/bg2.jpg',
+                'http://sy.zsicp.com/static/images/bg1.jpg'
+                // 'http://sy.zsicp.com/static/images/bg2.jpg',
             ],
             swiperOption:{
 
                 direction: 'vertical',
-                autoplay:true,
-                loop:true,
+                autoplay:false,
+                loop:false,
                 slidesPerView: 1,
                 spaceBetween: 30,
                 // setWrapperSize: true,
-                mousewheel: true,
-                autoHeight: true,
+                mousewheel: false,
+                autoHeight: false,
                 height: window.innerHeight,
                 pagination: {
                   el: '.swiper-pagination',
-                  clickable: true
+                  clickable: false
                 }
                 // some swiper options/callbacks
                 // 所有的参数同 swiper 官方 api 参数

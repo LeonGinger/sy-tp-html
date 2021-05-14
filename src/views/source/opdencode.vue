@@ -29,7 +29,9 @@
         :key="indexx">
         <!--     <div :id="'qrCode'+index" :ref="'qrcodeContainer'+index"></div> -->
         <!-- <img :src="sourceSrc[index]" style="width:15mm;height:15mm"/> -->
-        <vue-qr :correctLevel="3" :autoColor="false" colorDark="#000" :text="sourceSrc[index]" :size="60" :margin="0" :logoMargin="3"></vue-qr>
+          <template>
+            <vue-qr :correctLevel="3" :binarizeThreshold="0" :autoColor="false" colorDark="#147" :text="sourceSrc[index]" :size="100" :margin="0"></vue-qr>
+          </template>
         <div style="margin-top: 0mm"></div>
         <a :title="item.source_code">{{ item.source_code }}</a>
         </div>
@@ -126,6 +128,8 @@ export default {
           });
           for( var i=0;i <this.sourceCode.length;i++){
             this.sourceSrc[i] = MY_CODE_URL + '?code=' + this.sourceCode[i]['source_code']
+            // this.sourceSrc[0] = 'http://sy.zsicp.com?c=12345'
+            // this.sourceSrc[0] = 'sy.zsicp.com'
           }
           console.log(this.sourceSrc)
           // console.log(count_qrcode);
@@ -258,9 +262,9 @@ export default {
   text-align: center;
   // border: 1px solid black;
   // padding: 10px;
-  width: 20mm;
-  height: 20mm;
+  // width: 20mm;
+  // height: 20mm;
   float: left;
-  margin: 3px;
+  // margin: 3px;
 }
 </style>

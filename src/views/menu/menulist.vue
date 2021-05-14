@@ -381,36 +381,32 @@ export default {
         },
         searchBusinessname(query){
             if (query !== '') {
-                      this.loading = true;
-                      setTimeout(() => {
-                        this.loading = false;
-                        // if(this.busineslist.length!=0){
-                        //     //直接使用本地数据
-                        //     this.optionsbusiness = this.busineslist.map(item => {
-                        //         return { value: `${item.id}`, label: `${item.business_name}` };
-                        //     });
-                        // }else{
-                            //请求数据
-                            enterpriseList({page:1,size:999,name:query})
-                                .then(response=>{
-                                    if(response.code!=200){this.$message.error(response.message);return;}
-                                    this.busineslist = response.data.list;
-                                    this.optionsbusiness = this.busineslist.map(item => {
-                                            return { value: `${item.id}`, label: `${item.business_name}` };
-                                          });
-                                })
-                                .catch(()=>{
+                this.loading = true;
+                setTimeout(() => {
+                this.loading = false;
+                // if(this.busineslist.length!=0){
+                //     //直接使用本地数据
+                //     this.optionsbusiness = this.busineslist.map(item => {
+                //         return { value: `${item.id}`, label: `${item.business_name}` };
+                //     });
+                // }else{
+                    //请求数据
+                    enterpriseList({page:1,size:999,name:query})
+                        .then(response=>{
+                            if(response.code!=200){this.$message.error(response.message);return;}
+                            this.busineslist = response.data.list;
+                            this.optionsbusiness = this.busineslist.map(item => {
+                                    return { value: `${item.id}`, label: `${item.business_name}` };
+                                    });
+                        })
+                        .catch(()=>{
 
-                                })
-
-                        // }
-
-
-
-                      }, 200);
-                    } else {
-                      this.optionsbusiness = [];
-                    }
+                        })
+                // }
+                }, 200);
+            } else {
+                this.optionsbusiness = [];
+            }
         },
         handleSoucecode(index,row){
             this.$router.push({
