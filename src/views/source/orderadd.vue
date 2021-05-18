@@ -23,7 +23,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="4" style="width:220px">
-                        <el-form-item label="商品数量" prop="number">
+                        <el-form-item label="包装箱数" prop="number">
                             <el-input maxlength="4" v-model="data[index].number"><template slot="append">箱</template></el-input>
                         </el-form-item>
                     </el-col>
