@@ -91,10 +91,10 @@
             </el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item :command="formverifBininfo(scope.row, '1')"
-                >通 过</el-dropdown-item
+                >同 意</el-dropdown-item
               >
               <el-dropdown-item :command="formverifBininfo(scope.row, '2')"
-                >拒 绝</el-dropdown-item
+                >不同意</el-dropdown-item
               >
             </el-dropdown-menu>
           </el-dropdown>
@@ -103,8 +103,20 @@
             type="warning"
             size="small"
             @click.native="handleForm(scope.$index, scope.row)"
-            >查 看</el-button
-          >
+            >查 看</el-button>
+          <el-button
+            v-if="scope.row.state==1"
+            type="danger"
+            size="small"
+            @click.native="handleFormstatus(scope.$index, scope.row)"
+          >禁 用</el-button>
+          <el-button
+            v-else
+            type="success"
+            size="small"
+            @click.native="handleFormstatus(scope.$index, scope.row)"
+          >正 常</el-button>
+
         </template>
       </el-table-column>
     </el-table>
@@ -253,7 +265,7 @@
               <el-form-item label="状态" prop="status">
                 <el-radio-group v-model="formData.state">
                   <el-radio :label="'1'">正常</el-radio>
-                  <el-radio :label="'2'">冻结</el-radio>
+                  <el-radio :label="'2'">禁用</el-radio>
                 </el-radio-group>
               </el-form-item>
             </div></el-col
@@ -274,10 +286,10 @@
           </el-button>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item :command="formverifBininfo(formData, '1')"
-              >通 过</el-dropdown-item
+              >同 意</el-dropdown-item
             >
             <el-dropdown-item :command="formverifBininfo(formData, '2')"
-              >拒 绝</el-dropdown-item
+              >不同意</el-dropdown-item
             >
           </el-dropdown-menu>
         </el-dropdown>
@@ -414,6 +426,64 @@ export default {
   },
   methods: {
     //方法
+    //改变商家状态
+    handleFormstatus(index,row){
+        if(row.state==1){
+          this.$confirm('此操作将禁用商家及相关可使用功能,是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            var state = 2;
+            //提交
+            employeestate({id:row.id,state:state})
+                .then(response=>{
+                    if(response.code!=200){
+                        this.$message.error("操作失败");
+                        return false;
+                    }
+                    this.list[index].state = state;
+                    this.$message({
+                              showClose: true,
+                              message: '操作成功',
+                              type: 'success'
+                            });
+                })
+                .catch(()=>{
+                    this.$message.error("操作失败");
+
+                });
+            
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '取消操作'
+            });
+            return;
+          });      
+          
+        }else{
+          var state = 1;
+          //提交
+          employeestate({id:row.id,state:state})
+              .then(response=>{
+                  if(response.code!=200){
+                      this.$message.error("操作失败");
+                      return false;
+                  }
+                  this.list[index].state = state;
+                  this.$message({
+                            showClose: true,
+                            message: '操作成功',
+                            type: 'success'
+                          });
+              })
+              .catch(()=>{
+                  this.$message.error("操作失败");
+
+              });
+        }
+    },
     //
     formverifBininfo(row, command) {
       return {

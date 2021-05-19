@@ -188,9 +188,7 @@
 
 <script>
 import { menulist } from "@/api/menu/menuAll.js";
-import { orderList } from "@/api/source/sourceapi.js";
-import { order_demo } from "@/api/source/sourceapi.js";
-import { orderdelete } from "@/api/source/sourceapi.js";
+import { orderList,order_demo,orderdelete } from "@/api/source/sourceapi.js";
 import { Loading } from "element-ui";
 const formJson = {};
 export default {

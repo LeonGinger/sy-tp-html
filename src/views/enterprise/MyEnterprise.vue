@@ -330,29 +330,60 @@ export default {
         },
         handleFormstatus(index,row){
             if(row.state==1){
+              this.$confirm('此操作将禁用商家及相关可使用功能,是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
                 var state = 2;
-            }else{
-                var state = 1;
-            }
-            //提交
-            employeestate({id:row.id,state:state})
-                .then(response=>{
-                    if(response.code!=200){
+                //提交
+                employeestate({id:row.id,state:state})
+                    .then(response=>{
+                        if(response.code!=200){
+                            this.$message.error("操作失败");
+                            return false;
+                        }
+                        this.list[index].state = state;
+                        this.$message({
+                                  showClose: true,
+                                  message: '操作成功',
+                                  type: 'success'
+                                });
+                    })
+                    .catch(()=>{
                         this.$message.error("操作失败");
-                        return false;
-                    }
-                    this.list[index].state = state;
-                    this.$message({
-                              showClose: true,
-                              message: '操作成功',
-                              type: 'success'
-                            });
-                })
-                .catch(()=>{
-                    this.$message.error("操作失败");
-
+    
+                    });
+                
+              }).catch(() => {
+                this.$message({
+                  type: 'info',
+                  message: '取消操作'
                 });
-
+                return;
+              });      
+              
+            }else{
+              var state = 1;
+              //提交
+              employeestate({id:row.id,state:state})
+                  .then(response=>{
+                      if(response.code!=200){
+                          this.$message.error("操作失败");
+                          return false;
+                      }
+                      this.list[index].state = state;
+                      this.$message({
+                                showClose: true,
+                                message: '操作成功',
+                                type: 'success'
+                              });
+                  })
+                  .catch(()=>{
+                      this.$message.error("操作失败");
+    
+                  });
+            }
         },
         //员工
         handleFormemployee(employee_id){
@@ -491,7 +522,7 @@ export default {
         statusFilterName(status) {
             const statusMap = {
                 1: "正常",
-                2: "冻结",
+                2: "禁用",
                 'undefined':"无"
             };
             return statusMap[status];
@@ -507,8 +538,8 @@ export default {
         },
         statusFilterName_handle(status) {
             const statusMap = {
-                1: "冻结",
-                2: "解冻",
+                1: "禁用",
+                2: "正常",
                 'undefined':"无"
             };
             return statusMap[status];
