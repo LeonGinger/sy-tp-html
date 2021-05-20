@@ -159,11 +159,65 @@
       :title="formMap[formName]"
       :visible.sync="formVisibledetails"
       :before-close="hideFormdetails"
-      width="580px"
+      width="720px"
       top="5vh"
     >
       <template>
-        <el-table :data="orderData" style="width: 100%" v-loading="formLoading">
+        <el-table :data="orderData" style="width: 100%" v-loading="formLoading" @row-dblclick="dbclickOrderdata">
+          <el-table-column label="详情" width="140" type="expand">
+            <!-- 每条商品的详情 -->
+            <template slot-scope="props">
+              <span style="color:#ff0000" @dblclick="dbclickOrderdata(props)">*(双击编辑信息)</span>
+              <el-form label-position="left" inline class="demo-table-expand">
+                <el-form-item label="商品名称" v-if="props.row.source.menu_name">
+                  <el-input v-if="props.row.isOK" v-model="props.row.source.menu_name"></el-input>
+                  <span v-if="!props.row.isOK" title="双击编辑信息">{{ props.row.source.menu_name }}</span>
+                </el-form-item>
+                <br>
+                <el-form-item label="商品规格">
+                  1-{{props.row.isOK}}
+                  <span>{{ props.row.source.menu_weight }}</span>
+                </el-form-item>
+                <br>
+                <el-form-item label="生产源地">
+                  <span>{{ props.row.source.menu_address }}</span>
+                </el-form-item>
+                <br>
+                <el-form-item label="批次编号" v-if="props.row.source.order_number">
+                  <span>{{ props.row.source.order_number }}</span>
+                </el-form-item>
+                <br>
+                <el-form-item label="生产日期">
+                  <span>{{ props.row.source.production_time }}</span>
+                </el-form-item>
+                <br>
+                <el-form-item label="保质日期">
+                  <span>{{ props.row.source.quality_time }}</span>
+                </el-form-item>
+                <br>
+                <el-form-item label="入库时间" v-if="props.row.source.storage_time">
+                  <span>{{ props.row.source.storage_time }}</span>
+                </el-form-item>
+                <br>
+                <el-form-item label="操作员工" v-if="props.row.source.goto_user">
+                  <span>{{ props.row.source.goto_user }}</span>
+                </el-form-item>
+                <br>
+               <el-form-item label="出库时间" v-if="props.row.source.deliver_time">
+                  <span>{{ props.row.source.deliver_time }}</span>
+                </el-form-item>
+                <br>
+               <el-form-item label="用户扫码" v-if="props.row.source.scan_time">
+                  <span>{{ props.row.source.scan_time }}</span>
+                </el-form-item>
+                <br>
+               <el-form-item label="扫码次数" v-if="props.row.source.source_number">
+                  <span>{{ props.row.source.source_number }}</span>
+                </el-form-item>
+              </el-form>
+            </template>
+            <!-- END 详情 -->
+          </el-table-column>
           <el-table-column prop="menu_id" label="商品名称" width="140">
           </el-table-column>
           <el-table-column prop="menu_weight" label="规格" width="140">
@@ -221,6 +275,17 @@ export default {
   },
   methods: {
     //方法
+    dbclickOrderdata(row){
+      console.log(row)
+      // if(row.isOK){
+      this.$nextTick(()=>{
+        this.$set(this.orderData[row.$index], 'isOK', this.orderData[row.$index].isOK =! this.orderData[row.$index].isOK)
+      })
+      this.$forceUpdate()
+      // row.source.isOK =!row.source.isOK
+      // }
+      //  row.isOK =!row.isOK
+    },
     // 显示表单
     handleForm(order_number) {
         this.formLoading = true
