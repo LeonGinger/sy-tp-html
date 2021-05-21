@@ -176,11 +176,13 @@
                 <br>
                 <el-form-item label="商品规格">
                   1-{{props.row.isOK}}
-                  <span>{{ props.row.source.menu_weight }}</span>
+                  <span v-if="!props.row.isOK">{{ props.row.source.menu_weight }}</span>
+                  <el-input  v-if="props.row.isOK" v-model="menu_weightt" @input="change($event)" maxlength="3"></el-input>
                 </el-form-item>
                 <br>
                 <el-form-item label="生产源地">
-                  <span>{{ props.row.source.menu_address }}</span>
+                  <span v-if="!props.row.isOK">{{ props.row.source.menu_address }}</span>
+                  <el-input v-if="props.row.isOK" v-model="props.row.source.menu_name"></el-input>
                 </el-form-item>
                 <br>
                 <el-form-item label="批次编号" v-if="props.row.source.order_number">
@@ -188,11 +190,11 @@
                 </el-form-item>
                 <br>
                 <el-form-item label="生产日期">
-                  <span>{{ props.row.source.production_time }}</span>
+                  <span v-if="!props.row.isOK">{{ props.row.source.production_time }}</span>
                 </el-form-item>
                 <br>
                 <el-form-item label="保质日期">
-                  <span>{{ props.row.source.quality_time }}</span>
+                  <span v-if="!props.row.isOK">{{ props.row.source.quality_time }}</span>
                 </el-form-item>
                 <br>
                 <el-form-item label="入库时间" v-if="props.row.source.storage_time">
@@ -200,7 +202,7 @@
                 </el-form-item>
                 <br>
                 <el-form-item label="操作员工" v-if="props.row.source.goto_user">
-                  <span>{{ props.row.source.goto_user }}</span>
+                  <span">{{ props.row.source.goto_user }}</span>
                 </el-form-item>
                 <br>
                <el-form-item label="出库时间" v-if="props.row.source.deliver_time">
@@ -208,11 +210,15 @@
                 </el-form-item>
                 <br>
                <el-form-item label="用户扫码" v-if="props.row.source.scan_time">
-                  <span>{{ props.row.source.scan_time }}</span>
+                  <span">{{ props.row.source.scan_time }}</span>
                 </el-form-item>
                 <br>
                <el-form-item label="扫码次数" v-if="props.row.source.source_number">
                   <span>{{ props.row.source.source_number }}</span>
+                </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" @click="onSubmitorderData(props)">{{props.row.isOK | ordertipsFilters}}</el-button>
+                  <el-button v-if="props.row.isOK" @click="cancelSubmitOrderData(props)">取消</el-button>
                 </el-form-item>
               </el-form>
             </template>
@@ -248,6 +254,7 @@ const formJson = {};
 export default {
   data() {
     return {
+      orderDataTips:"修 改",
       formMap: {
         add: "新 增",
         edit: "编 辑",
@@ -275,6 +282,38 @@ export default {
   },
   methods: {
     //方法
+    //取消修改溯源信息
+    cancelSubmitOrderData(row){
+      this.orderDataTips = "修 改";
+      this.$nextTick(()=>{
+          this.orderData[row.$index].isOK = false;
+      })
+
+    },
+    //修改保存溯源信息
+    onSubmitorderData(row){
+      console.log(row)
+      //修改
+      if(this.orderDataTips=="修 改"){
+        console.log("走着？")
+        this.$set(this.orderData[row.$index], 'isOK', true)
+        this.$nextTick(()=>{
+            this.$set(this.orderData[row.$index], 'isOK', true)
+        })
+        this.orderDataTips = this.orderDataTips=="修 改"?"保 存":"修 改";
+        return;
+      }
+      //保存
+      if(this.orderDataTips=="保 存"){
+        this.$set(this.orderData[row.$index], 'isOK', false)
+        this.$nextTick(()=>{
+            this.$set(this.orderData[row.$index], 'isOK', false)
+        })
+
+        this.orderDataTips = this.orderDataTips=="修 改"?"保 存":"修 改";
+      }
+      
+    },
     dbclickOrderdata(row){
       console.log(row)
       // if(row.isOK){
@@ -522,6 +561,12 @@ export default {
         2: "解冻",
       };
       return statusMap[status];
+    },
+  },
+  filters: {
+    ordertipsFilters(row){
+        if(!row){return "修 改";}
+        return "保 存";
     },
   },
   mounted() {
