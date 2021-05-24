@@ -175,14 +175,14 @@
                 </el-form-item>
                 <br>
                 <el-form-item label="商品规格">
-                  1-{{props.row.isOK}}
+                  <!-- 1-{{props.row.isOK}} -->
                   <span v-if="!props.row.isOK">{{ props.row.source.menu_weight }}</span>
-                  <el-input  v-if="props.row.isOK" v-model="menu_weightt" @input="change($event)" maxlength="3"></el-input>
+                  <el-input  v-if="props.row.isOK" v-model="props.row.source.menu_weight" @input="change($event)" maxlength="3"></el-input>
                 </el-form-item>
                 <br>
                 <el-form-item label="生产源地">
                   <span v-if="!props.row.isOK">{{ props.row.source.menu_address }}</span>
-                  <el-input v-if="props.row.isOK" v-model="props.row.source.menu_name"></el-input>
+                  <el-input v-if="props.row.isOK" v-model="props.row.source.menu_address"></el-input>
                 </el-form-item>
                 <br>
                 <el-form-item label="批次编号" v-if="props.row.source.order_number">
@@ -191,10 +191,31 @@
                 <br>
                 <el-form-item label="生产日期">
                   <span v-if="!props.row.isOK">{{ props.row.source.production_time }}</span>
+                  <el-date-picker
+                    v-if="props.row.isOK"
+                    v-model="props.row.source.production_time"
+                    type="date"
+                    placeholder="选择生产日期">
+                  </el-date-picker>
                 </el-form-item>
                 <br>
                 <el-form-item label="保质日期">
                   <span v-if="!props.row.isOK">{{ props.row.source.quality_time }}</span>
+                  <el-row v-if="props.row.isOK">
+                    <el-col :span="8"><div class="grid-content bg-purple">
+                        <el-input v-model="quality_timeeNumber" maxlength="4"></el-input>
+                    </div></el-col>
+                    <el-col :span="12" style="width:120px;"><div class="grid-content bg-purple-light">
+                        <el-select v-model="quality_timeOptions" placeholder="请选择">
+                            <el-option
+                                v-for="item in optionstime"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.label">
+                            </el-option>
+                        </el-select>
+                    </div></el-col>
+                  </el-row>
                 </el-form-item>
                 <br>
                 <el-form-item label="入库时间" v-if="props.row.source.storage_time">
@@ -202,7 +223,7 @@
                 </el-form-item>
                 <br>
                 <el-form-item label="操作员工" v-if="props.row.source.goto_user">
-                  <span">{{ props.row.source.goto_user }}</span>
+                  <span>{{ props.row.source.goto_user }}</span>
                 </el-form-item>
                 <br>
                <el-form-item label="出库时间" v-if="props.row.source.deliver_time">
@@ -210,7 +231,7 @@
                 </el-form-item>
                 <br>
                <el-form-item label="用户扫码" v-if="props.row.source.scan_time">
-                  <span">{{ props.row.source.scan_time }}</span>
+                  <span>{{ props.row.source.scan_time }}</span>
                 </el-form-item>
                 <br>
                <el-form-item label="扫码次数" v-if="props.row.source.source_number">
@@ -254,6 +275,26 @@ const formJson = {};
 export default {
   data() {
     return {
+      quality_timeeNumber:'',
+      quality_timeOptions:'',
+      optionstime:[
+          {
+              value: '1',
+              label: '年'
+          },
+          {
+              value: '2',
+              label: '月'
+          },
+          {
+              value: '3',
+              label: '日'
+          },
+          {
+              value: '4',
+              label: '季度'
+          }
+      ],
       orderDataTips:"修 改",
       formMap: {
         add: "新 增",
@@ -305,11 +346,17 @@ export default {
       }
       //保存
       if(this.orderDataTips=="保 存"){
+        //请求保存API
+        
+
+
+
+
+        //END API
         this.$set(this.orderData[row.$index], 'isOK', false)
         this.$nextTick(()=>{
             this.$set(this.orderData[row.$index], 'isOK', false)
         })
-
         this.orderDataTips = this.orderDataTips=="修 改"?"保 存":"修 改";
       }
       
