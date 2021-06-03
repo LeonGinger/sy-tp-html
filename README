@@ -1,0 +1,286 @@
+
+########溯源系统----------后台VUE项目结构图
+##LastTime:2021年6月3日16:49:48
+@Author:<a>https://gitee.com/LeonJay</a>
+@Author:<a>https://gitee.com/just-be</a>
+@remark:该结构图仅说明本项目相关重点文件和文件夹作用,其余文件夹说明请查看README.MD原作者<a>https://gitee.com/sdfaf123</a>解释
+|   .editorconfig
+|   .env.development
+|   .env.production
+|   .env.stage
+|   .eslintrc.js
+|   .gitignore
+|   .postcssrc.js
+|   babel.config.js
+|   jest.config.js
+|   LICENSE
+|   package-lock.json
+|   package.json
+|   README
+|   README.md
+|   vue.config.js
+|           
++---public                                                          //-----------
+|   |   favicon.ico
+|   |   index-dev.html
+|   |   index.html
+|   |   
+|   \---tinymce4.7.5
+|       |   tinymce.min.js
+|       |   
+|       +---langs
+|       |       zh_CN.js
+|       |       
+|       +---plugins
+|       |   +---codesample
+|       |   |   \---css
+|       |   |           prism.css
+|       |   |           
+|       |   +---emoticons
+|       |   |   \---img
+|       |   |           
+|       |   \---visualblocks
+|       |       \---css
+|       |               visualblocks.css
+|       |               
+|       \---skins
+|           \---lightgray
+|               |   
+|               +---fonts
+|               |       
+|               \---img
+|
+|      
++---src                                                         //src
+|   |   App.vue
+|   |   element.js
+|   |   main.js
+|   |   role.js
+|   |   
+|   +---api                                                     //所有接口
+|   |   |   pool.js                                             //接口池(不知道放哪的接口,全部可放这)
+|   |   |   
+|   |   +---ad                                                  //广告
+|   |   |       ad.js
+|   |   |       adSite.js
+|   |   |       
+|   |   +---auth                                                //权限角色用户
+|   |   |       authAdmin.js
+|   |   |       authPermissionRule.js
+|   |   |       authRole.js
+|   |   |       login.js
+|   |   |       
+|   |   +---business                                            //商家
+|   |   |       business.js
+|   |   |       
+|   |   +---enterprise                                         //员工
+|   |   |       enterprise.js   
+|   |   |       
+|   |   +---file                                               //文件操作
+|   |   |       fileResource.js
+|   |   |       fileResourceTag.js
+|   |   |       upload.js
+|   |   |       
+|   |   +---menu                                              //商品
+|   |   |       menuAll.js
+|   |   |       
+|   |   +---source                                            //溯源相关
+|   |   |       sourceapi.js
+|   |   |       
+|   |   \---user                                             //用户员工相关
+|   |           user.js
+|   |           
+|   +---assets                                              //静态文件
+|   |   |   logo.png
+|   |   |   
+|   |   +---css
+|   |   |       base.less
+|   |   |       
+|   |   +---icons                                           //图标(这里注意,不同开发人员请使用自己的阿里ICON,并引入到入口中)
+|   |   |   |   demo.css
+|   |   |   |   demo_fontclass.html
+|   |   |   |   demo_symbol.html
+|   |   |   |   demo_unicode.html
+|   |   |   |   iconfont.css
+|   |   |   |   iconfont.eot
+|   |   |   |   iconfont.js
+|   |   |   |   iconfont.svg
+|   |   |   |   iconfont.ttf
+|   |   |   |   iconfont.woff
+|   |   |   |   
+|   |   |   \---GNLEON
+|   |   |           demo.css
+|   |   |           demo_index.html
+|   |   |           iconfont.css
+|   |   |           iconfont.eot
+|   |   |           iconfont.js
+|   |   |           iconfont.json
+|   |   |           iconfont.svg
+|   |   |           iconfont.ttf
+|   |   |           iconfont.woff
+|   |   |           iconfont.woff2
+|   |   |           
+|   |   \---image
+|   |           file_type_icon.png
+|   |           
+|   +---components                                            //共用组件、组件工具
+|   |   |   HelloWorld.vue
+|   |   |   ScrollPane.vue
+|   |   |   tagsView.vue
+|   |   |   
+|   |   +---common
+|   |   |       FileResource.vue
+|   |   |       IconSvg.vue
+|   |   |       
+|   |   +---File
+|   |   |       Upload.vue
+|   |   |       
+|   |   +---ScrollPane
+|   |   |       index.vue
+|   |   |       
+|   |   \---Tinymce
+|   |           index.vue
+|   |           plugins.js
+|   |           toolbar.js
+|   |           
+|   +---config                                              //全局配置文件
+|   |       app.js
+|   |       
+|   +---constants
+|   |       .gitignore
+|   |       
+|   +---directive                                           //自定义VUE指令(v-xxx)
+|   |       permission.js
+|   |       
+|   +---filtres                                             //时间\文字格式化工具
+|   |       index.js
+|   |       
+|   +---lang                                                //多语言
+|   |       en.js
+|   |       index.js
+|   |       zh.js
+|   |       
+|   +---mock                                                //模拟API测试数据
+|   |       ad.js
+|   |       adSite.js
+|   |       authAdmin.js
+|   |       authPermissionRule.js
+|   |       authRole.js
+|   |       fileResource.js
+|   |       fileResourceTag.js
+|   |       index.js
+|   |       login.js
+|   |       pool.js
+|   |       upload.js
+|   |       
+|   +---router                                              //路由
+|   |       index.js
+|   |       
+|   +---store                                               //sotre
+|   |   |   actions.js
+|   |   |   getters.js
+|   |   |   index.js
+|   |   |   mutation-types.js
+|   |   |   
+|   |   \---modules
+|   |           admin.js
+|   |           app.js
+|   |           tagsView-bck.js
+|   |           tagsView.js
+|   |           
+|   +---styles                                             //全局样式文件
+|   |       base.scss
+|   |       mixin.scss
+|   |       wxlogin.css
+|   |       
+|   +---utils                                             //所有封装工具(时间格式化\文字\请求\.....)
+|   |       auth.js
+|   |       axios.js
+|   |       china.js
+|   |       haiZiToPinYin.js
+|   |       http.js
+|   |       i18n.js
+|   |       store.js
+|   |       tool.js
+|   |       utils.filter.js
+|   |       
+|   \---views                                           //所有视图
+|       +---adManage                                    //广告
+|       |       ad.vue
+|       |       adSite.vue
+|       |       
+|       +---certify                                     //
+|       |       list.vue
+|       |       orderpull.vue
+|       |       statistics.vue
+|       |       
+|       +---code                                        //
+|       |       code_manage.vue
+|       |       new_file.vue
+|       |       
+|       +---components
+|       |       tinymce-demo.vue
+|       |       upload-demo.vue
+|       |       uploadList.vue
+|       |       
+|       +---enterprise                                  //商家管理
+|       |       apply.vue
+|       |       employee.vue
+|       |       information.vue
+|       |       MyEnterprise.vue
+|       |       
+|       +---error   
+|       |       err401.vue
+|       |       err404.vue
+|       |       err500.vue
+|       |       
+|       +---home
+|       |       adminMain.vue
+|       |       echartstest.vue
+|       |       index-3.0.1.vue
+|       |       index.vue
+|       |       main.vue
+|       |       redirect.vue
+|       |       SidebarItem.vue
+|       |       
+|       +---login                                       //登录
+|       |       index-bck.vue
+|       |       index.vue
+|       |       
+|       +---menu                                        //商品
+|       |       classify.vue
+|       |       menulist.vue
+|       |       menumodify.vue
+|       |       
+|       +---profile
+|       |       index.vue
+|       |       
+|       +---setting                                     //系统设置
+|       |   |   database.vue
+|       |   |   system.vue
+|       |   |   
+|       |   \---child
+|       |           base.vue
+|       |           norm.vue
+|       |           
+|       +---source                                      //溯源相关
+|       |       opdencode.vue
+|       |       opdencodelll.vue
+|       |       order.vue
+|       |       orderadd.vue
+|       |       sourcelist.vue
+|       |       
+|       \---userManage                                  //粉丝管理
+|           |   fans.vue
+|           |   
+|           \---admin
+|                   authAdmin.vue
+|                   authPermissionRule.vue
+|                   authRole.vue
+|                   router.vue
+|                   
+\---tests
+    \---unit
+            .eslintrc.js
+            HelloWorld.spec.js
+            
