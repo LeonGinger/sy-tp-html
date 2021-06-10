@@ -663,13 +663,15 @@
                 this.query.business_notice = this.$route.params.employee_id;
                 this.employee_id = this.$route.params.employee_id;
                 this.getBussinessInfo(this.employee_id);
-            }else{
+            }else if(this.$store.getters.adminId=='1'){
                 //超级管理员无需
-                if(this.$store.getters.adminId!='1'){
                     this.getBussinessInfo("");
-                }
-
+            }else{
+                //商家、操作员
+                const business_id = this.$store.state.admin.business_notice;
+                this.getBussinessInfo(business_id);
             }
+
             // 加载表格数据
             this.getList();
         }

@@ -304,7 +304,9 @@ export default {
         },
         // 显示更换手机号页面
         handlePhone(){
+            this.getuserinfo();
             this.phoneFormVisible = true;
+            
             // this.phoneFormData = {
             //     old_phone:"",
             //     new_phone:"",
@@ -359,6 +361,7 @@ export default {
         handleCode(){
             if(this.codetips!="发送验证码"){this.$message.error('操作频繁,请稍后再试');return;}
             if(!this.phoneFormData.new_phone){this.$message.error('请输入手机号');return;}
+            if(this.phoneFormData.old_phone && this.phoneFormData.new_phone == this.phoneFormData.old_phone){this.$message.error('请输入新的手机号');return;}
             this.codetime = 15;
             this.timer();
             let request_param = {
