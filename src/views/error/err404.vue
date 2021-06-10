@@ -7,6 +7,10 @@
                 <a href="/admin" class="error404-home-button">返回首页</a>
                 <div class="error404-block-button" @click="backPage">返回上一页</div>
             </div>
+            <div>
+                <a @click="gotoindex" class="error404-return-index-a"><p class="error404-return-index-tips">{{secendTime}}秒后即将返回首页,浏览器不自动跳转请点击......</p></a>
+
+            </div>
         </div>
     </div>
 </template>
@@ -14,10 +18,42 @@
 <script>
 export default {
     name: "Error404",
+    data(){
+        return{
+            secendTime:0,
+            timer:'',
+        }
+    },
     methods: {
         backPage() {
             this.$router.go(-1);
-        }
+        },
+        gotoindex(){
+            this.$router.push({
+              path:'/',
+            })
+        },
+        goGrdoupRecor(){
+            const TIME_COUNT = 5;
+            if(!this.timer){
+              this.secendTime = TIME_COUNT;
+              this.timer = setInterval(()=>{
+                if(this.secendTime > 0 && this.secendTime <= TIME_COUNT){
+                  this.secendTime--;
+                }else{
+                  clearInterval(this.timer);
+                  this.timer = null;
+                  //跳转的页面写在此处
+                  this.$router.push({
+                  path:'/',
+                })
+                }
+              },1000)
+            }
+        },
+    },
+    created(){
+        this.goGrdoupRecor();
     }
 };
 </script>
@@ -138,6 +174,15 @@ export default {
         color: #fff;
         background-color: #57a3f3;
         border-color: #57a3f3;
+    }
+    &-return-index-tips{
+        color: #fff;
+        color: #f56c6c;
+        border-color: #f56c6c;
+    }
+    &-return-index-a{
+        cursor: pointer;
+        text-align: center;
     }
 }
 </style>
