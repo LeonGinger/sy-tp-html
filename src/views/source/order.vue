@@ -163,7 +163,7 @@
       top="5vh"
     >
       <template>
-        <el-table :data="orderData" style="width: 100%" v-loading="formLoading" @row-dblclick="dbclickOrderdata">
+        <el-table :data="orderData" style="width: 100%" v-loading="formLoading"  @expand-change="zydescription" @row-dblclick="dbclickOrderdata">
           <el-table-column label="详情" width="140" type="expand">
             <!-- 每条商品的详情 -->
             <template slot-scope="props">
@@ -322,6 +322,16 @@ export default {
     };
   },
   methods: {
+    zydescription(row){
+      //控制台报错的话是正常 因为 source null 渲染不出
+      if(row.source==null){
+        this.$message({
+          showClose: true,
+          message: "该批次还没有溯源信息",
+          type: "warning",
+        });
+      }
+    },
     //方法
     //取消修改溯源信息
     cancelSubmitOrderData(row){
