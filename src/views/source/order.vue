@@ -163,7 +163,12 @@
       top="5vh"
     >
       <template>
-        <el-table :data="orderData" style="width: 100%" v-loading="formLoading"  @expand-change="zydescription" @row-dblclick="dbclickOrderdata">
+        <el-table :data="orderData" style="width: 100%" 
+                  :expand-row-keys="sourceexpends" 
+                  :row-key="getRowKeys"
+                  v-loading="formLoading"  
+                  @expand-change="zydescription" 
+                  @row-dblclick="dbclickOrderdata">
           <el-table-column label="详情" width="140" type="expand">
             <!-- 每条商品的详情 -->
             <template slot-scope="props">
@@ -177,7 +182,26 @@
                 <el-form-item label="商品规格">
                   <!-- 1-{{props.row.isOK}} -->
                   <span v-if="!props.row.isOK">{{ props.row.source.menu_weight }}</span>
-                  <el-input  v-if="props.row.isOK" v-model="props.row.source.menu_weight" @input="change($event)" maxlength="3"></el-input>
+                  <!-- <el-input  v-if="props.row.isOK" v-model="props.row.source.menu_weight" @input="change($event)" maxlength="3"></el-input> -->
+                  <el-row  v-if="props.row.isOK">
+                    <el-col :span="8"><div class="grid-content bg-purple">
+                        <el-input v-model="props.row.source.menu_weightt" @input="change($event)" maxlength="3"></el-input>
+                    </div></el-col>
+    
+                    <el-col :span="12" style="width:120px;"><div class="grid-content bg-purple-light">
+                        <el-select v-model="props.row.source.menu_weight" placeholder="请选择">
+                            <el-option
+                                v-for="item in optionsweight"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.label">
+                            </el-option>
+                        </el-select>
+                    </div></el-col>
+                  </el-row>
+                
+                
+                
                 </el-form-item>
                 <br>
                 <el-form-item label="生产源地">
@@ -203,10 +227,10 @@
                   <span v-if="!props.row.isOK">{{ props.row.source.quality_time }}</span>
                   <el-row v-if="props.row.isOK">
                     <el-col :span="8"><div class="grid-content bg-purple">
-                        <el-input v-model="quality_timeeNumber" maxlength="4"></el-input>
+                        <el-input v-model=" props.row.source.quality_timee" maxlength="4"></el-input>
                     </div></el-col>
                     <el-col :span="12" style="width:120px;"><div class="grid-content bg-purple-light">
-                        <el-select v-model="quality_timeOptions" placeholder="请选择">
+                        <el-select v-model=" props.row.source.quality_time" placeholder="请选择">
                             <el-option
                                 v-for="item in optionstime"
                                 :key="item.value"
@@ -275,8 +299,7 @@ const formJson = {};
 export default {
   data() {
     return {
-      quality_timeeNumber:'',
-      quality_timeOptions:'',
+      sourceexpends:[],
       optionstime:[
           {
               value: '1',
@@ -294,6 +317,40 @@ export default {
               value: '4',
               label: '季度'
           }
+      ],
+      optionsweight:[
+          {
+              value: '1',
+              label: '个'
+          },
+          {
+              value: '2',
+              label: '箱'
+          },
+          {
+              value: '3',
+              label: 'L/升'
+          },
+          {
+              value: '4',
+              label: 'ML/毫升'
+          },
+          {
+              value: '5',
+              label: 'G/克'
+          },
+          {
+              value: '6',
+              label: 'KG/千克'
+          },
+          {
+              value: '7',
+              label: '公斤'
+          },
+          {
+              value: '8',
+              label: '斤'
+          },
       ],
       orderDataTips:"修 改",
       formMap: {
@@ -322,7 +379,14 @@ export default {
     };
   },
   methods: {
-    zydescription(row){
+    getRowKeys(row){
+      if(row.source==null){
+        return [];
+      }
+      //通过getRowKeys方法获取到row的行id值
+      return row.source.id
+    },
+    zydescription(row,expandedRows){
       //控制台报错的话是正常 因为 source null 渲染不出
       if(row.source==null){
         this.$message({
@@ -330,12 +394,40 @@ export default {
           message: "该批次还没有溯源信息",
           type: "warning",
         });
+        return false
       }
+      //每次限制展开一行
+      const that = this
+      if (expandedRows.length) {
+
+        that.sourceexpends = []
+        if (row) {
+          // console.log("弹开")
+          that.sourceexpends.push(row.source.id)
+        }
+      }else{
+        // console.log("关闭")
+        that.sourceexpends = []
+      }
+      //每次点击都恢复显示状态
+      //code......
+  
     },
     //方法
     //取消修改溯源信息
     cancelSubmitOrderData(row){
+      console.log(row)
       this.orderDataTips = "修 改";
+      const order_number = row.row.source.order_number
+      this.formLoading = true;
+      order_demo({order_number})
+      .then((response) => {
+        this.orderData = response.data
+        this.formLoading=false
+      })
+      .catch(() => {
+        
+      });
       this.$nextTick(()=>{
           this.orderData[row.$index].isOK = false;
       })
@@ -345,21 +437,56 @@ export default {
     onSubmitorderData(row){
       console.log(row)
       //修改
+      
       if(this.orderDataTips=="修 改"){
-        console.log("走着？")
+        // console.log("走着？")
+        // return;
         this.$set(this.orderData[row.$index], 'isOK', true)
         this.$nextTick(()=>{
             this.$set(this.orderData[row.$index], 'isOK', true)
         })
         this.orderDataTips = this.orderDataTips=="修 改"?"保 存":"修 改";
+        //处理商品规格、保质日期
+        //待优化循环 start
+        if(this.orderData[row.$index].source.menu_weight){
+            try{
+                this.optionsweight.forEach((item,index)=>{
+                    if(this.orderData[row.$index].source.menu_weight.indexOf(item.label)!=-1){
+                        const tmp_weight = this.orderData[row.$index].source.menu_weight;
+                        this.orderData[row.$index].source.menu_weight = item.label;
+                        this.$set(this.orderData[row.$index].source, 'menu_weightt', tmp_weight.replace(item.label,""))
+                    }
+                })
+            }catch(e){
+                console.log("失败")
+
+            }
+        }
+        if(this.orderData[row.$index].source.quality_time){
+            //待优化循环
+            this.optionstime.forEach((item,index)=>{
+                if(this.orderData[row.$index].source.quality_time.indexOf(item.label)!=-1){
+                  
+                    const tmp_quality_time = this.orderData[row.$index].source.quality_time;
+                    this.orderData[row.$index].source.quality_time = item.label;
+                    this.$set(this.orderData[row.$index].source, 'quality_timee', tmp_quality_time.replace(item.label,""))
+                }
+            })
+        }
         return;
       }
       //保存
       if(this.orderDataTips=="保 存"){
         //请求保存API
-        
-
-
+        // console.log(this.orderData[row.$index])
+        // debugger
+        //重新组合保质日期、商品规格
+        this.orderData[row.$index].source.menu_weight = this.orderData[row.$index].source.menu_weightt + 
+                                                        this.orderData[row.$index].source.menu_weight;
+                                                        
+        this.orderData[row.$index].source.quality_time = this.orderData[row.$index].source.quality_timee + 
+                                                        this.orderData[row.$index].source.quality_time;
+                                                        
 
 
         //END API
@@ -386,6 +513,7 @@ export default {
     handleForm(order_number) {
         this.formLoading = true
         this.formVisibledetails = true
+        this.orderData = [];
         order_demo({order_number})
         .then((response) => {
           this.orderData = response.data

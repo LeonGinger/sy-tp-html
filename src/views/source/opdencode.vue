@@ -108,7 +108,7 @@ export default {
               message: '批次号'+value+'错误，请重试',
               type: 'warning'
             });
-            window.location.reload();
+            // window.location.reload();
             return false;
           }else if(response.code == 963){
             this.$message({
