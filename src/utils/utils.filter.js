@@ -80,7 +80,7 @@ export default {
 	},
     /*格式化日期*/
     formatDateTime: (date)=> {
-        
+		
         var y = date.getFullYear();
         var m = date.getMonth() + 1;
         m = m < 10 ? ('0' + m) : m;
@@ -94,4 +94,9 @@ export default {
         second=second < 10 ? ('0' + second) : second;
         return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second;
     },
+	/**时间戳转日期 */
+	getLocalTime(nS) {  
+		 return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/,' ');  
+		}
+
 }

@@ -59,4 +59,9 @@ export function orderdelete(params){
  export function orderupdate(params){
   return http.get(`${resquest}/orderupdate`,params);
  }
+
+ /*修改溯源详情信息 */
+ export function srouceupdate(params){
+  return http.post(`${resquest}/sourceinfoupdate`,params);
+ }
  

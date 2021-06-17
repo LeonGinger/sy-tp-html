@@ -172,9 +172,9 @@
           <el-table-column label="详情" width="140" type="expand">
             <!-- 每条商品的详情 -->
             <template slot-scope="props">
-              <span style="color:#ff0000" @dblclick="dbclickOrderdata(props)">*(双击编辑信息)</span>
+              <!-- <span style="color:#ff0000" @dblclick="dbclickOrderdata(props)">*(双击编辑信息)</span> -->
               <el-form label-position="left" inline class="demo-table-expand">
-                <el-form-item label="商品名称" v-if="props.row.source.menu_name">
+                <el-form-item label="商品名称">
                   <el-input v-if="props.row.isOK" v-model="props.row.source.menu_name"></el-input>
                   <span v-if="!props.row.isOK" title="双击编辑信息">{{ props.row.source.menu_name }}</span>
                 </el-form-item>
@@ -218,8 +218,10 @@
                   <el-date-picker
                     v-if="props.row.isOK"
                     v-model="props.row.source.production_time"
-                    type="date"
-                    placeholder="选择生产日期">
+                    type="datetime"
+                    placeholder="选择生产日期"
+                    default-time="12:00:00"
+                    >
                   </el-date-picker>
                 </el-form-item>
                 <br>
@@ -293,8 +295,9 @@
 
 <script>
 import { menulist } from "@/api/menu/menuAll.js";
-import { orderList,order_demo,orderdelete } from "@/api/source/sourceapi.js";
+import { orderList,order_demo,orderdelete,srouceupdate } from "@/api/source/sourceapi.js";
 import { Loading } from "element-ui";
+import time from "@/utils/utils.filter.js";
 const formJson = {};
 export default {
   data() {
@@ -404,14 +407,16 @@ export default {
         if (row) {
           // console.log("弹开")
           that.sourceexpends.push(row.source.id)
+          // that.orderDataTips = "修 改";
         }
       }else{
         // console.log("关闭")
         that.sourceexpends = []
+        // that.orderDataTips = "修 改";
       }
       //每次点击都恢复显示状态
       //code......
-  
+      this.cancelSubmitOrderData_cp(row)
     },
     //方法
     //取消修改溯源信息
@@ -433,11 +438,28 @@ export default {
       })
 
     },
+    //作用不同
+    cancelSubmitOrderData_cp(row){
+      console.log(row)
+      this.orderDataTips = "修 改";
+      const order_number = row.source.order_number
+      this.formLoading = true;
+      order_demo({order_number})
+      .then((response) => {
+        this.orderData = response.data
+        this.formLoading=false
+      })
+      .catch(() => {
+        
+      });
+      this.$nextTick(()=>{
+          this.orderData[row.$index].isOK = false;
+      })
+
+    },
     //修改保存溯源信息
     onSubmitorderData(row){
-      console.log(row)
       //修改
-      
       if(this.orderDataTips=="修 改"){
         // console.log("走着？")
         // return;
@@ -455,7 +477,7 @@ export default {
                         const tmp_weight = this.orderData[row.$index].source.menu_weight;
                         this.orderData[row.$index].source.menu_weight = item.label;
                         this.$set(this.orderData[row.$index].source, 'menu_weightt', tmp_weight.replace(item.label,""))
-                    }
+                    }``
                 })
             }catch(e){
                 console.log("失败")
@@ -478,15 +500,36 @@ export default {
       //保存
       if(this.orderDataTips=="保 存"){
         //请求保存API
-        // console.log(this.orderData[row.$index])
-        // debugger
         //重新组合保质日期、商品规格
         this.orderData[row.$index].source.menu_weight = this.orderData[row.$index].source.menu_weightt + 
                                                         this.orderData[row.$index].source.menu_weight;
                                                         
         this.orderData[row.$index].source.quality_time = this.orderData[row.$index].source.quality_timee + 
                                                         this.orderData[row.$index].source.quality_time;
-                                                        
+        //处理时间
+        if (Date.parse(this.orderData[row.$index].source.production_time)){
+            let tmp_timezone = new Date(Date.parse(this.orderData[row.$index].source.production_time))
+            console.log(tmp_timezone)
+            this.orderData[row.$index].source.production_time = time.formatDateTime(tmp_timezone);
+        }
+        //暂时先这样
+        srouceupdate(this.orderData[row.$index].source)
+        .then((response)=>{
+          if(response.code!='200'){
+            this.$message.error('保存失败,请联系管理员或稍后再试');
+            //这里不return是下面统一恢复 表单样式
+          }else{
+            this.$message({
+              message: '保存成功',
+              type: 'success'
+            });
+
+          }
+
+        })
+        .catch(()=>{
+             this.$message.error('保存失败,请联系管理员或稍后再试');
+        });
 
 
         //END API
