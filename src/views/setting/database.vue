@@ -72,7 +72,7 @@
 
 <script>
     import {baseindex,basedump,basedown,basedel} from "@/api/pool.js";
-    import {fileLengthFormat} from "@/utils/tool.js";
+    import {formatFileSize} from "@/utils/tool.js";
     const formJson = {};
     export default {
         data() {
@@ -93,6 +93,29 @@
             }
     },
         methods:{
+            // fileLengthFormat(total, n){
+            //     var format;
+            //     var len = total / (1024.0);
+            //     if (len > 1000) {
+            //         return arguments.callee(len, ++n);
+            //     } else {
+            //         switch (n) {
+            //             case 1:
+            //                 format = len.toFixed(2) + "KB";
+            //                 break;
+            //             case 2:
+            //                 format = len.toFixed(2) + "MB";
+            //                 break;
+            //             case 3:
+            //                 format = len.toFixed(2) + "GB";
+            //                 break;
+            //             case 4:
+            //                 format = len.toFixed(2) + "TB";
+            //                 break;
+            //         }
+            //         return format;
+            //     }
+            // },
             getList(){
                 this.loading = false;
                 baseindex(this.query)
@@ -213,7 +236,10 @@
         },
         filters:{
             FilterSize(val){
-                return fileLengthFormat(val,1);
+                console.log(val)
+                // console.log(this.fileLengthFormat(val,1))
+                // return val;
+                return formatFileSize(val,1);
             },
         },
         mounted() {
@@ -221,6 +247,7 @@
         },
         created() {
             this.getList();
+            // this.fileLengthFormat(,1)
 
         }
 };
