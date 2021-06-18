@@ -21,7 +21,7 @@ Vue.prototype.$echarts = echarts;
 Vue.use(VueI18n)
 
 //
-Vue.prototype.baseURL = "http://sy.zsicp.com";
+Vue.prototype.baseURL = "https://sy.zsicp.com";
 // 注册全局组件（register global）
 Vue.component("icon-svg", IconSvg);
 

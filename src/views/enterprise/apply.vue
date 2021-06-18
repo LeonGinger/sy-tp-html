@@ -598,7 +598,11 @@ export default {
       var _this = this
       employeestate(this.formverif)
         .then((response) => {
-          if (response.code == 12138) {
+          if (response.code == 0){
+            this.$message.error("审核失败");
+            return false;
+          }
+          if (response.code != 200) {
             this.$message({
               showClose: true,
               type: "warning",

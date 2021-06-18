@@ -132,7 +132,7 @@ export default {
         return {
             weburl:DOMAIN_ADMIN_URL,
             swiperImglist:[
-                'http://sy.zsicp.com/static/images/bg1.jpg'
+                'https://sy.zsicp.com/static/images/bg1.jpg'
                 // 'http://sy.zsicp.com/static/images/bg2.jpg',
             ],
             swiperOption:{

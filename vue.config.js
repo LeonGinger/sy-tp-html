@@ -36,7 +36,7 @@ module.exports = {
         // },
         proxy: {
             '/web': {
-                target: 'http://sy.zsicp.com',
+                target: 'https://sy.zsicp.com',
                 changeOrigin: true,
                 ws: false,
                 pathRewrite: {
