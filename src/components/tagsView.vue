@@ -97,12 +97,14 @@ export default {
         addViewTags() {
 
             const route = this.generateRoute();
+            console.log(route)
             if (!route) {
                 return false;
             }
             if(route){
                 console.log("计");
                 return;
+                //下面会卡死,未解决  无法用 
                 // this.$store.dispatch("addVisitedViews", route);
                 //滚动条
                 // this.moveToCurrentTag();
