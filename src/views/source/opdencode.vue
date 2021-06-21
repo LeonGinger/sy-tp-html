@@ -30,7 +30,14 @@
         <!--     <div :id="'qrCode'+index" :ref="'qrcodeContainer'+index"></div> -->
         <!-- <img :src="sourceSrc[index]" style="width:15mm;height:15mm"/> -->
           <template>
-            <vue-qr :correctLevel="3" :binarizeThreshold="0" :autoColor="false" colorDark="#147" :text="sourceSrc[index]" :size="100" :margin="0"></vue-qr>
+            <vue-qr 
+              :correctLevel="1" 
+              :binarizeThreshold="255"
+              :autoColor="false" 
+              colorDark="#147" 
+              :text="sourceSrc[index]" 
+              :size="100" 
+              :margin="0"></vue-qr>
           </template>
         <div style="margin-top: 0mm"></div>
         <a :title="item.source_code">{{ item.source_code }}</a>
