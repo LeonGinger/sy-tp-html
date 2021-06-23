@@ -35,14 +35,19 @@
               </el-col>
           </el-form-item>
             <el-form-item label="生产源地" prop="menu_address">
-                <el-col :span="13" style="max-width:300px">
+                <el-col :span="12" style="max-width:300px">
                     <el-input v-model="formData.menu_address" maxlength="40" show-word-limit></el-input>
                 </el-col>
             </el-form-item>
 
           <el-form-item label="商品规格" prop="menu_weight">
 
-              <el-row>
+
+                <el-col :span="12" style="max-width:300px">
+                    <el-input v-model="formData.menu_weight_copy" maxlength="16" show-word-limit></el-input>
+                </el-col>
+
+              <!-- <el-row>
                 <el-col :span="2"><div class="grid-content bg-purple">
                     <el-input v-model="menu_weightt" @input="change($event)" maxlength="3"></el-input>
                 </div></el-col>
@@ -57,7 +62,7 @@
                         </el-option>
                     </el-select>
                 </div></el-col>
-              </el-row>
+              </el-row> -->
 
           </el-form-item>
 
@@ -79,7 +84,13 @@
               </el-date-picker>
             </el-form-item> -->
             <el-form-item label="保质日期" prop="quality_time">
-              <el-row>
+
+
+                <el-col :span="12" style="max-width:300px">
+                    <el-input v-model="formData.quality_time_copy" maxlength="16" show-word-limit></el-input>
+                </el-col>
+
+              <!-- <el-row>
                 <el-col :span="2"><div class="grid-content bg-purple">
                     <el-input v-model="quality_timee" maxlength="4"></el-input>
                 </div></el-col>
@@ -93,7 +104,7 @@
                         </el-option>
                     </el-select>
                 </div></el-col>
-              </el-row>
+              </el-row> -->
             </el-form-item>
             <el-form-item label="样品名称" prop="monitor_menu.sample_name">
                 <el-col :span="12" style="max-width:300px">
@@ -252,6 +263,7 @@
         monitor_image:[],
         menu_weightt: '',
         quality_time: '',
+
         // menu_weight:'1',
     };
     const formJson = {
@@ -260,7 +272,9 @@
         monitor_image:[],
         menu_weightt: '',
         quality_time: '',
-        monitor_menu:{sample_name:'',monitoring_time:'',test_location:''}
+        monitor_menu:{sample_name:'',monitoring_time:'',test_location:''},
+        menu_weight_copy:'',
+        quality_time_copy:'',
         // menu_weight:'1',
     };
     export default {
@@ -283,22 +297,33 @@
                 callback();
             };
             var listtwo = (rule, value, callback) =>{
-                if(this.formData.quality_time.length==0){
-                    callback(new Error('请输入保质期'));
+                if(this.formData.quality_time_copy){
+                   
+                }else{
+                     callback(new Error('请输入保质期'));
                 }
-                if(this.quality_timee.length==0){
-                    callback(new Error('请输入保质期'));
-                }
+
+                // if(this.formData.quality_time.length==0){
+                //     callback(new Error('请输入保质期'));
+                // }
+                // if(this.quality_timee.length==0){
+                //     callback(new Error('请输入保质期'));
+                // }
                 callback();
             };
             var listtwo2 = (rule, value, callback) =>{
                 console.log(this.formData)
-                if(this.formData.menu_weight){}else{
+
+                if(this.formData.menu_weight_copy){}else{
                     callback(new Error('请输入商品规格'));
                 }
-                if(this.menu_weightt.length==0){
-                    callback(new Error('请输入商品规格'));
-                }
+
+                // if(this.formData.menu_weight){}else{
+                //     callback(new Error('请输入商品规格'));
+                // }
+                // if(this.menu_weightt.length==0){
+                //     callback(new Error('请输入商品规格'));
+                // }
                 callback();
             };
             return {
@@ -534,35 +559,44 @@
                                         this.formData.certificate_image = [];
                                     }
                                 }
-                                  //待优化循环 start
                                 if(this.formData.menu_weight){
-                                    try{
-                                        this.optionsweight.forEach((item,index)=>{
-                                            if(this.formData.menu_weight.indexOf(item.label)!=-1){
-                                                const tmp_weight = this.formData.menu_weight;
-                                                this.formData.menu_weight = item.label;
-                                                //this.formData.menu_weightt = tmp_weight.replace(item.label,"");
-                                                this.menu_weightt = tmp_weight.replace(item.label,"");
-                                                throw new Error("OK DONE");
-                                            }
-                                        })
-                                    }catch(e){
-
-
-                                    }
-
+                                    this.$set(this.formData,'menu_weight_copy',this.formData.menu_weight)
+                                    // this.formData.menu_weight_copy = this.formData.menu_weight
                                 }
                                 if(this.formData.quality_time){
-                                    //待优化循环
-                                    this.optionstime.forEach((item,index)=>{
-                                        if(this.formData.quality_time.indexOf(item.label)!=-1){
-                                            const tmp_quality_time = this.formData.quality_time;
-                                            this.formData.quality_time = item.label;
-                                            // this.formData.quality_timee = tmp_quality_time.replace(item.label,"");
-                                            this.quality_timee = tmp_quality_time.replace(item.label,"");
-                                        }
-                                    })
+                                    this.$set(this.formData,'quality_time_copy',this.formData.quality_time)
+                                    // this.formData.quality_time_copy = this.formData.quality_time
                                 }
+                                  //待优化循环 start
+                                  // if(this.formData.menu_weight){
+                                // if(this.formData.menu_weight){
+                                //     try{
+                                //         this.optionsweight.forEach((item,index)=>{
+                                //             if(this.formData.menu_weight.indexOf(item.label)!=-1){
+                                //                 const tmp_weight = this.formData.menu_weight;
+                                //                 this.formData.menu_weight = item.label;
+                                //                 //this.formData.menu_weightt = tmp_weight.replace(item.label,"");
+                                //                 this.menu_weightt = tmp_weight.replace(item.label,"");
+                                //                 throw new Error("OK DONE");
+                                //             }
+                                //         })
+                                //     }catch(e){
+
+
+                                //     }
+
+                                // }
+                                // if(this.formData.quality_time){
+                                //     //待优化循环
+                                //     this.optionstime.forEach((item,index)=>{
+                                //         if(this.formData.quality_time.indexOf(item.label)!=-1){
+                                //             const tmp_quality_time = this.formData.quality_time;
+                                //             this.formData.quality_time = item.label;
+                                //             // this.formData.quality_timee = tmp_quality_time.replace(item.label,"");
+                                //             this.quality_timee = tmp_quality_time.replace(item.label,"");
+                                //         }
+                                //     })
+                                // }
                                 console.log(this.formData)
                                 //end
                             }catch(e){}
@@ -605,8 +639,8 @@
                     return false;
                 }
                 if(this.$store.state.admin.business_notice){this.formData.business_id = this.$store.state.admin.business_notice;}
-                this.formData.menu_weight_copy = this.menu_weightt+this.formData.menu_weight;
-                this.formData.quality_time_copy = this.quality_timee+this.formData.quality_time;
+                // this.formData.menu_weight_copy = this.menu_weightt+this.formData.menu_weight;
+                // this.formData.quality_time_copy = this.quality_timee+this.formData.quality_time;
                 this.$refs["form"].validate(valid => {
                     console.log(valid)
                     if (valid) {
