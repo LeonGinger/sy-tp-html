@@ -13,6 +13,12 @@
                         </div>
                 </el-tab-pane>
 
+                <el-tab-pane label="商品单位设置" name="four" :key="'four'">
+                        <div style="background: green; display: inline">
+                            <child3></child3>
+                        </div>
+                </el-tab-pane>
+
                 <el-tab-pane label="常用工具" name="third" :key="'third'">
                         <div style="background: green; display: inline">
                             <el-row>
@@ -33,10 +39,12 @@
 <script>
     import child1 from "@/views/setting/child/base.vue";
     import child2 from "@/views/setting/child/norm.vue";
+    import child3 from "@/views/setting/child/setunit.vue";
     export default {
         components: {
             child1,
-            child2
+            child2,
+            child3
         },
         data() {
             return {

@@ -260,8 +260,9 @@
 |       |   |   system.vue
 |       |   |   
 |       |   \---child
-|       |           base.vue
-|       |           norm.vue
+|       |           base.vue                            //H5商家须知条例
+|       |           norm.vue                            //H5常见问题帮助
+|       |           setunit.vue                         //设置单位规则
 |       |           
 |       +---source                                      //溯源相关
 |       |       opdencode.vue

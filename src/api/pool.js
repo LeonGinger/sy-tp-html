@@ -84,8 +84,26 @@ export function basedel(params) {
     return http.post(`${resquest}/database_del`,params);
 }
 
+/**获取单位列表 */
+export function unitlist(params) {
 
+    return http.get(`${resquest}/unitlist`,params);
+}
+/**添加单位规格 */
+export function unitadd(params) {
 
+    return http.post(`${resquest}/unitadd`,params);
+}
+/**修改单位内容 */
+export function unitedit(params) {
+
+    return http.post(`${resquest}/unitedit`,params);
+}
+/**删除单位 */
+export function unitdel(params) {
+
+    return http.post(`${resquest}/unitdel`,params);
+}
 
 
 
